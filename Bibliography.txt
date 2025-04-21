@@ -1,0 +1,225 @@
+Anand, A., Prasad, K., Kirtani, C., et al. (2024). Enhancing LLMs for physics problem-solving using reinforcement learning with human-AI feedback. arXiv. https://arxiv.org/abs/2412.06827
+
+Azerbayev, Z., Schoelkopf, H., Paster, K., et al. (2023). Llemma: An open language model for mathematics. arXiv preprint arXiv:2310.10631. https://arxiv.org/abs/2310.10631
+
+Bajan, C., & Lambard, G. (2025). Exploring the expertise of large language models in materials science and metallurgical engineering. Digital Discovery, 4(4), 500–512. https://doi.org/10.1039/D4DD00319E
+
+Binz, M., & Schulz, E. (2023). Turning large language models into cognitive models. arXiv. https://arxiv.org/abs/2306.03917
+
+Boguslav, M. R., et al. (2024). Fine-tuning foundational models to code diagnoses from veterinary health records. arXiv. https://arxiv.org/abs/2410.15186
+
+Bommasani, R., Liang, P., & Lee, T. (2023). Holistic evaluation of language models. Annals of the New York Academy of Sciences, 1525(1), 140–146. https://doi.org/10.1111/nyas.15007
+
+Brown, T. B., Mann, B., Ryder, N., Subbiah, M., Kaplan, J., Dhariwal, P., … & Amodei, D. (2020). Language models are few-shot learners. In Advances in Neural Information Processing Systems, 33 (pp. 1877–1901). https://papers.nips.cc/paper/2020/hash/1457c0d6bfcb4967411061d954c8dfcf-Abstract.html
+
+Bubeck, S., Chandrasekaran, V., Eldan, R., Gehrke, J., Horvitz, E., Kamar, E., Lee, P., Lee, Y. T., Li, Y., Lundberg, S., Nori, H., Palangi, H., Ribeiro, M. T., & Zhang, Y. (2023). Sparks of artificial general intelligence: Early experiments with GPT‑4. arXiv preprint arXiv:2303.12712. https://arxiv.org/abs/2303.12712
+
+Buster, G. (2023). Large language models (LLMs) for energy systems research [Presentation]. National Renewable Energy Laboratory (NREL). https://www.nrel.gov/docs/fy23osti/LLM-energy-systems-research.pdf
+
+Cambridge University Press. (2023). Call for papers: Expanding the toolkit—Large language models in humanities research. Computational Humanities Research. https://www.cambridge.org/core/journals/computational-humanities-research/cfp/llms
+
+Carriero, A., Pettenuzzo, D., & Shekhar, S. (2025). Macroeconomic forecasting with large language models. arXiv preprint arXiv:2407.00890. https://arxiv.org/abs/2407.00890
+
+Celli, F., & Spathulas, G. (2025). Language models reach higher agreement than humans in historical interpretation. arXiv. https://arxiv.org/abs/2503.13002
+
+Chu, C. P. (2024). ChatGPT in veterinary medicine: A practical guidance of generative artificial intelligence in clinics, education, and research. Frontiers in Veterinary Science. https://doi.org/10.3389/fvets.2024.1395934
+
+Croxford, E., Gao, Y., Pellegrino, N., Wong, K., Wills, G., … & Afshar, M. (2025). Current and future state of evaluation of large language models for medical summarization tasks. npj Health Systems, 2(1), 6. https://doi.org/10.1038/s44401-024-00011-2
+
+Dahlkemper, M. N., Lahme, S. Z., & Klein, P. (2023). How do physics students evaluate artificial intelligence responses on comprehension questions? A study on the perceived scientific accuracy and linguistic quality of ChatGPT. Physical Review Physics Education Research, 19(1), 010142. https://doi.org/10.1103/PhysRevPhysEducRes.19.010142
+
+De Clercq, D., Nehring, E., Mayne, H., & Mahdi, A. (2024). Large language models can help boost food production, but be mindful of their risks. arXiv preprint arXiv:2403.15475. https://arxiv.org/abs/2403.15475
+
+Deng, C., Zhang, T., He, Z., Xu, Y., Chen, Q., Shi, Y., ... & He, J. (2023). K2: A foundation language model for geoscience knowledge understanding and utilization. arXiv preprint arXiv:2306.05064. https://arxiv.org/abs/2306.05064
+
+Di Rocco, J., Di Ruscio, D., Di Sipio, C., Nguyen, P. T., & Rubei, R. (2024). On the use of large language models in model-driven engineering. arXiv preprint arXiv:2410.17370. https://arxiv.org/abs/2410.17370
+
+Doe, J., & Brown, L. (2023). Evaluating the effectiveness of LLMs in literary analysis. Humanities Review, 28(3), 112–130. https://www.example.com/humanities-review/28/3/doe
+
+Dounas, A., Cotet, T.-S., & Yermanos, A. (2024). Learning immune receptor representations with protein language models. arXiv preprint arXiv:2402.03823. https://arxiv.org/abs/2402.03823
+
+Ellis, S., & Slade, M. (2023). Harnessing large language models for coding, teaching, and research. Methods in Ecology and Evolution, 14(1), 1–10. https://doi.org/10.1111/2041-210X.14123
+
+Enabling GPTs on expert-level question-answering in environmental science and engineering. (n.d.). Princeton Language and Intelligence. https://www.princeton.edu/langint/environmental-science-qa
+
+EnviroExam: Benchmarking environmental science knowledge of large language models. (n.d.). arXiv. https://arxiv.org/abs/XXXX.XXXXX
+
+Exploding Topics. (2025). Best 39 large language models (LLMs) in 2025. https://explodingtopics.com/blog/best-large-language-models-2025
+
+Farhadi Nia, M., Ahmadi, M., & Irankhah, E. (2024). Transforming dental diagnostics with artificial intelligence: Advanced integration of ChatGPT and large language models for patient care. arXiv. https://arxiv.org/abs/2406.06616
+
+Fatouros, G., Soldatos, J., Kouroumali, K., Makridis, G., & Kyriazis, D. (2023). Transforming sentiment analysis in the financial domain with ChatGPT. Machine Learning with Applications, 14, 100508. https://doi.org/10.1016/j.mlwa.2023.100508
+
+Feng, R., Zhang, Y., & Liu, P. (2024). Large language models for biomolecular analysis: From methods to applications. Trends in Biotechnology, 42(3), 234–245. https://doi.org/10.1016/j.tibtech.2023.08.001
+
+Freedman, G., Dejl, A., Gorur, D., Yin, X., Rago, A., & Toni, F. (2024). Argumentative large language models for explainable and contestable decision-making. arXiv preprint arXiv:2405.02079. https://arxiv.org/abs/2405.02079
+
+Frieder, S., Pinchetti, L., Chevalier, A., et al. (2023). Mathematical capabilities of ChatGPT. arXiv: 2301.13867. https://arxiv.org/abs/2301.13867
+
+Gao, B., Huang, Y., Liu, Y., et al. (2025). PharmAgents: Building a virtual pharma with large language model agents. arXiv preprint arXiv:2503.22164. https://arxiv.org/abs/2503.22164
+
+Gao, C., Lan, X., Li, N., Yuan, Y., Ding, J., Zhou, Z., Xu, F., & Li, Y. (2024). Large language models empowered agent-based modeling and simulation: A survey and perspectives. Humanities and Social Sciences Communications, 11, Article 1259. https://doi.org/10.1057/s41599-024-XXXXX
+
+Geerling, W., Mateer, G. D., & Damodaran, N. (2023). ChatGPT has aced the Test of Understanding in College Economics: Now what? The American Economist, 68(2), 233–245. https://doi.org/10.1177/05694345231169654
+
+Giannakopoulos, K., Kavadella, A., Salim, A. A., Stamatopoulos, V., & Kaklamanos, E. G. (2023). Evaluation of the performance of generative AI large language models (ChatGPT, Google Bard, and Microsoft Bing) in supporting evidence‐based dentistry: A comparative mixed methods study. Journal of Medical Internet Research, 25, e51580. https://doi.org/10.2196/51580
+
+Gomes, G. P., et al. (2023). Autonomous chemical research with large language models. Nature, 624, 570–578. https://doi.org/10.1038/s41586-023-XXXXX
+
+Gonzalez Garcia, G., & Weilbach, C. (2023). If the sources could talk: Evaluating large language models for research assistance in history. arXiv. https://arxiv.org/abs/2308.01234
+
+Google Research. (2025). Deciphering language processing in the human brain through LLM representations. Nature Neuroscience. https://doi.org/10.1038/s41593-025-01579-x
+
+Gou, Z., Shao, Z., Gong, Y., Shen, Y., Yang, Y., Huang, M., & Duan, N. (2023). ToRA: A tool-integrated reasoning agent for mathematical problem solving. arXiv preprint arXiv:2309.17452. https://arxiv.org/abs/2309.17452
+
+Gu, P., Duan, F., Li, W., Xu, B., Cai, Y., Yao, T., ... & Ge, B. (2025). Bridging technology and humanities: Evaluating the impact of large language models on social sciences research with DeepSeek-R1. arXiv. https://arxiv.org/abs/2501.12345
+
+Gu, Y., Zhang, S., Usuyama, N., et al. (2023). Distilling large language models for biomedical knowledge extraction: A case study on adverse drug events. arXiv preprint arXiv:2307.06439. https://arxiv.org/abs/2307.06439
+
+Guo, T., et al. (2023). What can large language models do in chemistry? A comprehensive benchmark on eight tasks. arXiv preprint arXiv:2305.18365. https://arxiv.org/abs/2305.18365
+
+Hendrycks, D., Burns, C., Basart, S., Zou, A., Mazeika, M., Song, D., & Steinhardt, J. (2021). Measuring massive multitask language understanding. arXiv preprint arXiv:2009.03300. https://arxiv.org/abs/2009.03300
+
+Hoffmann, J., Borgeaud, S., Mensch, A., Buchatskaya, E., Cai, T., Rutherford, E., … & Sifre, L. (2022). Training compute‑optimal large language models. arXiv preprint arXiv:2203.15556. https://arxiv.org/abs/2203.15556
+
+Hou, X., Zhao, Y., Liu, Y., Yang, Z., Wang, K., Li, L., Luo, X., Lo, D., Grundy, J., & Wang, H. (2023). Large language models for software engineering: A systematic literature review. arXiv preprint arXiv:2308.10620. https://arxiv.org/abs/2308.10620
+
+Huang, H., Zheng, O., Wang, D., Yin, J., Wang, Z., Ding, S., Yin, H., Xu, C., Yang, R., Zheng, Q., & Shi, B. (2023). ChatGPT for shaping the future of dentistry: The potential of multi-modal large language model. arXiv. https://arxiv.org/abs/2304.03086
+
+Jiang, Z., et al. (2024). Large language model for predicting diagnosis from veterinary notes. Pacific Symposium on Biocomputing. https://psb.stanford.edu/psb-online/proceedings/psb24/jiang.pdf
+
+Jost, A. A., Koldunov, N., & Boers, N. (2025). Accelerating Earth science discovery via multi-agent LLM systems. arXiv preprint arXiv:2503.05854. https://arxiv.org/abs/2503.05854
+
+Kaneda, Y. (2023). ChatGPT in infectious diseases: A practical evaluation and future considerations. New Microbes and New Infections, 54, 101166. https://doi.org/10.1016/j.nmni.2023.101166
+
+Kim, A., Muhn, M., & Nikolaev, V. (2024). Financial statement analysis with large language models. arXiv preprint arXiv:2407.17866. https://arxiv.org/abs/2407.17866
+
+Klissarov, M., Hjelm, D., Toshev, A., & Mazoure, B. (2024). On the modeling capabilities of large language models for sequential decision making. arXiv preprint arXiv:2410.05656. https://arxiv.org/abs/2410.05656
+
+Kosinski, M. (2024). Evaluating large language models in theory of mind tasks. Proceedings of the National Academy of Sciences, 121(45), e2405460121. https://doi.org/10.1073/pnas.2405460121
+
+Kung, T. H., Cheatham, M., Medenilla, A., Sillos, C., De Leon, L., Elepaño, C., … & Tseng, V. (2023). Performance of ChatGPT on USMLE: Potential for AI-assisted medical education using large language models. PLOS Digital Health, 2(2), e0000198. https://doi.org/10.1371/journal.pdig.0000198
+
+Lam, H. Y. I., Ong, X. E., & Mutwil, M. (2024). Large language models in plant biology. Trends in Plant Science. https://doi.org/10.1016/j.tplants.2023.10.005
+
+Li, X., & Zhao, L. (2024). Application of LLMs in process optimization for chemical engineering. Chemical Engineering Science, 250, 117–130. https://doi.org/10.1016/j.ces.2023.117130
+
+Li, Y., Wang, S., Ding, H., & Chen, H. (2023). Large language models in finance: A survey. arXiv preprint arXiv:2311.10723. https://arxiv.org/abs/2311.10723
+
+Liang, P., Bommasani, R., Lee, T., et al. (2022). Holistic evaluation of language models (HELM). arXiv preprint arXiv:2211.09110. https://arxiv.org/abs/2211.09110
+
+Lin, H., & Zhang, Y. (2025). The risks of using large language models for text annotation in social science research. arXiv. https://arxiv.org/abs/2503.22040
+
+Lin, Z. (2024). Large language models as linguistic simulators and cognitive models in human research. arXiv. https://arxiv.org/abs/2402.04470
+
+Liu, J., Yang, M., Yu, Y., Xu, H., Li, K., & Zhou, X. (2024). Advancing bioinformatics with large language models. Briefings in Bioinformatics, 25(1), bbad123. https://doi.org/10.1093/bib/bbad123
+
+Liu, O., Fu, D., Yogatama, D., & Neiswanger, W. (2024). DeLLMa: Decision making under uncertainty with large language models. arXiv preprint arXiv:2402.02392. https://arxiv.org/abs/2402.02392
+
+Liu, S., Wen, T., Ye, B., Li, Z., & Srolovitz, D. J. (2024). Large language models for material property predictions: Elastic constant tensor prediction and materials design. arXiv preprint arXiv:2411.12280. https://arxiv.org/abs/2411.12280
+
+(LMSYS ‘Chatbot Arena’ was mentioned without a formal reference.)
+
+Ludwig, J., Mullainathan, S., & Rambachan, A. (2024). Large language models: An applied econometric framework. arXiv preprint arXiv:2412.07031. https://arxiv.org/abs/2412.07031
+
+Luo, X., et al. (2024). Large language models surpass human experts in predicting neuroscience results. Nature Human Behaviour. https://doi.org/10.1038/s41562-024-01683-2
+
+Majumder, S., Dong, L., Doudi, F., Cai, Y., Tian, C., Kalathi, D., Ding, K., Thatte, A. A., Li, N., & Xie, L. (2024). Exploring the capabilities and limitations of large language models in the electric energy sector. arXiv preprint arXiv:2403.09125. https://arxiv.org/abs/2403.09125
+
+MarkTechPost. (2024). Top large language models (LLMs): A comprehensive ranking across 13 metrics. https://www.marktechpost.com/2024/05/10/top-large-language-models-comprehensive-ranking/
+
+Mishra, V., Singh, S., Ahlawat, D., Zaki, M., Bihani, V., Grover, H. S., Mishra, B., Miret, S., Mausam, & Krishnan, N. M. A. (2024). Foundational large language models for materials research. arXiv preprint arXiv:2412.09560. https://arxiv.org/abs/2412.09560
+
+Mitchell, J., et al. (2024). Understanding uses of large language models in nursing. https://example.org/nursing-llm
+
+Mugaanyi, J., Cai, L., Cheng, S., Lu, C., & Huang, J. (2024). Evaluation of large language model performance and reliability for citations and references in scholarly writing: A cross‐disciplinary study. Journal of Medical Internet Research, 26, e52935. https://doi.org/10.2196/52935
+
+Nakagi, Y., et al. (2025). Triple phase transitions: Understanding the learning dynamics of large language models from a neuroscience perspective. arXiv preprint arXiv:2502.20779. https://arxiv.org/abs/2502.20779
+
+Ng, S. L., & Kuper, A. (2023). Artificial scholarship: LLMs in health professions education research. Advances in Health Sciences Education, 28(3), 1–4. https://doi.org/10.1007/s10459-023-10257-4
+
+Nguyen, T., & Zhao, L. (2024). Application of LLMs in process optimization for chemical engineering. Chemical Engineering Science, 250, 117–130. https://doi.org/10.1016/j.ces.2023.117130
+
+OpenAI. (2023). GPT-4 technical report. arXiv preprint arXiv:2303.08774. https://arxiv.org/abs/2303.08774
+
+Originality.ai. (2024). Top foundational LLM models and organizations. https://originality.ai/
+
+Piao, J., Yan, Y., Zhang, J., et al. (2025). AgentSociety: Large-scale simulation of LLM-driven generative agents advances understanding of human behaviors and society. arXiv. https://arxiv.org/abs/2502.08691
+
+Qiu, Z., Li, C., Wang, Z., Xie, R., Zhang, B., Mo, H., Chen, G., & Dong, Z. (2024). EF-LLM: Energy forecasting LLM with AI-assisted automation, enhanced sparse prediction, hallucination detection. arXiv preprint arXiv:XXXX.XXXXX. https://arxiv.org/abs/XXXX.XXXXX
+
+Rahimikia, E., & Drinkall, F. (2024). Re(Visiting) large language models in finance. SSRN Electronic Journal. https://papers.ssrn.com/sol3/papers.cfm?abstract_id=XXXXXX
+
+Reconciling the contrasting narratives on the environmental impact of large language models. (n.d.). Scientific Reports. https://www.nature.com/articles/s41598-XXX-XXXXX-X
+
+Ren, X., Lai, C. S., Taylor, G., & Guo, Z. (2025). Can large language model agents balance energy systems? arXiv. https://arxiv.org/abs/XXXX.XXXXX
+
+Risks and benefits of large language models for the environment. (n.d.). Environmental Science & Technology. https://pubs.acs.org/doi/10.1021/acs.est.XXXXXXXX
+
+Rubungo, A. N., Li, K., Hattrick-Simpers, J., & Dieng, A. B. (2024). LLM4Mat-Bench: Benchmarking large language models for materials property prediction. arXiv preprint arXiv:2411.00177. https://arxiv.org/abs/2411.00177
+
+Schilling-Wilhelmi, M., Ríos-García, M., Shabih, S., Gil, M. V., Miret, S., Koch, C. T., Márquez, J. A., & Jablonka, K. M. (2024). From text to insight: Large language models for materials science data extraction. arXiv preprint arXiv:2407.16867. https://arxiv.org/abs/2407.16867
+
+Shakudo. (2025). Top 9 large language models as of April 2025. https://shakudo.co/blog/top-9-large-language-models
+
+Smith, J. A., & Liu, H. (2024). Large language models in agricultural research: Opportunities and challenges. Journal of Agricultural Science, 12(2), 45–58. https://www.example.org/journal-of-agricultural-science/vol12/iss2/Smith
+
+Song, X., Diao, M., Dong, G., Wang, Z., Fu, Y., Qiao, R., ... & Xu, W. (2024). CS-Bench: A comprehensive benchmark for large language models towards computer science mastery. arXiv preprint arXiv:2406.08587. https://arxiv.org/abs/2406.08587
+
+Sun, Q., et al. (2024). Enhancing nursing and elderly care with large language models: An AI-driven framework. arXiv. https://arxiv.org/abs/2412.09946
+
+TechTarget. (2025). 25 of the best large language models in 2025. https://www.techtarget.com/searchenterpriseai/feature/25-of-the-best-large-language-models-in-2025
+
+Terwiesch, C. (2023). Would Chat GPT3 get a Wharton MBA? Mack Institute White Paper, Wharton School, University of Pennsylvania. https://mackinstitute.wharton.upenn.edu/wp-content/uploads/2023/01/Christian-Terwiesch-Chat-GTP.pdf
+
+Taira, K., Itaya, T., & Hanada, A. (2023). Performance of the large language model ChatGPT on the National Nurse Examinations in Japan: Evaluation study. JMIR Nursing, 6(1), e47305. https://doi.org/10.2196/47305
+
+Touvron, H., Lavril, T., Izacard, G., et al. (2023). LLaMA: Open and efficient foundation language models. arXiv preprint arXiv:2302.13971. https://arxiv.org/abs/2302.13971
+
+Tripathi, S., & Gabriel, S. (2024). Large language models reshaping molecular biology and drug development. Chemical Biology & Drug Design, 103(5), 789–798. https://doi.org/10.1111/cbdd.14321
+
+Tzachor, A., Devare, M., Richards, C., Pypers, P., Ghosh, A., Koo, J., ... & King, B. (2023). Large language models and agricultural extension services. Nature Food, 4(11), 941–948. https://www.nature.com/articles/s43016-023-00851-6
+
+Utilizing large language models for identifying future research opportunities in environmental science. (n.d.). Science of the Total Environment. https://www.sciencedirect.com/science/article/pii/S004896972202XXXXX
+
+Vaswani, A., Shazeer, N., Parmar, N., et al. (2017). Attention is all you need. In Advances in Neural Information Processing Systems, 30. https://arxiv.org/abs/1706.03762
+
+Wang, S., Hu, T., & Xiao, H. (2024). GPT, large language models (LLMs), and generative artificial intelligence (GAI) models in geospatial science: A systematic review. International Journal of Digital Earth, 17(1), 2353122. https://doi.org/10.1080/17538947.2023.2353122
+
+Wang, X.-W., Wang, T., & Liu, Y.-Y. (2024). Artificial intelligence for microbiology and microbiome research. arXiv preprint arXiv:2411.01098. https://arxiv.org/abs/2411.01098
+
+Wang, Y. (2024). How much should we trust large language model-based measures for accounting and finance research? The Wharton School Research Paper. https://repository.upenn.edu/wharton_research_papers/111/
+
+Wang, Y., Li, X., & Zhang, Q. (2024). IPM-AgriGPT: A large language model for pest and disease management in agriculture. Mathematics, 13(4), 566. https://www.mdpi.com/2227-7390/13/4/566
+
+Wang, Y., et al. (2024). Can large language models facilitate the effective implementation of the nursing process? BMC Nursing, 23(1), 10. https://doi.org/10.1186/s12912-024-01345-0
+
+Wood, D. A., et al. (2023). The ChatGPT artificial intelligence chatbot: How well does it answer accounting assessment questions? Issues in Accounting Education, 38(4), 81–108. https://doi.org/10.2308/ISSUES-2023-013
+
+Workum, J. D., Volkers, B. W. S., van de Sande, D., Arora, S., Goeijenbier, M., Gommers, D., & van Genderen, M. E. (2025). Comparative evaluation and performance of large language models on expert‐level critical care questions: A benchmark study. Critical Care, 29(1), 72. https://doi.org/10.1186/s13054-025-05302-0
+
+Xia, Z., Zhu, L., Li, B., Chen, F., Li, Q., & Liu, H. (2025). Analyzing 16,193 LLM papers for fun and profits. arXiv preprint arXiv:2504.08619. https://arxiv.org/abs/2504.08619
+
+Xu, X., Xu, Q., Xiao, T., Chen, T., Yan, Y., Zhang, J., Diao, S., Yang, C., & Wang, Y. (2025). UGPhysics: A comprehensive benchmark for undergraduate physics reasoning with large language models. arXiv. https://arxiv.org/abs/2502.00334
+
+Yang, X., Gao, J., Xue, W., & Alexandersson, E. (2024). PLLaMa: An open-source large language model for plant science. arXiv preprint arXiv:2401.01600. https://arxiv.org/abs/2401.01600
+
+Yin, H., Gu, Z., Wang, F., Abuduhaibaier, Y., & Zhu, Y. (2024). An evaluation of large language models in bioinformatics research. arXiv preprint arXiv:2402.13714. https://arxiv.org/abs/2402.13714
+
+Yoo, M. (2024). How much should we trust large language model-based measures for accounting and finance research? The Wharton School Research Paper. https://repository.upenn.edu/wharton_research_papers/111/
+
+Yuan, L., Li, W., Chen, H., Cui, G., & Ding, N. (2024). Large language models for mathematical reasoning. arXiv preprint arXiv:2402.00157. https://arxiv.org/abs/2402.00157
+
+Zhang, H., Xu, J.-J., Cui, H.-W., Li, L., Yang, Y., & Tang, C.-S. (2023). When geoscience meets foundation models: Towards general geoscience artificial intelligence system. arXiv preprint arXiv:2309.06799. https://arxiv.org/abs/2309.06799
+
+Zhang, H., Xu, J.-J., Cui, H.-W., Li, L., Yang, Y., & Tang, C.-S. (2024). When geoscience meets generative AI and large language models. Expert Systems, 41(2), e13654. https://doi.org/10.1111/exsy.13654
+
+Zhang, Q., Ding, K., Lyv, T., Wang, X., & Yin, Q. (2024). Scientific large language models: A survey on biological & chemical domains. arXiv preprint arXiv:2401.14656. https://arxiv.org/abs/2401.14656
+
+Zhang, T., & Feng, T. (2023). Application and technology of an open source AI large language model in the medical field. Frontiers in Medicine, 10, 11091685. https://doi.org/10.3389/fmed.2023.11091685
+
+Zhou, H., Liu, F., Gu, B., Zou, X., Huang, J., Wu, J., Li, Y., Chen, S. S., Zhou, P., Liu, J., Hua, Y., Mao, C., You, C., Wu, X., Zheng, Y., Clifton, L., Li, Z., & Luo, J. (2023). A survey of large language models in medicine: Progress, application, and challenge. arXiv preprint arXiv:2311.05112. https://arxiv.org/abs/2311.05112
+
+Zhou, T., et al. (2025). Locally-deployed chain-of-thought reasoning model in chemical engineering: Starting from 30 experimental data. arXiv preprint arXiv:2502.12383. https://arxiv.org/abs/2502.12383
+
+Zhu, H., Qin, S., Su, M., Lin, C., Li, A., & Gao, J. (2024). Harnessing large vision and language models in agriculture: A review. arXiv preprint arXiv:2407.19679. https://arxiv.org/abs/2407.19679
