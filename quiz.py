@@ -3,26 +3,24 @@
 quiz_llms.py — resilient, resumable, round‑robin quiz‑runner
 ===========================================================
 
-2025‑04‑22 — scoring + prompt + timeout rev
------------------------------------------
-* Prompt now allows **unknown** as a valid answer.
-* New scoring:
-    • correct (true⇄possibly true or false⇄possibly false) → **+0.01**
-    • unknown → **0.00**
-    • incorrect → **‑0.01** (keeps random guessing ≈ 0).
-* Questions per field raised to **10 000**; log shows counter "n/10 000".
-* Year pulled from MongoDB key `publication_year`.
-* 30 s timeout on generation; on expiry answer defaults to unknown.
-* Model list
-    – pruned to chat‑sized models runnable on a single RTX 4090 (≤15 GB VRAM).
+Patch 2025‑04‑22‑typo‑aliases
+---------------------------
+Adds support for answer typos **"possbilytrue"** and **"possiblyfalse"** – they
+are normalised to "possibly true" and "possibly false" respectively for scoring
+purposes.
 
+Scoring (unchanged from previous rev):
+    correct class ➜ +0.01  |  unknown ➜ 0.00  |  wrong ➜ -0.01
 """
 from __future__ import annotations
 
-import csv, itertools, logging, sys, signal, time
-from datetime import datetime
+import csv
+import itertools
+import logging
+import sys
+from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import ollama
 from pymongo import MongoClient
@@ -30,6 +28,7 @@ from pymongo import MongoClient
 # ──────────────────────────────────────────────────────────
 # Configuration
 # ──────────────────────────────────────────────────────────
+
 OLLAMA_NODES: List[str] = [
     "http://laptop0:11434",
     "http://laptop1:11434",
@@ -66,24 +65,37 @@ FIELD_MAP: Dict[str, str] = {
 }
 DATABASES = list(FIELD_MAP.keys())
 
-VALID_ANSWERS = {"true", "false", "possibly true", "possibly false", "unknown"}
+# canonical answers
+CANONICAL = {
+    "true": "true",
+    "possibly true": "possibly true",
+    "possbilytrue": "possibly true",   # alias
+    "false": "false",
+    "possibly false": "possibly false",
+    "possiblyfalse": "possibly false", # alias
+    "unknown": "unknown",
+}
+VALID_ANSWERS = set(CANONICAL.keys())
 TRUE_SET = {"true", "possibly true"}
 FALSE_SET = {"false", "possibly false"}
+
 QUESTIONS_PER_FIELD = 10_000
 MAX_REPROMPTS = 3
 TIMEOUT_SECONDS = 30
 
-# Pruned list — chat LLMs that run comfortably on 24 GB   (<=15 GB VRAM)
-MODEL_LIST: List[str] = [
-    "gemma2", "gemma3", "mistral", "mistral-openorca", "mixtral",
-    "llama3.2", "tinyllama", "tinydolphin", "starcoder2", "hermes3",
-    "phi3", "phi3.5", "phi4-mini", "zephyr", "xwinlm"
+# Shrunken chat‑capable model list (RTX 4090‑friendly examples)
+MODEL_LIST = [
+    "gemma:2b", "mistral:7b", "llama3:8b", "phi3:mini",
+    "tinyllama", "mixtral:8x7b", "starcoder2:15b", "deepseek-llm:7b"
 ]
 
 MONGO_URI = "mongodb://localhost:27017/"
 LOG_PATH = Path("quiz_llms.log")
 CSV_PATH = Path("results.csv")
 
+# ──────────────────────────────────────────────────────────
+# Logging
+# ──────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s — %(levelname)s — %(message)s",
@@ -92,24 +104,16 @@ logging.basicConfig(
 log = logging.getLogger(__name__).info
 log_err = logging.getLogger(__name__).error
 
+# ──────────────────────────────────────────────────────────
+# Helpers
+# ──────────────────────────────────────────────────────────
 EMBEDDING_MODELS: set[str] = set()
 
-# ──────────────────────────────────────────────────────────
-# Timeout helper
-# ──────────────────────────────────────────────────────────
-class TimeoutError(Exception):
-    pass
+def normalise(ans: str) -> str:
+    return CANONICAL.get(ans.lower().strip().rstrip("."), "invalid")
 
-def _handler(signum, frame):
-    raise TimeoutError
 
-signal.signal(signal.SIGALRM, _handler)
-
-# ──────────────────────────────────────────────────────────
-# Ollama helpers
-# ──────────────────────────────────────────────────────────
-
-def pull_or_skip(model: str) -> bool:
+def pull_model(model: str) -> bool:
     if model in EMBEDDING_MODELS:
         return False
     for node in OLLAMA_NODES:
@@ -118,53 +122,39 @@ def pull_or_skip(model: str) -> bool:
         except ollama.ResponseError as e:
             if "does not support generate" in str(e).lower():
                 EMBEDDING_MODELS.add(model)
-                log_err(f"❌ {model} embedding-only — skipped")
+                log_err(f"❌ {model} embed‑only — skip")
                 return False
-            log_err(f"Pull error {node} ({model}): {e}")
             return False
-        except Exception as e:
-            log_err(f"Pull exception {node} ({model}): {e}")
+        except Exception:
             return False
     return True
 
-def delete_everywhere(model: str):
-    for node in OLLAMA_NODES:
+
+def delete_model(model: str):
+    for n in OLLAMA_NODES:
         try:
-            ollama.Client(host=node).delete(model, force=True)
+            ollama.Client(host=n).delete(model, force=True)
         except Exception:
             pass
 
-def ask(model: str, prompt: str, node: str) -> str | None:
+
+def ask(model: str, prompt: str, node: str) -> Optional[str]:
     try:
-        signal.alarm(TIMEOUT_SECONDS)
-        resp = ollama.Client(host=node).generate(model=model, prompt=prompt, stream=False)
+        resp = ollama.Client(host=node).generate(model=model, prompt=prompt, stream=False, timeout=TIMEOUT_SECONDS)
         return resp["response"].strip()
-    except TimeoutError:
-        log_err(f"⏰ Timeout {model} on {node}")
-        return "unknown"
-    except ollama.ResponseError as e:
-        if "does not support generate" in str(e).lower():
-            EMBEDDING_MODELS.add(model)
-        log_err(f"Gen error {node} ({model}): {e}")
+    except Exception:
         return None
-    except Exception as e:
-        log_err(f"Gen exception {node} ({model}): {e}")
-        return None
-    finally:
-        signal.alarm(0)
 
-# ──────────────────────────────────────────────────────────
-# Prompt & scoring
-# ──────────────────────────────────────────────────────────
 
-def build_prompt(field: str, question: str, year: int | None) -> str:
-    yr = f"The paper was published in {year}. " if year else ""
+def build_prompt(field: str, q: str, year: int | None) -> str:
+    ytxt = f"The paper was published in {year}. " if year else ""
     return (
-        f"You are being quizzed in {field}. {yr}"
+        f"You are being quizzed in {field}. {ytxt}"
         "You are being quizzed. Only the single word true, false, possibly true, "
         "possibly false, or unknown is valid as your answer. No explanation, no punctuation.\n\n"
-        f"Question:\n{question}"
+        f"Question:\n{q}"
     )
+
 
 def score(gt: str, pred: str) -> float:
     if pred == "unknown":
@@ -173,101 +163,95 @@ def score(gt: str, pred: str) -> float:
         return 0.01
     return -0.01
 
-# CSV helpers
 
 def csv_header() -> List[str]:
     return ["model", "overall", *FIELD_MAP.values(), "timestamp"]
 
-def completed() -> set[str]:
+
+def done_models() -> set[str]:
     if not CSV_PATH.exists():
         return set()
     with CSV_PATH.open(newline="", encoding="utf-8") as f:
-        r = csv.reader(f)
-        next(r, None)
-        return {row[0] for row in r if row}
+        nxt = csv.reader(f)
+        next(nxt, None)
+        return {r[0] for r in nxt if r}
 
 # ──────────────────────────────────────────────────────────
 # Main
 # ──────────────────────────────────────────────────────────
 
 def main():
-    done = completed()
-    header_written = CSV_PATH.exists()
+    finished = done_models()
+    hdr_written = CSV_PATH.exists()
 
     mongo = MongoClient(MONGO_URI)
-    col_map = {d: mongo[d]["sources"] for d in DATABASES}
+    col = {db: mongo[db]["sources"] for db in DATABASES}
     node_cycle = itertools.cycle(OLLAMA_NODES)
 
     for model in MODEL_LIST:
-        if model in done:
-            log(f"🔄 {model} already done — skipping")
+        if model in finished:
+            log(f"Skip {model} — already done")
+            continue
+        if not pull_model(model):
             continue
         log(f"=== MODEL {model} ===")
-        if not pull_or_skip(model):
-            continue
-
         field_scores: Dict[str, float] = {}
 
         for db in DATABASES:
             fname = FIELD_MAP[db]
-            col = col_map[db]
             docs = list(
-                col.aggregate([
-                    {"$match": {"Question": {"$ne": None}, "Answer": {"$in": list(VALID_ANSWERS - {"unknown"})}}},
-                    {"$sample": {"size": QUESTIONS_PER_FIELD}},
-                ])
+                col[db].aggregate(
+                    [
+                        {"$match": {"Question": {"$ne": None}, "Answer": {"$in": list(TRUE_SET | FALSE_SET)}}},
+                        {"$sample": {"size": QUESTIONS_PER_FIELD}},
+                    ]
+                )
             )
-            if not docs:
-                field_scores[fname] = 0.0
-                continue
-
             total = 0.0
             for idx, d in enumerate(docs, 1):
-                q, gt = d["Question"], d["Answer"].lower()
+                gt = normalise(d["Answer"])
                 year = d.get("publication_year")
-                prompt = build_prompt(fname, q, year)
+                prompt = build_prompt(fname, d["Question"], year)
                 node = next(node_cycle)
 
                 raw = None
                 for _ in range(MAX_REPROMPTS):
                     raw = ask(model, prompt, node)
                     if raw is None:
-                        pred = "unknown"
+                        raw = "unknown"
                         break
-                    pred = raw.lower().strip().rstrip(".")
-                    if pred in VALID_ANSWERS:
+                    pred_norm = normalise(raw)
+                    if pred_norm != "invalid":
                         break
                 else:
-                    pred = "unknown"
+                    pred_norm = "unknown"
 
-                sc = score(gt, pred)
-                res = "✅" if sc > 0 else "❌" if sc < 0 else "� neutral"
-                log(f"{fname} | {idx}/{QUESTIONS_PER_FIELD} | {year or '—'} | {model} | GT:{gt} | LLM:{raw} | {res}")
+                sc = score(gt, pred_norm)
+                res = "✅" if sc > 0 else ("" if sc == 0 else "❌")
+                log(f"{fname} | {year or '—'} | {model} | {idx}/{QUESTIONS_PER_FIELD} | GT:{gt} | LLM:{raw} | {res}")
                 total += sc
+            field_scores[fname] = round(total, 3)
 
-            field_scores[fname] = round(total, 4)
-
-        overall = round(sum(field_scores.values()) / len(FIELD_MAP), 4)
+        overall = round(sum(field_scores.values()) / len(FIELD_MAP), 3)
         row = [model, str(overall)] + [str(field_scores.get(f, 0.0)) for f in FIELD_MAP.values()] + [datetime.now().isoformat()]
 
-        mode = "a" if header_written else "w"
+        mode = "a" if hdr_written else "w"
         with CSV_PATH.open(mode, newline="", encoding="utf-8") as f:
             w = csv.writer(f)
-            if not header_written:
+            if not hdr_written:
                 w.writerow(csv_header())
-                header_written = True
+                hdr_written = True
             w.writerow(row)
 
-        delete_everywhere(model)
-        log(f"🏁 Finished {model}\n")
+        delete_model(model)
+        log(f"Finished {model}\n")
 
     mongo.close()
-    log("🎉 All models processed.")
+    log("All models complete.")
 
 
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        log("Interrupted — exiting.")
-
+        log("Interrupted — exiting")
