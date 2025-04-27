@@ -1,36 +1,25 @@
 #!/usr/bin/env python3
 """
-quiz_llms.py — resilient, resumable, round-robin quiz-runner
+quiz_llms.py — resilient, resumable, round‑robin quiz‑runner
 ===========================================================
 
-Key features
-------------
-* Three Ollama nodes (laptop0/1/2:11434) used round-robin.
-* Pulls each model on all nodes before use; deletes when finished.
-* Detects / skips embedding-only models that reject `generate`.
-* Strict per-question prompt:
-
-      You are being quizzed in <field-name>.
-      The paper was published in <year>.
-      You are being quizzed. Only the single word true, false, possibly true,
-      or possibly false is valid as your answer. No explanation, no punctuation.
-
-* Logs: **field | year | model | question | GT | LLM | result**  
-  ✅ = +0.10 ❌ = -0.10
+2025‑04‑22 — scoring + prompt + timeout rev
+-----------------------------------------
+* Prompt now allows **unknown** as a valid answer.
 * New scoring:
-      – GT ∈{true, possibly true} & Pred ∈{true, possibly true}  → +0.10  
-      – GT ∈{false, possibly false} & Pred ∈{false, possibly false} → +0.10  
-      – Otherwise → -0.10 (so random guessing ≈ 0).
-* Writes `results.csv` with human field names, overall, timestamp.
-* Resumable — skips any LLM already present in `results.csv`.
-"""
+    • correct (true⇄possibly true or false⇄possibly false) → **+0.01**
+    • unknown → **0.00**
+    • incorrect → **‑0.01** (keeps random guessing ≈ 0).
+* Questions per field raised to **10 000**; log shows counter "n/10 000".
+* Year pulled from MongoDB key `publication_year`.
+* 30 s timeout on generation; on expiry answer defaults to unknown.
+* Model list
+    – pruned to chat‑sized models runnable on a single RTX 4090 (≤15 GB VRAM).
 
+"""
 from __future__ import annotations
 
-import csv
-import itertools
-import logging
-import sys
+import csv, itertools, logging, sys, signal, time
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List
@@ -41,7 +30,6 @@ from pymongo import MongoClient
 # ──────────────────────────────────────────────────────────
 # Configuration
 # ──────────────────────────────────────────────────────────
-
 OLLAMA_NODES: List[str] = [
     "http://laptop0:11434",
     "http://laptop1:11434",
@@ -78,60 +66,24 @@ FIELD_MAP: Dict[str, str] = {
 }
 DATABASES = list(FIELD_MAP.keys())
 
-VALID_ANSWERS = {"true", "false", "possibly true", "possibly false"}
+VALID_ANSWERS = {"true", "false", "possibly true", "possibly false", "unknown"}
 TRUE_SET = {"true", "possibly true"}
 FALSE_SET = {"false", "possibly false"}
-QUESTIONS_PER_FIELD = 1_000
+QUESTIONS_PER_FIELD = 10_000
 MAX_REPROMPTS = 3
+TIMEOUT_SECONDS = 30
 
-# Full model list (duplicates kept exactly as supplied)
+# Pruned list — chat LLMs that run comfortably on 24 GB   (<=15 GB VRAM)
 MODEL_LIST: List[str] = [
-    "internlm2","all-minilm","nomic-embed-text","snowflake-arctic-embed",
-    "granite-embedding","smollm","smollm2","paraphrase-multilingual",
-    "bge-large","mxbai-embed-large","qwen","qwen2","qwen2.5","qwen2.5-coder",
-    "reader-lm","bge-m3","snowflake-arctic-embed2","falcon3","gemma3",
-    "granite3-moe","granite3.1-moe","granite3.1-dense","granite3.2",
-    "granite3.2-vision","granite3.3","llama-guard3","llama3.2","sailor2",
-    "starcoder","tinydolphin","tinyllama","deepseek-coder","deepcoder",
-    "deepscaler","phi","dolphin-phi","qwen2-math","yi-coder",
-    "deepseek-coder-v2","exaone-deep","exaone3.5","granite3-guardian",
-    "gemma","gemma2","codegemma","granite3.2-vision","llava-phi3",
-    "llava-llama3","deepseek-r1","deepseek-llm","starcoder2","hermes3",
-    "phi3.5","phi3","phi4-mini","phi4","smollm","smollm2","bge-large",
-    "codestral","command-r7b","command-r7b-arabic","wizardlm","wizardlm2",
-    "wizardlm-uncensored","wizardcoder","wizard-vicuna",
-    "wizard-vicuna-uncensored","wizard-vicuna-uncensored","wizard-math",
-    "wizard-math","wizard-vicuna-uncensored","xwinlm","zephyr","granite-code",
-    "granite3.1-dense","granite3-dense","granite3.2","granite3.3",
-    "granite3-moe","hermes3","internlm2","tinyllama","phi4-mini","smollm",
-    "smollm2","deepseek-coder","deepseek-coder-v2","deepseek-r1",
-    "deepseek-v2","deepseek-v3","dolphincoder","dolphin-mixtral",
-    "dolphin-mistral","dolphin-llama3","dolphin3","moondream","mixtral",
-    "mistral","mistral-nemo","mistral-openorca","mistral-small",
-    "mistral-small3.1","mistrallite","minicpm-v","mxbai-embed-large",
-    "neural-chat","notus","notux","nous-hermes","nous-hermes2",
-    "nous-hermes2-mixtral","olmo2","openchat","openhermes","openthinker",
-    "orca2","orca-mini","samantha-mistral","solar","solar-pro","sqlcoder",
-    "stable-code","stablelm-zephyr","stablelm2","stable-beluga","starling-lm",
-    "bge-large","bakllava","aya","aya-expanse","athene-v2","codebooga",
-    "codegeex4","codeqwen","codestral","cogito","duckdb-nsql","falcon2",
-    "falcon","gemma3","glm4","granite3.1-dense","granite3-moe","internlm2",
-    "internlm2","llama3-chatqa","llama3-gradient","llama3-groq-tool-use",
-    "mistral","mistral-openorca","mixtral","magicoder","mathstral",
-    "medllama2","meditron","nemotron-mini","openhermes","openchat",
-    "openthinker","paraphrase-multilingual","phind-codellama","reflection",
-    "r1-1776","sailor2","smallthinker","snowflake-arctic-embed",
-    "snowflake-arctic-embed2","tulu3","yarn-llama2","yarn-mistral","yi",
-    "vicuna",
+    "gemma2", "gemma3", "mistral", "mistral-openorca", "mixtral",
+    "llama3.2", "tinyllama", "tinydolphin", "starcoder2", "hermes3",
+    "phi3", "phi3.5", "phi4-mini", "zephyr", "xwinlm"
 ]
 
 MONGO_URI = "mongodb://localhost:27017/"
 LOG_PATH = Path("quiz_llms.log")
 CSV_PATH = Path("results.csv")
 
-# ──────────────────────────────────────────────────────────
-# Logging
-# ──────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s — %(levelname)s — %(message)s",
@@ -140,15 +92,24 @@ logging.basicConfig(
 log = logging.getLogger(__name__).info
 log_err = logging.getLogger(__name__).error
 
-# ──────────────────────────────────────────────────────────
-# Helpers
-# ──────────────────────────────────────────────────────────
-
 EMBEDDING_MODELS: set[str] = set()
 
+# ──────────────────────────────────────────────────────────
+# Timeout helper
+# ──────────────────────────────────────────────────────────
+class TimeoutError(Exception):
+    pass
+
+def _handler(signum, frame):
+    raise TimeoutError
+
+signal.signal(signal.SIGALRM, _handler)
+
+# ──────────────────────────────────────────────────────────
+# Ollama helpers
+# ──────────────────────────────────────────────────────────
 
 def pull_or_skip(model: str) -> bool:
-    """Pull model on all nodes; return False if model is embedding-only or failed."""
     if model in EMBEDDING_MODELS:
         return False
     for node in OLLAMA_NODES:
@@ -157,7 +118,7 @@ def pull_or_skip(model: str) -> bool:
         except ollama.ResponseError as e:
             if "does not support generate" in str(e).lower():
                 EMBEDDING_MODELS.add(model)
-                log_err(f"❌ {model} is embedding-only — skipping")
+                log_err(f"❌ {model} embedding-only — skipped")
                 return False
             log_err(f"Pull error {node} ({model}): {e}")
             return False
@@ -166,19 +127,21 @@ def pull_or_skip(model: str) -> bool:
             return False
     return True
 
-
-def delete_everywhere(model: str) -> None:
+def delete_everywhere(model: str):
     for node in OLLAMA_NODES:
         try:
             ollama.Client(host=node).delete(model, force=True)
         except Exception:
             pass
 
-
 def ask(model: str, prompt: str, node: str) -> str | None:
     try:
+        signal.alarm(TIMEOUT_SECONDS)
         resp = ollama.Client(host=node).generate(model=model, prompt=prompt, stream=False)
         return resp["response"].strip()
+    except TimeoutError:
+        log_err(f"⏰ Timeout {model} on {node}")
+        return "unknown"
     except ollama.ResponseError as e:
         if "does not support generate" in str(e).lower():
             EMBEDDING_MODELS.add(model)
@@ -187,23 +150,35 @@ def ask(model: str, prompt: str, node: str) -> str | None:
     except Exception as e:
         log_err(f"Gen exception {node} ({model}): {e}")
         return None
+    finally:
+        signal.alarm(0)
 
+# ──────────────────────────────────────────────────────────
+# Prompt & scoring
+# ──────────────────────────────────────────────────────────
 
 def build_prompt(field: str, question: str, year: int | None) -> str:
     yr = f"The paper was published in {year}. " if year else ""
     return (
         f"You are being quizzed in {field}. {yr}"
         "You are being quizzed. Only the single word true, false, possibly true, "
-        "or possibly false is valid as your answer. No explanation, no punctuation.\n\n"
+        "possibly false, or unknown is valid as your answer. No explanation, no punctuation.\n\n"
         f"Question:\n{question}"
     )
 
+def score(gt: str, pred: str) -> float:
+    if pred == "unknown":
+        return 0.0
+    if (gt in TRUE_SET and pred in TRUE_SET) or (gt in FALSE_SET and pred in FALSE_SET):
+        return 0.01
+    return -0.01
+
+# CSV helpers
 
 def csv_header() -> List[str]:
-    return ["model", *FIELD_MAP.values(), "overall", "timestamp"]
+    return ["model", "overall", *FIELD_MAP.values(), "timestamp"]
 
-
-def completed_models() -> set[str]:
+def completed() -> set[str]:
     if not CSV_PATH.exists():
         return set()
     with CSV_PATH.open(newline="", encoding="utf-8") as f:
@@ -211,30 +186,22 @@ def completed_models() -> set[str]:
         next(r, None)
         return {row[0] for row in r if row}
 
-
-def score(gt: str, pred: str) -> float:
-    if (gt in TRUE_SET and pred in TRUE_SET) or (gt in FALSE_SET and pred in FALSE_SET):
-        return 0.10
-    return -0.10
-
-
 # ──────────────────────────────────────────────────────────
 # Main
 # ──────────────────────────────────────────────────────────
 
-def main() -> None:
-    done = completed_models()
+def main():
+    done = completed()
     header_written = CSV_PATH.exists()
 
     mongo = MongoClient(MONGO_URI)
-    collections = {db: mongo[db]["sources"] for db in DATABASES}
+    col_map = {d: mongo[d]["sources"] for d in DATABASES}
     node_cycle = itertools.cycle(OLLAMA_NODES)
 
     for model in MODEL_LIST:
         if model in done:
             log(f"🔄 {model} already done — skipping")
             continue
-
         log(f"=== MODEL {model} ===")
         if not pull_or_skip(model):
             continue
@@ -243,24 +210,21 @@ def main() -> None:
 
         for db in DATABASES:
             fname = FIELD_MAP[db]
-            col = collections[db]
-
+            col = col_map[db]
             docs = list(
-                col.aggregate(
-                    [
-                        {"$match": {"Question": {"$ne": None}, "Answer": {"$in": list(VALID_ANSWERS)}}},
-                        {"$sample": {"size": QUESTIONS_PER_FIELD}},
-                    ]
-                )
+                col.aggregate([
+                    {"$match": {"Question": {"$ne": None}, "Answer": {"$in": list(VALID_ANSWERS - {"unknown"})}}},
+                    {"$sample": {"size": QUESTIONS_PER_FIELD}},
+                ])
             )
             if not docs:
                 field_scores[fname] = 0.0
                 continue
 
-            field_total = 0.0
-            for d in docs:
+            total = 0.0
+            for idx, d in enumerate(docs, 1):
                 q, gt = d["Question"], d["Answer"].lower()
-                year = d.get("year")
+                year = d.get("publication_year")
                 prompt = build_prompt(fname, q, year)
                 node = next(node_cycle)
 
@@ -268,24 +232,23 @@ def main() -> None:
                 for _ in range(MAX_REPROMPTS):
                     raw = ask(model, prompt, node)
                     if raw is None:
+                        pred = "unknown"
                         break
                     pred = raw.lower().strip().rstrip(".")
                     if pred in VALID_ANSWERS:
                         break
                 else:
-                    pred = "skipped"
+                    pred = "unknown"
 
-                sc = score(gt, pred) if pred in VALID_ANSWERS else -0.10
-                res = "✅" if sc > 0 else "❌"
-                log(f"{fname} | {year or '—'} | {model} | {q} | GT:{gt} | LLM:{raw} | {res}")
-                field_total += sc
+                sc = score(gt, pred)
+                res = "✅" if sc > 0 else "❌" if sc < 0 else "� neutral"
+                log(f"{fname} | {idx}/{QUESTIONS_PER_FIELD} | {year or '—'} | {model} | GT:{gt} | LLM:{raw} | {res}")
+                total += sc
 
-            field_scores[fname] = round(field_total, 3)
+            field_scores[fname] = round(total, 4)
 
-        # write CSV
-        row = [model] + [str(field_scores.get(f, 0.0)) for f in FIELD_MAP.values()]
-        overall = round(sum(field_scores.values()) / len(FIELD_MAP), 3)
-        row += [str(overall), datetime.now().isoformat()]
+        overall = round(sum(field_scores.values()) / len(FIELD_MAP), 4)
+        row = [model, str(overall)] + [str(field_scores.get(f, 0.0)) for f in FIELD_MAP.values()] + [datetime.now().isoformat()]
 
         mode = "a" if header_written else "w"
         with CSV_PATH.open(mode, newline="", encoding="utf-8") as f:
