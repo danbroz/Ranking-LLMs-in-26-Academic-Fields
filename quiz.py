@@ -640,7 +640,86 @@ def _query_gpu_memory_mb() -> List[int]:
     return [24576]
 
 
+def _detect_cpu_cores() -> int:
+    """Detect CPU core count, including hyperthreading."""
+    try:
+        # Try os.cpu_count() first (Python 3.4+)
+        cores = os.cpu_count()
+        if cores:
+            return cores
+    except Exception:
+        pass
+    
+    try:
+        # Try multiprocessing as fallback
+        import multiprocessing
+        cores = multiprocessing.cpu_count()
+        if cores:
+            return cores
+    except Exception:
+        pass
+    
+    # Try reading from /proc/cpuinfo on Linux
+    try:
+        with open('/proc/cpuinfo', 'r') as f:
+            cores = len([line for line in f if line.startswith('processor')])
+            if cores > 0:
+                return cores
+    except Exception:
+        pass
+    
+    # Fallback to 8 cores if detection fails
+    return 8
+
+
+def _detect_available_ram_gb() -> float:
+    """Detect available system RAM in gigabytes."""
+    try:
+        # Try /proc/meminfo on Linux
+        with open('/proc/meminfo', 'r') as f:
+            for line in f:
+                if line.startswith('MemAvailable:'):
+                    kb = int(line.split()[1])
+                    return kb / (1024 * 1024)  # Convert KB to GB
+                elif line.startswith('MemTotal:'):
+                    # Fallback to total if available not found
+                    kb = int(line.split()[1])
+                    return kb / (1024 * 1024)  # Convert KB to GB
+    except Exception:
+        pass
+    
+    try:
+        # Try psutil if available
+        import psutil
+        ram_gb = psutil.virtual_memory().total / (1024 ** 3)
+        return ram_gb
+    except ImportError:
+        pass
+    except Exception:
+        pass
+    
+    # Fallback to 32 GB if detection fails
+    return 32.0
+
+
+def calculate_workers_per_node() -> int:
+    """Calculate optimal workers per node based on CPU cores and GPU count."""
+    cpu_cores = _detect_cpu_cores()
+    num_gpus = len(GPU_MEMORY_MB)
+    
+    # Formula: workers = min(max(2, cpu_cores // num_gpus), 16)
+    # Minimum 2, scale with CPU cores divided by GPUs, cap at 16
+    if num_gpus > 0:
+        workers = min(max(2, cpu_cores // num_gpus), 16)
+    else:
+        # If no GPUs detected, use a conservative value
+        workers = min(max(2, cpu_cores // 4), 16)
+    
+    return workers
+
+
 GPU_MEMORY_MB = _query_gpu_memory_mb()
+WORKERS_PER_NODE = calculate_workers_per_node()
 
 def estimate_model_memory_mb(model: str) -> int:
     """Estimate VRAM per instance required to serve *model* via Ollama."""
@@ -690,6 +769,14 @@ def main():
     GLOBAL_SALVAGE_TOTAL = 0
     GLOBAL_SALVAGE_BY_MODEL = {}
     GLOBAL_SALVAGE_BY_FIELD = defaultdict(int)
+    
+    # Log system specs and calculated concurrency
+    cpu_cores = _detect_cpu_cores()
+    ram_gb = _detect_available_ram_gb()
+    num_gpus = len(GPU_MEMORY_MB)
+    log(f"💻 System specs: {cpu_cores} CPU cores, {ram_gb:.1f} GB RAM, {num_gpus} GPU(s)")
+    log(f"⚙️  Calculated concurrency: {WORKERS_PER_NODE} workers per node")
+    
     completed=done(); hdr=CSV_PATH.exists()
     mongo=MongoClient(MONGO_URI)
     cols={db:mongo[db]["sources"] for db in DATABASES}
@@ -720,7 +807,8 @@ def main():
 
             total=0.0
             field_salvaged = 0
-            with ThreadPoolExecutor(max_workers=node_count) as executor:
+            max_workers = node_count * WORKERS_PER_NODE
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 futures=[
                     executor.submit(process_batch, node, batch, model, fname)
                     for node, batch in node_batches.items() if batch

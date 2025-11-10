@@ -61,7 +61,90 @@ def _query_gpu_memory_mb():
     return [24576]
 
 
+def _detect_cpu_cores():
+    """Detect CPU core count, including hyperthreading."""
+    try:
+        # Try os.cpu_count() first (Python 3.4+)
+        cores = os.cpu_count()
+        if cores:
+            return cores
+    except Exception:
+        pass
+    
+    try:
+        # Try multiprocessing as fallback
+        import multiprocessing
+        cores = multiprocessing.cpu_count()
+        if cores:
+            return cores
+    except Exception:
+        pass
+    
+    # Try reading from /proc/cpuinfo on Linux
+    try:
+        with open('/proc/cpuinfo', 'r') as f:
+            cores = len([line for line in f if line.startswith('processor')])
+            if cores > 0:
+                return cores
+    except Exception:
+        pass
+    
+    # Fallback to 8 cores if detection fails
+    return 8
+
+
+def _detect_available_ram_gb():
+    """Detect available system RAM in gigabytes."""
+    try:
+        # Try /proc/meminfo on Linux
+        with open('/proc/meminfo', 'r') as f:
+            for line in f:
+                if line.startswith('MemAvailable:'):
+                    kb = int(line.split()[1])
+                    return kb / (1024 * 1024)  # Convert KB to GB
+                elif line.startswith('MemTotal:'):
+                    # Fallback to total if available not found
+                    kb = int(line.split()[1])
+                    return kb / (1024 * 1024)  # Convert KB to GB
+    except Exception:
+        pass
+    
+    try:
+        # Try psutil if available
+        import psutil
+        ram_gb = psutil.virtual_memory().total / (1024 ** 3)
+        return ram_gb
+    except ImportError:
+        pass
+    except Exception:
+        pass
+    
+    # Fallback to 32 GB if detection fails
+    return 32.0
+
+
 GPU_MEMORY_MB = _query_gpu_memory_mb()
+
+
+def calculate_workers_per_node():
+    """Calculate optimal workers per node based on CPU cores and GPU count."""
+    cpu_cores = _detect_cpu_cores()
+    num_gpus = len(GPU_MEMORY_MB)
+    
+    # Formula: workers = min(max(2, cpu_cores // num_gpus), 16)
+    # Minimum 2, scale with CPU cores divided by GPUs, cap at 16
+    if num_gpus > 0:
+        workers = min(max(2, cpu_cores // num_gpus), 16)
+    else:
+        # If no GPUs detected, use a conservative value
+        workers = min(max(2, cpu_cores // 4), 16)
+    
+    return workers
+
+
+# Calculate dynamic concurrency values at module initialization
+WORKERS_PER_NODE = calculate_workers_per_node()
+MAX_CONCURRENT_REQUESTS_PER_NODE = WORKERS_PER_NODE  # Match workers per node
 
 MONGO_URI = "mongodb://localhost:27017/"
 DATABASES = [f'field_{fid}' for fid in range(11, 37)]
@@ -70,9 +153,7 @@ MAX_ATTEMPTS = 3
 TASK_TIMEOUT_SECONDS = 60  # Increased from 30 to handle load better
 LOG_TIMEOUT_SECONDS = 3600  # 1 hour - only restart if truly stuck
 BATCH_SIZE = 40
-WORKERS_PER_NODE = 10  # Increased from 3 to better utilize each Ollama instance
 RETRY_DELAY = 0.05  # Reduced from 0.2s for faster retries
-MAX_CONCURRENT_REQUESTS_PER_NODE = 10  # Semaphore limit per node (matches WORKERS_PER_NODE)
 NODE_BACKOFF_SECONDS = 30  # Back off a node for 30 seconds after timeout
 
 last_log_time = datetime.now()
@@ -164,6 +245,13 @@ def ensure_ollama_instances():
     hostname = get_hostname()
     if hostname != 'node0':
         log(f"⚠️ Hostname is '{hostname}', not 'node0'; proceeding with local Ollama setup anyway.")
+
+    # Log system specs and calculated concurrency
+    cpu_cores = _detect_cpu_cores()
+    ram_gb = _detect_available_ram_gb()
+    num_gpus = len(GPU_MEMORY_MB)
+    log(f"💻 System specs: {cpu_cores} CPU cores, {ram_gb:.1f} GB RAM, {num_gpus} GPU(s)")
+    log(f"⚙️  Calculated concurrency: {WORKERS_PER_NODE} workers per node, {MAX_CONCURRENT_REQUESTS_PER_NODE} max concurrent requests per node")
 
     ensure_ollama_installed()
 
