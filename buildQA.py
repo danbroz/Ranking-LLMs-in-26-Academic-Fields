@@ -296,13 +296,21 @@ Answer: true"""
         "- Please provide the research abstract.\n"
         "- I will follow the instructions.\n"
         "- Any explanation of what you are doing.\n"
-        "- 'Q:' or any abbreviation of 'Question:'. Spell 'Question:' exactly.\n"
+        "- Anything after the answer line.\n"
+    )
+
+    question_rules = (
+        "Format requirements:\n"
+        "1. First line: must start with either 'Question:' or the abbreviated 'Q:' immediately followed by ' Is it true, false, possibly true, or possibly false that' and must end with a question mark '?'.\n"
+        "2. Second line: must start with 'Answer:' followed by exactly one of true, false, possibly true, possibly false.\n"
+        "3. No other text is allowed—no extra sentences, no blank lines, no truncation.\n"
     )
 
     base_prompt = (
         "You are generating questions and answers into a database from research abstracts. "
         "Only the exact format shown below is accepted—no confirmations, no acknowledgements, and no explanations. "
-        "The very first character you output must be 'Q' from 'Question:'. Respond directly with the question line and the answer line, nothing else before, between, or after.\n\n"
+        "The very first character you output must be 'Q' (either 'Question:' or 'Q:'), and the line must end with '?'. Respond directly with the question line and the answer line, nothing else before, between, or after.\n\n"
+        f"{question_rules}\n"
         "From the following research abstract, generate exactly one question based specifically on the findings described. "
         "Start the question with the exact words 'Is it true, false, possibly true, or possibly false that'. "
         "Do not include phrases like 'does the study', 'does the abstract', 'based on these findings', "
@@ -319,9 +327,9 @@ Answer: true"""
     if error_feedback:
         base_prompt += (
             f"Your previous response was incorrect: {error_feedback}\n"
-            "You must begin your reply with 'Question:' as the first token, followed immediately by the required question. "
+            "You must begin your reply with 'Question:' or 'Q:' as the first token, followed immediately by the required question that ends with '?' as shown above. "
             "The second line must start with 'Answer:' exactly and contain only one of the allowed words. "
-            "Do NOT write acknowledgements, confirmations, or any of the forbidden phrases above. "
+            "Do NOT write acknowledgements, confirmations, or any extra phrases. "
             "Output exactly two lines—see the example—and never imitate the unacceptable example.\n\n"
         )
 
