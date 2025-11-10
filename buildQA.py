@@ -284,7 +284,8 @@ Answer: true"""
 
     base_prompt = (
         "You are generating questions and answers into a database from research abstracts. "
-        "The database will not get updated unless you follow these instructions precisely.\n\n"
+        "Only the exact format shown below is accepted—no confirmations, no acknowledgements, and no explanations. "
+        "Respond directly with the question and answer lines, nothing else before or after.\n\n"
         "From the following research abstract, generate exactly one question based specifically on the findings described. "
         "Start the question with the exact words 'Is it true, false, possibly true, or possibly false that'. "
         "Do not include phrases like 'does the study', 'does the abstract', 'based on these findings', "
@@ -296,9 +297,19 @@ Answer: true"""
     )
 
     if error_feedback:
-        base_prompt += f"Your previous response was incorrect: {error_feedback}\nPlease correct and try again carefully. Follow the format exactly as shown in the example.\n\n"
+        base_prompt += (
+            f"Your previous response was incorrect: {error_feedback}\n"
+            "Remember: do not write acknowledgements or explanations—only the question line and the answer line. "
+            "Follow the format exactly as shown in the example.\n\n"
+        )
 
-    base_prompt += f"Abstract:\n{abstract}\n\nOutput format (MUST follow exactly):\nQuestion: Is it true, false, possibly true, or possibly false that <your question here>?\nAnswer: <true|false|possibly true|possibly false>"
+    base_prompt += (
+        "Abstract:\n"
+        f"{abstract}\n\n"
+        "Output format (MUST follow exactly two lines):\n"
+        "Question: Is it true, false, possibly true, or possibly false that <your question here>?\n"
+        "Answer: <true|false|possibly true|possibly false>"
+    )
     return base_prompt
 
 def is_valid_response(response):
