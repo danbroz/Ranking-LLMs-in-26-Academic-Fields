@@ -289,10 +289,19 @@ Answer: true"""
         "Answer: true\n"
     )
 
+    never_say = (
+        "Never write any of the following phrases (before, between, or after the required lines):\n"
+        "- Okay, I understand.\n"
+        "- I'm ready.\n"
+        "- Please provide the research abstract.\n"
+        "- I will follow the instructions.\n"
+        "- Any explanation of what you are doing.\n"
+    )
+
     base_prompt = (
         "You are generating questions and answers into a database from research abstracts. "
         "Only the exact format shown below is accepted—no confirmations, no acknowledgements, and no explanations. "
-        "Respond directly with the question line and the answer line, nothing else before, between, or after.\n\n"
+        "The very first character you output must be 'Q' from 'Question:'. Respond directly with the question line and the answer line, nothing else before, between, or after.\n\n"
         "From the following research abstract, generate exactly one question based specifically on the findings described. "
         "Start the question with the exact words 'Is it true, false, possibly true, or possibly false that'. "
         "Do not include phrases like 'does the study', 'does the abstract', 'based on these findings', "
@@ -302,13 +311,15 @@ Answer: true"""
         "Then directly answer it with one of these four choices only (no additional explanation).\n\n"
         f"{example}\n\n"
         f"{unacceptable}\n"
+        f"{never_say}\n"
     )
 
     if error_feedback:
         base_prompt += (
             f"Your previous response was incorrect: {error_feedback}\n"
-            "Remember: do NOT write acknowledgements, confirmations, or explanations—only the question line and the answer line. "
-            "Follow the format exactly as shown in the example and never imitate the unacceptable example.\n\n"
+            "You must begin your reply with 'Question:' as the first token, followed immediately by the required question. "
+            "Do NOT write acknowledgements, confirmations, or any of the forbidden phrases above. "
+            "Output exactly two lines—see the example—and never imitate the unacceptable example.\n\n"
         )
 
     base_prompt += (
