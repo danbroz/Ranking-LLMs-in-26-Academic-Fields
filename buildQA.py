@@ -127,17 +127,25 @@ GPU_MEMORY_MB = _query_gpu_memory_mb()
 
 
 def calculate_workers_per_node():
-    """Calculate optimal workers per node based on CPU cores and GPU count."""
+    """Calculate optimal workers per node based on CPU cores, GPU count, and model size."""
     cpu_cores = _detect_cpu_cores()
     num_gpus = len(GPU_MEMORY_MB)
     
-    # Formula: workers = min(max(2, cpu_cores // num_gpus), 16)
-    # Minimum 2, scale with CPU cores divided by GPUs, cap at 16
+    # For small models (like gemma3:270m), we can be more aggressive with concurrency
+    # Base calculation: workers = cpu_cores // num_gpus, but scale up for small models
     if num_gpus > 0:
-        workers = min(max(2, cpu_cores // num_gpus), 16)
+        base_workers = cpu_cores // num_gpus
+        # For small models (< 2GB), allow much higher concurrency (up to 50 workers per node)
+        # This helps saturate GPU utilization when model inference is fast
+        if MODEL_MEMORY_MB < 2000:
+            # Small model: allow 3-4x base workers, cap at 50
+            workers = min(max(10, base_workers * 3), 50)
+        else:
+            # Larger models: more conservative, cap at 20
+            workers = min(max(5, base_workers * 2), 20)
     else:
         # If no GPUs detected, use a conservative value
-        workers = min(max(2, cpu_cores // 4), 16)
+        workers = min(max(5, cpu_cores // 4), 20)
     
     return workers
 
@@ -571,7 +579,7 @@ def generate_question_answer(node, abstract):
                     else:
                         question = question_line
                     answer_line = answer_line.strip()
-                    if answer_line.startswith("Answer:"):
+                    if answer_linenswer_line.startswith("Answer:"):
                         answer = answer_line[len("Answer:"):].strip()
                     else:
                         answer = answer_line
@@ -654,8 +662,9 @@ def upsert_and_update(mongo_client, row, question, answer, field_ids):
         "Answer": answer,
     }
 
-    # Batch write to all field databases
-    for fid in field_ids:
+    # Batch write to all field databases in parallel using threads for speed
+    # This reduces database write latency when writing to multiple field databases
+    def write_to_field(fid):
         db = mongo_client[f'field_{fid}']
         collection = db['sources']
         collection.update_one(
@@ -663,6 +672,14 @@ def upsert_and_update(mongo_client, row, question, answer, field_ids):
             {"$set": document},
             upsert=True
         )
+    
+    # Use ThreadPoolExecutor for parallel writes if multiple fields
+    if len(field_ids) > 1:
+        with ThreadPoolExecutor(max_workers=min(len(field_ids), 8)) as write_executor:
+            write_executor.map(write_to_field, field_ids)
+    else:
+        # Single field, no need for threading overhead
+        write_to_field(field_ids[0])
 
 
 def is_record_processed(mongo_client, openalex_id, field_ids):
