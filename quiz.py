@@ -15,7 +15,7 @@ model|overall|fields|timestamp, trimmed model list fallback for RTX 4090) is int
 """
 
 from __future__ import annotations
-import csv, logging, sys, re
+import csv, logging, sys, re, signal
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Tuple
@@ -186,19 +186,82 @@ CORRECT_SCORE = 0.1   # 1000 correct answers → 100 points
 INCORRECT_SCORE = -0.1
 
 OLLAMA_PROCESSES: List[subprocess.Popen] = []
+OLLAMA_MANAGED_PIDS: set[int] = set()
 
 
-def _cleanup_processes():
-    for proc in OLLAMA_PROCESSES:
+def _register_pid(pid: int) -> None:
+    if pid > 0:
+        OLLAMA_MANAGED_PIDS.add(pid)
+
+
+def _detect_pids_for_ports(ports: list[str]) -> set[int]:
+    if not ports:
+        return set()
+    try:
+        output = subprocess.check_output(
+            ["ss", "-ltnp"], text=True, stderr=subprocess.DEVNULL
+        )
+    except Exception:
+        return set()
+
+    port_patterns = tuple(f":{port}" for port in ports)
+    candidates: set[int] = set()
+    for line in output.splitlines():
+        if any(pattern in line for pattern in port_patterns):
+            candidates.update(int(match) for match in re.findall(r"pid=(\d+)", line))
+    return candidates
+
+
+def _pid_is_alive(pid: int) -> bool:
+    try:
+        os.kill(pid, 0)
+    except OSError:
+        return False
+    return True
+
+
+def _terminate_pid(pid: int, timeout: float = 5.0) -> None:
+    if pid <= 0:
+        return
+    if not _pid_is_alive(pid):
+        return
+
+    with suppress(ProcessLookupError):
+        os.kill(pid, signal.SIGTERM)
+
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        if not _pid_is_alive(pid):
+            return
+        time.sleep(0.1)
+
+    with suppress(ProcessLookupError):
+        os.kill(pid, signal.SIGKILL)
+
+
+def shutdown_ollama_instances(force_all: bool = False) -> None:
+    """Terminate tracked Ollama processes and any strays bound to our ports."""
+    for proc in list(OLLAMA_PROCESSES):
         if proc.poll() is None:
             with suppress(Exception):
                 proc.terminate()
-    for proc in OLLAMA_PROCESSES:
-        with suppress(Exception):
-            proc.wait(timeout=5)
+                proc.wait(timeout=5)
+        if proc.poll() is None:
+            with suppress(Exception):
+                proc.kill()
+        OLLAMA_PROCESSES.remove(proc)
+
+    managed_pids = set(OLLAMA_MANAGED_PIDS)
+    if force_all:
+        managed_pids |= _detect_pids_for_ports([inst["port"] for inst in INSTANCES])
+
+    for pid in managed_pids:
+        _terminate_pid(pid)
+
+    OLLAMA_MANAGED_PIDS.clear()
 
 
-atexit.register(_cleanup_processes)
+atexit.register(lambda: shutdown_ollama_instances(force_all=True))
 
 # ────────── environment helpers ──────────
 
@@ -221,6 +284,14 @@ def _service_action(args: list[str]) -> bool:
 
 def ensure_ollama_running() -> None:
     ensure_ollama_installed()
+    ports = [inst["port"] for inst in INSTANCES]
+    existing_pids = _detect_pids_for_ports(ports)
+    for pid in existing_pids:
+        _register_pid(pid)
+    if existing_pids:
+        shutdown_ollama_instances(force_all=True)
+        time.sleep(0.5)
+
     primary_hosts = [inst["host"] for inst in INSTANCES]
 
     def ping(host: str) -> bool:
@@ -229,16 +300,14 @@ def ensure_ollama_running() -> None:
             return True
         return False
 
-    all_available = all(ping(host) for host in primary_hosts)
-    if all_available:
-        return
-
     if shutil.which("systemctl"):
         _service_action(["systemctl", "stop", "ollama"])
         time.sleep(1)
 
     for inst in INSTANCES:
         if ping(inst["host"]):
+            for pid in _detect_pids_for_ports([inst["port"]]):
+                _register_pid(pid)
             continue
 
         env = os.environ.copy()
@@ -253,9 +322,13 @@ def ensure_ollama_running() -> None:
             env=env,
         )
         OLLAMA_PROCESSES.append(proc)
+        _register_pid(proc.pid)
         time.sleep(2)
         if not ping(inst["host"]):
             raise RuntimeError(f"Unable to reach Ollama at {inst['host']}. Please ensure the service is running.")
+
+    for pid in _detect_pids_for_ports(ports):
+        _register_pid(pid)
 
 # ────────── helpers ──────────
 EMBEDMODELS:set[str]=set()
@@ -468,6 +541,10 @@ def main():
 
     mongo.close(); log("🎉 all models done")
 
-if __name__=="__main__":
-    try: main()
-    except KeyboardInterrupt: log("bye")
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        log("bye")
+    finally:
+        shutdown_ollama_instances(force_all=True)
