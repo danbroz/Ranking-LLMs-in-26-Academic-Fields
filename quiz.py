@@ -43,6 +43,13 @@ MAX_REPROMPTS = 1
 VALID_ANSWERS     = {"true", "false", "possibly true", "possibly false", "unknown"}
 TRUE_SET, FALSE_SET = {"true", "possibly true"}, {"false", "possibly false"}
 ALIAS = {"possbilytrue": "possibly true", "possiblyfalse": "possibly false"}
+NUMERIC_CHOICES = {
+    "1": "true",
+    "2": "false",
+    "3": "possibly true",
+    "4": "possibly false",
+    "5": "unknown",
+}
 FILLER_PHRASES = {
     "the answer is yes": "true",
     "answer is yes": "true",
@@ -383,6 +390,10 @@ def normalize_and_validate(raw: str) -> Tuple[str, bool, str]:
     normalized = " ".join(stripped.lower().split())
     normalized = ALIAS.get(normalized, normalized)
 
+    if re.fullmatch(r"[1-5](?:[).])?", normalized):
+        mapped = NUMERIC_CHOICES[normalized[0]]
+        return mapped, True, "Numeric choice"
+
     if normalized in VALID_ANSWERS and stripped.lower() == normalized:
         return normalized, True, ""
 
@@ -403,10 +414,6 @@ def normalize_and_validate(raw: str) -> Tuple[str, bool, str]:
             for synonym in synonyms:
                 if synonym in word_tokens:
                     return target, True, f"Alias keyword '{synonym}'"
-
-    for token in VALID_ANSWERS:
-        if token in normalized:
-            return token, True, "Matched valid token inside longer response."
 
     return "unknown", False, "Answer must be exactly one of: true, false, possibly true, possibly false, unknown."
 
