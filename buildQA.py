@@ -20,7 +20,7 @@ import requests
 import pandas as pd
 from tqdm import tqdm
 from datetime import datetime, timedelta
-from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
+from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED, as_completed
 from threading import Thread, Semaphore, Lock
 from collections import defaultdict
 import signal
@@ -150,10 +150,10 @@ MONGO_URI = "mongodb://localhost:27017/"
 DATABASES = [f'field_{fid}' for fid in range(11, 37)]
 
 MAX_ATTEMPTS = 3
-TASK_TIMEOUT_SECONDS = 60  # Increased from 30 to handle load better
+TASK_TIMEOUT_SECONDS = 45  # Reduced from 60s for faster failure detection
 LOG_TIMEOUT_SECONDS = 3600  # 1 hour - only restart if truly stuck
 BATCH_SIZE = 40
-RETRY_DELAY = 0.05  # Reduced from 0.2s for faster retries
+RETRY_DELAY = 0.01  # Reduced from 0.05s for faster retries
 NODE_BACKOFF_SECONDS = 30  # Back off a node for 30 seconds after timeout
 
 last_log_time = datetime.now()
@@ -163,6 +163,8 @@ node_semaphores = {}  # Semaphore per node to limit concurrent requests
 node_timeout_counts = defaultdict(int)  # Track timeout counts per node
 node_last_timeout = {}  # Track last timeout time per node
 node_lock = Lock()  # Lock for thread-safe access to node tracking
+node_round_robin_index = 0  # Round-robin index for simple node selection
+node_round_robin_lock = Lock()  # Lock for thread-safe round-robin access
 
 def log(message):
     global last_log_time
@@ -319,7 +321,7 @@ def ensure_ollama_instances():
         stdout = open(f'ollama_{port}.log', 'a')
         process = subprocess.Popen(['nohup', 'ollama', 'serve'], env=env, stdout=stdout, stderr=subprocess.STDOUT)
         gpu_started_counts[int(gpu)] += 1
-        time.sleep(5)
+        time.sleep(2)  # Reduced from 5s for faster startup
 
         # Ensure model is available for this instance
         env_pull = os.environ.copy()
@@ -338,7 +340,7 @@ def ensure_ollama_instances():
             log(f"⚠️ Model setup issue on port {port} (GPU {gpu}); continuing.")
 
     log("⏳ Waiting for Ollama instances to initialize...")
-    time.sleep(10)
+    time.sleep(5)  # Reduced from 10s for faster initialization
 
     # Check health and track per GPU
     healthy_nodes = []
@@ -507,16 +509,29 @@ def mark_node_timeout(node):
 
 
 def get_available_node():
-    """Get an available node, avoiding overloaded ones."""
-    available_nodes = [n for n in nodes if is_node_available(n)]
-    if not available_nodes:
-        # All nodes in backoff, use all nodes anyway
-        available_nodes = nodes
+    """Get an available node using round-robin for speed, with smart fallback on timeout."""
+    # Fast path: simple round-robin selection
+    with node_round_robin_lock:
+        global node_round_robin_index
+        if not nodes:
+            return None
+        selected = nodes[node_round_robin_index % len(nodes)]
+        node_round_robin_index += 1
     
-    # Prefer nodes with fewer recent timeouts
-    with node_lock:
-        sorted_nodes = sorted(available_nodes, key=lambda n: node_timeout_counts.get(n, 0))
-    return random.choice(sorted_nodes[:max(1, len(sorted_nodes) // 2)])  # Choose from least problematic half
+    # Check if selected node is available (not in backoff)
+    if is_node_available(selected):
+        return selected
+    
+    # Fallback: find any available node
+    available_nodes = [n for n in nodes if is_node_available(n)]
+    if available_nodes:
+        # Use round-robin on available nodes
+        with node_round_robin_lock:
+            idx = node_round_robin_index % len(available_nodes)
+            return available_nodes[idx]
+    
+    # All nodes in backoff, use round-robin anyway
+    return selected
 
 
 def generate_question_answer(node, abstract):
@@ -969,7 +984,7 @@ if __name__ == '__main__':
             executor = ThreadPoolExecutor(max_workers=max_workers)
             
             chunk_count = 0
-            for chunk in pd.read_json(url, lines=True, chunksize=8192):
+            for chunk in pd.read_json(url, lines=True, chunksize=16384):  # Increased from 8192 for faster I/O
                 chunk_count += 1
                 if chunk_count == 1:
                     log(f"📊 Processing first chunk from {url} ({len(chunk)} records)")
@@ -999,9 +1014,9 @@ if __name__ == '__main__':
                 if chunk_count == 1 and len(futures) > 0:
                     log(f"🚀 Submitted {len(futures)} tasks to executor")
                 
-                # Process results as they complete (streaming approach)
+                # Process results as they complete using as_completed() for better parallelism
                 # Don't wait for all - process next chunk while this one is still running
-                for f in futures:
+                for f in as_completed(futures):
                     try:
                         if f.result():
                             processed += 1
