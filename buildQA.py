@@ -70,9 +70,9 @@ MAX_ATTEMPTS = 3
 TASK_TIMEOUT_SECONDS = 60  # Increased from 30 to handle load better
 LOG_TIMEOUT_SECONDS = 3600  # 1 hour - only restart if truly stuck
 BATCH_SIZE = 40
-WORKERS_PER_NODE = 3  # Reduced from 16 - max concurrent requests per Ollama instance
+WORKERS_PER_NODE = 10  # Increased from 3 to better utilize each Ollama instance
 RETRY_DELAY = 0.05  # Reduced from 0.2s for faster retries
-MAX_CONCURRENT_REQUESTS_PER_NODE = 3  # Semaphore limit per node
+MAX_CONCURRENT_REQUESTS_PER_NODE = 10  # Semaphore limit per node (matches WORKERS_PER_NODE)
 NODE_BACKOFF_SECONDS = 30  # Back off a node for 30 seconds after timeout
 
 last_log_time = datetime.now()
@@ -187,27 +187,38 @@ def ensure_ollama_instances():
     # Build instance plan based on GPU memory
     INSTANCES = []
     port = BASE_PORT
+    gpu_instance_counts = defaultdict(int)
     for gpu_index, total_mem in enumerate(GPU_MEMORY_MB):
         available = max(0, total_mem - GPU_MEMORY_RESERVE_MB)
         if available >= MODEL_MEMORY_MB:
             count = max(1, available // MODEL_MEMORY_MB)
         else:
             count = 1
+        log(f"📊 GPU {gpu_index}: {total_mem}MB total, {available}MB available -> planning {count} instances")
         for _ in range(count):
             INSTANCES.append({
                 'host': f'http://localhost:{port}',
                 'port': str(port),
                 'gpu': str(gpu_index),
             })
+            gpu_instance_counts[gpu_index] += 1
             port += 1
 
     if not INSTANCES:
         raise RuntimeError("Unable to plan any Ollama instances; check GPU availability.")
 
+    log(f"📋 Planned {len(INSTANCES)} total instances across {len(GPU_MEMORY_MB)} GPUs")
+    for gpu_idx, count in sorted(gpu_instance_counts.items()):
+        log(f"   GPU {gpu_idx}: {count} instances")
+
     nodes = [inst['host'] for inst in INSTANCES]
     node_semaphores = {}
     node_timeout_counts = defaultdict(int)
     node_last_timeout = {}
+
+    # Track which instances start successfully per GPU
+    gpu_started_counts = defaultdict(int)
+    gpu_healthy_counts = defaultdict(int)
 
     for inst in INSTANCES:
         port = inst['port']
@@ -218,7 +229,8 @@ def ensure_ollama_instances():
         env['CUDA_VISIBLE_DEVICES'] = gpu
         log(f"🔧 Starting Ollama on port {port} (GPU {gpu})")
         stdout = open(f'ollama_{port}.log', 'a')
-        subprocess.Popen(['nohup', 'ollama', 'serve'], env=env, stdout=stdout, stderr=subprocess.STDOUT)
+        process = subprocess.Popen(['nohup', 'ollama', 'serve'], env=env, stdout=stdout, stderr=subprocess.STDOUT)
+        gpu_started_counts[int(gpu)] += 1
         time.sleep(5)
 
         # Ensure model is available for this instance
@@ -232,17 +244,31 @@ def ensure_ollama_instances():
                 stderr=subprocess.DEVNULL,
             )
             if show.returncode != 0:
-                log(f"⬇️ Pulling {MODEL_NAME} on port {port}")
+                log(f"⬇️ Pulling {MODEL_NAME} on port {port} (GPU {gpu})")
                 subprocess.run(['ollama', 'pull', MODEL_NAME], env=env_pull, check=True)
         except subprocess.CalledProcessError:
-            log(f"⚠️ Model setup issue on port {port}; continuing.")
+            log(f"⚠️ Model setup issue on port {port} (GPU {gpu}); continuing.")
 
     log("⏳ Waiting for Ollama instances to initialize...")
     time.sleep(10)
 
-    healthy_nodes = [node for node in nodes if check_ollama_health(node)]
+    # Check health and track per GPU
+    healthy_nodes = []
+    for inst in INSTANCES:
+        node = inst['host']
+        gpu = int(inst['gpu'])
+        if check_ollama_health(node):
+            healthy_nodes.append(node)
+            gpu_healthy_counts[gpu] += 1
+        else:
+            log(f"⚠️ Instance on port {inst['port']} (GPU {gpu}) failed health check")
+
     if healthy_nodes:
         log(f"✅ {len(healthy_nodes)}/{len(nodes)} Ollama instances are healthy")
+        for gpu_idx in sorted(gpu_healthy_counts.keys()):
+            started = gpu_started_counts.get(gpu_idx, 0)
+            healthy = gpu_healthy_counts.get(gpu_idx, 0)
+            log(f"   GPU {gpu_idx}: {healthy}/{started} instances healthy")
         nodes = healthy_nodes
     else:
         log("⚠️ No healthy Ollama instances found, using all nodes anyway")
@@ -352,7 +378,21 @@ def is_valid_response(response):
         'japanese', 'korean', 'chinese', 'russian', 'arabic', 'spanish', 'french'
     ]):
         return False
-    # Check for required format
+    
+    response_stripped = response.strip()
+    
+    # Accept responses that start with "Q: Is it true..." pattern (even if incomplete)
+    if response_stripped.startswith("Q: Is it true") or response_stripped.startswith("Question: Is it true"):
+        # Check if it has both lines (preferred)
+        if "\n" in response:
+            first_line, second_line = response.split("\n", 1)
+            first_line_stripped = first_line.strip()
+            if first_line_stripped.startswith(("Question:", "Q:")) and second_line.strip().startswith("Answer:"):
+                return True
+        # Also accept if it just starts with the question pattern (will try to extract)
+        return True
+    
+    # Fallback to original strict validation
     if "\n" in response:
         first_line, second_line = response.split("\n", 1)
         first_line_stripped = first_line.strip()
@@ -417,21 +457,43 @@ def generate_question_answer(node, abstract):
             )['response']
 
             if is_valid_response(response):
-                question_line, answer_line = response.split("\n", 1)
-                question_line = question_line.strip()
-                if question_line.startswith("Question:"):
-                    question = question_line[len("Question:"):].strip()
-                elif question_line.startswith("Q:"):
-                    question = question_line[len("Q:"):].strip()
-                else:
-                    question = question_line
-                answer_line = answer_line.strip()
-                if answer_line.startswith("Answer:"):
-                    answer = answer_line[len("Answer:"):].strip()
-                else:
-                    answer = answer_line
-                if answer.lower() in ['true', 'false', 'possibly true', 'possibly false']:
-                    return question, answer
+                # Handle responses with newline (complete format)
+                if "\n" in response:
+                    question_line, answer_line = response.split("\n", 1)
+                    question_line = question_line.strip()
+                    if question_line.startswith("Question:"):
+                        question = question_line[len("Question:"):].strip()
+                    elif question_line.startswith("Q:"):
+                        question = question_line[len("Q:"):].strip()
+                    else:
+                        question = question_line
+                    answer_line = answer_line.strip()
+                    if answer_line.startswith("Answer:"):
+                        answer = answer_line[len("Answer:"):].strip()
+                    else:
+                        answer = answer_line
+                    if answer.lower() in ['true', 'false', 'possibly true', 'possibly false']:
+                        return question, answer
+                # Handle incomplete responses that start with "Q: Is it true..." pattern
+                elif response.strip().startswith("Q: Is it true") or response.strip().startswith("Question: Is it true"):
+                    question_line = response.strip()
+                    if question_line.startswith("Question:"):
+                        question = question_line[len("Question:"):].strip()
+                    elif question_line.startswith("Q:"):
+                        question = question_line[len("Q:"):].strip()
+                    else:
+                        question = question_line
+                    # Try to extract answer from the question line if it contains one
+                    # Otherwise, default to "unknown" for incomplete responses
+                    answer = "unknown"
+                    # Check if answer appears in the question line (sometimes models put it there)
+                    for ans in ['true', 'false', 'possibly true', 'possibly false']:
+                        if ans in question_line.lower():
+                            answer = ans
+                            break
+                    # Only return if we have a valid question (not just "Q" or empty)
+                    if question and len(question) > 10:  # Basic sanity check
+                        return question, answer
 
             if last_response and response[:50] == last_response[:50]:
                 break
@@ -682,14 +744,56 @@ def process_row(node, mongo_client, row, abstract, field_ids):
     except (KeyError, TypeError, AttributeError):
         return False
 
+def monitor_gpu_utilization():
+    """Periodically log GPU utilization and instance distribution."""
+    try:
+        result = subprocess.run(
+            ['nvidia-smi', '--query-gpu=index,memory.used,memory.total,utilization.gpu', '--format=csv,noheader,nounits'],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        if result.returncode == 0:
+            lines = result.stdout.strip().split('\n')
+            gpu_info = []
+            for line in lines:
+                parts = line.split(', ')
+                if len(parts) >= 4:
+                    gpu_idx, mem_used, mem_total, util = parts[0], parts[1], parts[2], parts[3]
+                    gpu_info.append(f"GPU {gpu_idx}: {util}% util, {mem_used}/{mem_total}MB")
+            if gpu_info:
+                log(f"📊 GPU Status: {' | '.join(gpu_info)}")
+        
+        # Count Ollama processes per GPU
+        result = subprocess.run(
+            ['nvidia-smi', '--query-compute-apps=gpu_uuid,pid,process_name', '--format=csv,noheader'],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        if result.returncode == 0:
+            ollama_count = result.stdout.count('ollama')
+            if ollama_count > 0:
+                log(f"🔧 Active Ollama processes: {ollama_count}")
+    except Exception as e:
+        # Silently fail - GPU monitoring is optional
+        pass
+
 def timeout_monitor():
     global last_log_time
+    gpu_monitor_counter = 0
     while True:
         # Only restart if no activity AND progress bar hasn't moved
         time.sleep(30)  # Check less frequently
         if datetime.now() - last_log_time > timedelta(seconds=LOG_TIMEOUT_SECONDS):
             log(f"⚠️ No activity for {LOG_TIMEOUT_SECONDS}s. Restarting...")
             os.execv(sys.executable, ['python'] + sys.argv)
+        
+        # Monitor GPU utilization every 5 minutes (10 iterations × 30s = 5min)
+        gpu_monitor_counter += 1
+        if gpu_monitor_counter >= 10:
+            monitor_gpu_utilization()
+            gpu_monitor_counter = 0
 
 def run_database_backup(mongo_uri: str) -> None:
     """Execute the backup script with force/drop semantics for all field DBs."""
@@ -771,9 +875,9 @@ if __name__ == '__main__':
         
         # Stream in chunks to limit memory usage
         try:
-            # Reduced concurrency: 3-4 requests per node = 45-60 total workers
+            # Full concurrency: allow all nodes to be fully utilized
             max_workers = len(nodes) * WORKERS_PER_NODE if nodes else 45
-            max_workers = min(max_workers, 60)  # Cap at 60 to prevent overwhelming
+            log(f"🚀 Using {max_workers} concurrent workers ({len(nodes)} nodes × {WORKERS_PER_NODE} workers/node)")
             executor = ThreadPoolExecutor(max_workers=max_workers)
             
             chunk_count = 0
