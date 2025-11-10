@@ -31,12 +31,19 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import defaultdict
 
 # ────────── config ──────────
-INSTANCES = [
-    {"host": "http://127.0.0.1:11434", "port": "11434", "gpu": "0"},
-    {"host": "http://127.0.0.1:11435", "port": "11435", "gpu": "1"},
-    {"host": "http://127.0.0.1:11436", "port": "11436", "gpu": "2"},
-]
-OLLAMA_NODES = [inst["host"] for inst in INSTANCES]
+INSTANCES: List[Dict[str, str]] = []
+OLLAMA_NODES: List[str] = []
+GPU_MEMORY_RESERVE_MB = 512
+DEFAULT_INSTANCE_MEMORY_MB = 2048
+MODEL_MEMORY_OVERRIDES_MB = {
+    "smollm:135m": 906,
+    "smollm2:135m": 906,
+    "smollm:360m": 1200,
+    "smollm2:360m": 1200,
+    "gemma3:1b": 2000,
+    "gemma3:270m": 1200,
+}
+BASE_PORT = 11434
 TIMEOUT_SEC  = 30
 QUESTIONS_PER_FIELD = 1_000
 MAX_REPROMPTS = 2
@@ -309,6 +316,8 @@ def _service_action(args: list[str]) -> bool:
 
 
 def ensure_ollama_running() -> None:
+    if not INSTANCES:
+        raise RuntimeError("No Ollama instances planned. Call restart_ollama_instances(model) first.")
     ensure_ollama_installed()
     ports = [inst["port"] for inst in INSTANCES]
     existing_pids = _detect_pids_for_ports(ports)
@@ -357,8 +366,11 @@ def ensure_ollama_running() -> None:
         _register_pid(pid)
 
 
-def restart_ollama_instances() -> None:
-    """Forcefully stop any running Ollama servers and start fresh instances."""
+def restart_ollama_instances(model: str) -> None:
+    global INSTANCES, OLLAMA_NODES
+    INSTANCES = plan_instances_for_model(model)
+    OLLAMA_NODES = [inst["host"] for inst in INSTANCES]
+    log(f"Planning {len(INSTANCES)} Ollama workers for {model} (≈{estimate_model_memory_mb(model)} MB each)")
     shutdown_ollama_instances(force_all=True)
     time.sleep(0.5)
     ensure_ollama_running()
@@ -592,20 +604,81 @@ def done()->set[str]:
     with CSV_PATH.open(newline="",encoding="utf-8")as f:
         r=csv.reader(f); next(r,None); return {row[0] for row in r}
 
+def _query_gpu_memory_mb() -> List[int]:
+    try:
+        result = subprocess.run(
+            [
+                "nvidia-smi",
+                "--query-gpu=memory.total",
+                "--format=csv,noheader,nounits",
+            ],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        values = [int(line.strip()) for line in result.stdout.splitlines() if line.strip()]
+        if values:
+            return values
+    except Exception:
+        pass
+    return [24576]
+
+
+GPU_MEMORY_MB = _query_gpu_memory_mb()
+
+def estimate_model_memory_mb(model: str) -> int:
+    normalized = model.lower()
+    if normalized in MODEL_MEMORY_OVERRIDES_MB:
+        return MODEL_MEMORY_OVERRIDES_MB[normalized]
+    base = normalized.split(":")[0]
+    if base in MODEL_MEMORY_OVERRIDES_MB:
+        return MODEL_MEMORY_OVERRIDES_MB[base]
+    match = re.search(r"(\d+(?:\.\d+)?)([mb])", normalized)
+    if match:
+        value = float(match.group(1))
+        unit = match.group(2)
+        params_millions = value * (1000 if unit == 'b' else 1)
+        estimated = int(params_millions * 7)
+        return max(DEFAULT_INSTANCE_MEMORY_MB, estimated)
+    return DEFAULT_INSTANCE_MEMORY_MB
+
+
+def plan_instances_for_model(model: str) -> List[Dict[str, str]]:
+    mem_needed = max(estimate_model_memory_mb(model), 1)
+    plan: List[Dict[str, str]] = []
+    port = BASE_PORT
+    for gpu_index, total_mem in enumerate(GPU_MEMORY_MB):
+        available = max(0, total_mem - GPU_MEMORY_RESERVE_MB)
+        if available >= mem_needed:
+            count = max(1, available // mem_needed)
+        else:
+            count = 1
+        count = max(1, min(count, 8))
+        for _ in range(count):
+            plan.append({
+                "host": f"http://127.0.0.1:{port}",
+                "port": str(port),
+                "gpu": str(gpu_index),
+            })
+            port += 1
+    if not plan:
+        plan.append({"host": f"http://127.0.0.1:{BASE_PORT}", "port": str(BASE_PORT), "gpu": "0"})
+    return plan
+
 # ────────── main ──────────
 def main():
     global GLOBAL_SALVAGE_TOTAL, GLOBAL_SALVAGE_BY_MODEL, GLOBAL_SALVAGE_BY_FIELD
     GLOBAL_SALVAGE_TOTAL = 0
     GLOBAL_SALVAGE_BY_MODEL = {}
     GLOBAL_SALVAGE_BY_FIELD = defaultdict(int)
-    restart_ollama_instances()
     completed=done(); hdr=CSV_PATH.exists()
     mongo=MongoClient(MONGO_URI)
     cols={db:mongo[db]["sources"] for db in DATABASES}
 
     for model in MODEL_LIST:
         if model in completed: log(f"skip {model}"); continue
-        restart_ollama_instances()
+        restart_ollama_instances(model)
         if not pull(model):
             shutdown_ollama_instances(force_all=True)
             continue

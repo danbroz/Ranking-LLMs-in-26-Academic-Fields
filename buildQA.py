@@ -16,8 +16,40 @@ from threading import Thread, Semaphore, Lock
 from collections import defaultdict
 import signal
 
-# Single node (node0) with 15 local Ollama instances
-nodes = [f'http://localhost:{p}' for p in range(11434, 11449)]
+from scripts import backup_field_databases, prune_field_databases
+
+# Dynamic Ollama configuration will be computed at runtime
+GPU_MEMORY_RESERVE_MB = 512
+SMOLLM2_MEMORY_MB = 906
+BASE_PORT = 11434
+
+nodes = []
+INSTANCES = []
+
+
+def _query_gpu_memory_mb():
+    try:
+        result = subprocess.run(
+            [
+                "nvidia-smi",
+                "--query-gpu=memory.total",
+                "--format=csv,noheader,nounits",
+            ],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        values = [int(line.strip()) for line in result.stdout.splitlines() if line.strip()]
+        if values:
+            return values
+    except Exception:
+        pass
+    # Fallback to a single 24 GB GPU if detection fails
+    return [24576]
+
+
+GPU_MEMORY_MB = _query_gpu_memory_mb()
 
 MONGO_URI = "mongodb://localhost:27017/"
 DATABASES = [f'field_{fid}' for fid in range(11, 37)]
@@ -108,66 +140,95 @@ def check_ollama_health(node_url):
 
 
 def ensure_ollama_instances():
-    """Start 15 Ollama instances on node0, one per port 11434–11448, cycle GPUs 0-2, and pull model."""
+    """Start smollm2:135m instances scaled to GPU VRAM."""
+    global nodes, INSTANCES, node_semaphores, node_timeout_counts, node_last_timeout
+
     hostname = get_hostname()
     if hostname != 'node0':
         log(f"⚠️ Hostname is '{hostname}', not 'node0'; proceeding with local Ollama setup anyway.")
 
     ensure_ollama_installed()
 
-    # Try stopping any running system service and stray processes
+    # Stop any system-level services and stray processes
     sudo_pwd = os.environ.get('SUDO_PASSWORD')
     if sudo_pwd:
         try:
-            subprocess.run(['sudo', '-S', 'systemctl', 'stop', 'ollama'],
-                           input=(sudo_pwd + '\n').encode('utf-8'),
-                           check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(
+                ['sudo', '-S', 'systemctl', 'stop', 'ollama'],
+                input=(sudo_pwd + '\n').encode('utf-8'),
+                check=False,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
         except Exception:
             pass
     else:
-        subprocess.run(['sudo', 'systemctl', 'stop', 'ollama'], check=False, 
-                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.run(['pkill', 'ollama'], check=False, 
-                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(['sudo', 'systemctl', 'stop', 'ollama'], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(['pkill', 'ollama'], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-    ports = list(range(11434, 11449))
-    for i, port in enumerate(ports):
-        gpu = str(i % 3)
+    # Build instance plan based on GPU memory
+    INSTANCES = []
+    port = BASE_PORT
+    for gpu_index, total_mem in enumerate(GPU_MEMORY_MB):
+        available = max(0, total_mem - GPU_MEMORY_RESERVE_MB)
+        if available >= SMOLLM2_MEMORY_MB:
+            count = max(1, available // SMOLLM2_MEMORY_MB)
+        else:
+            count = 1
+        for _ in range(count):
+            INSTANCES.append({
+                'host': f'http://localhost:{port}',
+                'port': str(port),
+                'gpu': str(gpu_index),
+            })
+            port += 1
+
+    if not INSTANCES:
+        raise RuntimeError("Unable to plan any Ollama instances; check GPU availability.")
+
+    nodes = [inst['host'] for inst in INSTANCES]
+    node_semaphores = {}
+    node_timeout_counts = defaultdict(int)
+    node_last_timeout = {}
+
+    for inst in INSTANCES:
+        port = inst['port']
+        gpu = inst['gpu']
         env = os.environ.copy()
         env['OLLAMA_HOST'] = f'0.0.0.0:{port}'
         env['OLLAMA_MODELS'] = os.path.expanduser(f'~/.ollama-{port}')
         env['CUDA_VISIBLE_DEVICES'] = gpu
         log(f"🔧 Starting Ollama on port {port} (GPU {gpu})")
-        # Start server
         stdout = open(f'ollama_{port}.log', 'a')
         subprocess.Popen(['nohup', 'ollama', 'serve'], env=env, stdout=stdout, stderr=subprocess.STDOUT)
         time.sleep(5)
-        # Pull model into the instance if missing
+
+        # Ensure smollm2 model is available for this instance
         env_pull = os.environ.copy()
         env_pull['OLLAMA_HOST'] = f'localhost:{port}'
         try:
-            # Check if model exists
-            show = subprocess.run(['ollama', 'show', 'gemma3:4b'], env=env_pull, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            show = subprocess.run(
+                ['ollama', 'show', 'smollm2:135m'],
+                env=env_pull,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
             if show.returncode != 0:
-                log(f"⬇️ Pulling gemma3:4b on port {port}")
-                subprocess.run(['ollama', 'pull', 'gemma3:4b'], env=env_pull, check=True)
+                log(f"⬇️ Pulling smollm2:135m on port {port}")
+                subprocess.run(['ollama', 'pull', 'smollm2:135m'], env=env_pull, check=True)
         except subprocess.CalledProcessError:
             log(f"⚠️ Model setup issue on port {port}; continuing.")
-    
-    # Wait a bit more for instances to fully start, then check health
+
     log("⏳ Waiting for Ollama instances to initialize...")
     time.sleep(10)
-    
-    # Filter to only healthy nodes
-    global nodes, node_semaphores
+
     healthy_nodes = [node for node in nodes if check_ollama_health(node)]
     if healthy_nodes:
         log(f"✅ {len(healthy_nodes)}/{len(nodes)} Ollama instances are healthy")
         nodes = healthy_nodes
     else:
-        log(f"⚠️ No healthy Ollama instances found, using all nodes anyway")
-    
-    # Initialize semaphores for each node
+        log("⚠️ No healthy Ollama instances found, using all nodes anyway")
+
     for node in nodes:
         node_semaphores[node] = Semaphore(MAX_CONCURRENT_REQUESTS_PER_NODE)
 
@@ -288,49 +349,41 @@ def generate_question_answer(node, abstract):
         # Acquire semaphore for this attempt
         semaphore.acquire()
         try:
-            try:
-                client = ollama.Client(host=current_node, timeout=TASK_TIMEOUT_SECONDS)
-                response = client.generate(
-                    model='gemma3:4b', 
-                    prompt=prompt,
-                    options={'temperature': 0.3, 'top_p': 0.9}  # Lower temperature for more consistent output
-                )['response']
-                
-                if is_valid_response(response):
-                    question_line, answer_line = response.split("\n", 1)
-                    question = question_line.replace("Question: ", "").strip()
-                    answer = answer_line.replace("Answer: ", "").strip()
-                    # Validate answer is one of the four options
-                    if answer.lower() in ['true', 'false', 'possibly true', 'possibly false']:
-                        return question, answer
+            client = ollama.Client(host=current_node, timeout=TASK_TIMEOUT_SECONDS)
+            response = client.generate(
+                model='smollm2:135m',
+                prompt=prompt,
+                options={'temperature': 0.3, 'top_p': 0.9}
+            )['response']
 
-                # Early exit if response is clearly wrong format
-                if last_response and response[:50] == last_response[:50]:
-                    # Same response, skip retry
-                    break
-                    
-                error_feedback = f"Invalid format: {response[:100]}"
-                prompt = create_prompt(abstract, error_feedback)
-                last_response = response
-                if attempts == 0:  # Only log first attempt to reduce log spam
-                    log(f"⚠️ Formatting issue on {current_node}: {error_feedback[:80]}")
+            if is_valid_response(response):
+                question_line, answer_line = response.split("\n", 1)
+                question = question_line.replace("Question: ", "").strip()
+                answer = answer_line.replace("Answer: ", "").strip()
+                if answer.lower() in ['true', 'false', 'possibly true', 'possibly false']:
+                    return question, answer
 
-            except Exception as e:
-                error_str = str(e).lower()
-                # Check if it's a timeout
-                if 'timeout' in error_str or 'timed out' in error_str:
-                    mark_node_timeout(current_node)
-                    # Try different node on next attempt if available
-                    if attempts < MAX_ATTEMPTS - 1:
-                        new_node = get_available_node()
-                        if new_node != current_node:
-                            current_node = new_node
-                
-                if attempts == 0:  # Only log first attempt
-                    if random.random() < 0.01:  # Log 1% of errors
-                        log(f"⚠️ Node {current_node} exception: {e}")
+            if last_response and response[:50] == last_response[:50]:
+                break
+
+            error_feedback = f"Invalid format: {response[:100]}"
+            prompt = create_prompt(abstract, error_feedback)
+            last_response = response
+            if attempts == 0:
+                log(f"⚠️ Formatting issue on {current_node}: {error_feedback[:80]}")
+
+        except Exception as e:
+            error_str = str(e).lower()
+            if 'timeout' in error_str or 'timed out' in error_str:
+                mark_node_timeout(current_node)
+                if attempts < MAX_ATTEMPTS - 1:
+                    new_node = get_available_node()
+                    if new_node != current_node:
+                        current_node = new_node
+
+            if attempts == 0 and random.random() < 0.01:
+                log(f"⚠️ Node {current_node} exception: {e}")
         finally:
-            # Always release semaphore
             semaphore.release()
 
         attempts += 1
@@ -568,6 +621,41 @@ def timeout_monitor():
             log(f"⚠️ No activity for {LOG_TIMEOUT_SECONDS}s. Restarting...")
             os.execv(sys.executable, ['python'] + sys.argv)
 
+def run_database_backup(mongo_uri: str) -> None:
+    log("💾 Starting field database backup...")
+    original_argv = sys.argv
+    try:
+        sys.argv = [
+            "backup_field_databases.py",
+            "--mongo-uri",
+            mongo_uri,
+            "--force",
+            "--drop-existing",
+            "--yes",
+        ]
+        backup_field_databases.main()
+    finally:
+        sys.argv = original_argv
+
+
+def run_database_prune(mongo_uri: str, limit: int = 1000) -> None:
+    log("🧹 Pruning field databases to working set...")
+    original_argv = sys.argv
+    try:
+        sys.argv = [
+            "prune_field_databases.py",
+            "--mongo-uri",
+            mongo_uri,
+            "--limit",
+            str(limit),
+            "--force",
+            "--yes",
+        ]
+        prune_field_databases.main()
+    finally:
+        sys.argv = original_argv
+
+
 if __name__ == '__main__':
     # Ensure MongoDB and Ollama are installed and running before watchdog
     ensure_mongodb_installed_and_running()
@@ -623,7 +711,7 @@ if __name__ == '__main__':
                     log(f"📊 Processing first chunk from {url} ({len(chunk)} records)")
                 if chunk.empty:
                     continue
-                
+
                 # Early filtering before executor submission
                 filtered_rows = []
                 for _, row in chunk.iterrows():
@@ -677,4 +765,11 @@ if __name__ == '__main__':
     progress_bar.close()
     mongo_client.close()
     log(f"🎉 Completed QA generation. Processed {total_processed} documents with Q/A.")
+
+    try:
+        run_database_backup(MONGO_URI)
+        run_database_prune(MONGO_URI)
+        log("✅ Backup and prune steps completed.")
+    except Exception as exc:
+        log(f"⚠️ Post-processing maintenance encountered an issue: {exc}")
 
