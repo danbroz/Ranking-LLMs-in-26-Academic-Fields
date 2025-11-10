@@ -271,6 +271,8 @@ def shutdown_ollama_instances(force_all: bool = False) -> None:
         _terminate_pid(pid)
 
     OLLAMA_MANAGED_PIDS.clear()
+    with suppress(Exception):
+        subprocess.run(["pkill", "-f", "ollama serve"], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 atexit.register(lambda: shutdown_ollama_instances(force_all=True))
@@ -360,6 +362,12 @@ def delete(model:str):
         try: ollama.Client(host=n).delete(model,force=True)
         except Exception: pass
 
+
+def stop_model_on_all_nodes(model: str) -> None:
+    for node in OLLAMA_NODES:
+        with suppress(Exception):
+            ollama.Client(host=node).stop(model)
+
 def ask(model:str,prompt:str,node:str)->str:
     try:
         client = ollama.Client(host=node, timeout=TIMEOUT_SEC)
@@ -371,6 +379,7 @@ def ask(model:str,prompt:str,node:str)->str:
                 "temperature": 0.0,
                 "top_p": 0.9,
                 "num_predict": 6,  # enough tokens for "possibly false" while preventing rambling
+                "keep_alive": 0,
             },
         )
         return r["response"].strip()
@@ -534,6 +543,9 @@ def done()->set[str]:
 # ────────── main ──────────
 def main():
     global GLOBAL_SALVAGE_TOTAL, GLOBAL_SALVAGE_BY_MODEL, GLOBAL_SALVAGE_BY_FIELD
+    GLOBAL_SALVAGE_TOTAL = 0
+    GLOBAL_SALVAGE_BY_MODEL = {}
+    GLOBAL_SALVAGE_BY_FIELD = defaultdict(int)
     ensure_ollama_running()
     completed=done(); hdr=CSV_PATH.exists()
     mongo=MongoClient(MONGO_URI)
@@ -584,6 +596,7 @@ def main():
             if not hdr: w.writerow(header()); hdr=True
             w.writerow(row)
 
+        stop_model_on_all_nodes(model)
         GLOBAL_SALVAGE_TOTAL += model_salvage_total
         GLOBAL_SALVAGE_BY_MODEL[model] = model_salvage_total
         if model_salvage_total:
