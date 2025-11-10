@@ -1,0 +1,985 @@
+2025-11-10 02:07:01 - 💻 System specs: 16 CPU cores, 123.6 GB RAM, 3 GPU(s)
+2025-11-10 02:07:01 - ⚙️  Calculated concurrency: 15 workers per node, 15 max concurrent requests per node
+2025-11-10 02:07:01 - 📊 GPU 0: 24564MB total, 24052MB available -> planning 16 instances
+2025-11-10 02:07:01 - 📊 GPU 1: 24564MB total, 24052MB available -> planning 16 instances
+2025-11-10 02:07:01 - 📊 GPU 2: 24564MB total, 24052MB available -> planning 16 instances
+2025-11-10 02:07:01 - 📋 Planned 48 total instances across 3 GPUs
+2025-11-10 02:07:01 -    GPU 0: 16 instances
+2025-11-10 02:07:01 -    GPU 1: 16 instances
+2025-11-10 02:07:01 -    GPU 2: 16 instances
+2025-11-10 02:07:01 - 🔧 Starting Ollama on port 11434 (GPU 0)
+2025-11-10 02:07:06 - 🔧 Starting Ollama on port 11435 (GPU 0)
+2025-11-10 02:07:08 - 🔧 Starting Ollama on port 11436 (GPU 0)
+2025-11-10 02:07:10 - 🔧 Starting Ollama on port 11437 (GPU 0)
+2025-11-10 02:07:12 - 🔧 Starting Ollama on port 11438 (GPU 0)
+2025-11-10 02:07:14 - 🔧 Starting Ollama on port 11439 (GPU 0)
+2025-11-10 02:07:16 - 🔧 Starting Ollama on port 11440 (GPU 0)
+2025-11-10 02:07:18 - 🔧 Starting Ollama on port 11441 (GPU 0)
+2025-11-10 02:07:20 - 🔧 Starting Ollama on port 11442 (GPU 0)
+2025-11-10 02:07:23 - 🔧 Starting Ollama on port 11443 (GPU 0)
+2025-11-10 02:07:25 - 🔧 Starting Ollama on port 11444 (GPU 0)
+2025-11-10 02:07:27 - 🔧 Starting Ollama on port 11445 (GPU 0)
+2025-11-10 02:07:29 - 🔧 Starting Ollama on port 11446 (GPU 0)
+2025-11-10 02:07:31 - 🔧 Starting Ollama on port 11447 (GPU 0)
+2025-11-10 02:07:33 - 🔧 Starting Ollama on port 11448 (GPU 0)
+2025-11-10 02:07:35 - 🔧 Starting Ollama on port 11449 (GPU 0)
+2025-11-10 02:07:37 - 🔧 Starting Ollama on port 11450 (GPU 1)
+2025-11-10 02:07:39 - 🔧 Starting Ollama on port 11451 (GPU 1)
+2025-11-10 02:07:41 - 🔧 Starting Ollama on port 11452 (GPU 1)
+2025-11-10 02:07:43 - 🔧 Starting Ollama on port 11453 (GPU 1)
+2025-11-10 02:07:45 - 🔧 Starting Ollama on port 11454 (GPU 1)
+2025-11-10 02:07:47 - 🔧 Starting Ollama on port 11455 (GPU 1)
+2025-11-10 02:07:49 - 🔧 Starting Ollama on port 11456 (GPU 1)
+2025-11-10 02:07:51 - 🔧 Starting Ollama on port 11457 (GPU 1)
+2025-11-10 02:07:54 - 🔧 Starting Ollama on port 11458 (GPU 1)
+2025-11-10 02:07:56 - 🔧 Starting Ollama on port 11459 (GPU 1)
+2025-11-10 02:07:58 - 🔧 Starting Ollama on port 11460 (GPU 1)
+2025-11-10 02:08:00 - 🔧 Starting Ollama on port 11461 (GPU 1)
+2025-11-10 02:08:02 - 🔧 Starting Ollama on port 11462 (GPU 1)
+2025-11-10 02:08:04 - 🔧 Starting Ollama on port 11463 (GPU 1)
+2025-11-10 02:08:06 - 🔧 Starting Ollama on port 11464 (GPU 1)
+2025-11-10 02:08:08 - 🔧 Starting Ollama on port 11465 (GPU 1)
+2025-11-10 02:08:10 - 🔧 Starting Ollama on port 11466 (GPU 2)
+2025-11-10 02:08:12 - 🔧 Starting Ollama on port 11467 (GPU 2)
+2025-11-10 02:08:14 - 🔧 Starting Ollama on port 11468 (GPU 2)
+2025-11-10 02:08:16 - 🔧 Starting Ollama on port 11469 (GPU 2)
+2025-11-10 02:08:18 - 🔧 Starting Ollama on port 11470 (GPU 2)
+2025-11-10 02:08:20 - 🔧 Starting Ollama on port 11471 (GPU 2)
+2025-11-10 02:08:22 - 🔧 Starting Ollama on port 11472 (GPU 2)
+2025-11-10 02:08:25 - 🔧 Starting Ollama on port 11473 (GPU 2)
+2025-11-10 02:08:27 - 🔧 Starting Ollama on port 11474 (GPU 2)
+2025-11-10 02:08:29 - 🔧 Starting Ollama on port 11475 (GPU 2)
+2025-11-10 02:08:31 - 🔧 Starting Ollama on port 11476 (GPU 2)
+2025-11-10 02:08:33 - 🔧 Starting Ollama on port 11477 (GPU 2)
+2025-11-10 02:08:35 - 🔧 Starting Ollama on port 11478 (GPU 2)
+2025-11-10 02:08:37 - 🔧 Starting Ollama on port 11479 (GPU 2)
+2025-11-10 02:08:39 - 🔧 Starting Ollama on port 11480 (GPU 2)
+2025-11-10 02:08:41 - 🔧 Starting Ollama on port 11481 (GPU 2)
+2025-11-10 02:08:43 - ⏳ Waiting for Ollama instances to initialize...
+2025-11-10 02:08:49 - ✅ 48/48 Ollama instances are healthy
+2025-11-10 02:08:49 -    GPU 0: 16/16 instances healthy
+2025-11-10 02:08:49 -    GPU 1: 16/16 instances healthy
+2025-11-10 02:08:49 -    GPU 2: 16/16 instances healthy
+2025-11-10 02:08:49 - 🔌 Connecting to MongoDB...
+2025-11-10 02:08:49 - ✅ MongoDB connected
+2025-11-10 02:08:49 - 📥 Downloading OpenAlex manifest...
+2025-11-10 02:08:49 - ✅ Manifest downloaded, found 1006 URL entries
+2025-11-10 02:08:49 - 📊 Total records to process: 271,335,309
+node0 QA Generation:   0%|          | 0/271335309 [00:00<?, ?it/s]2025-11-10 02:08:49 - 🚀 Starting to process 1006 URLs...
+2025-11-10 02:08:49 - 📥 Starting to process URL: https://openalex.s3.amazonaws.com/data/works/updated_date=2024-08-27/part_000.gz
+2025-11-10 02:08:49 - 🚀 Using 720 concurrent workers (48 nodes × 15 workers/node)
+2025-11-10 02:08:49 - 📊 Processing first chunk from https://openalex.s3.amazonaws.com/data/works/updated_date=2024-08-27/part_000.gz (28 records)
+2025-11-10 02:08:49 - 🔍 Filtered chunk: 13 records to process, 15 skipped
+2025-11-10 02:08:49 - 🚀 Submitted 13 tasks to executor
+node0 QA Generation:   0%|          | 28/271335309 [00:00<847:19:26, 88.95it/s]2025-11-10 02:08:49 - 📥 Starting to process URL: https://openalex.s3.amazonaws.com/data/works/updated_date=2025-03-26/part_000.gz
+2025-11-10 02:08:49 - 🚀 Using 720 concurrent workers (48 nodes × 15 workers/node)
+2025-11-10 02:09:04 - 📊 Processing first chunk from https://openalex.s3.amazonaws.com/data/works/updated_date=2025-03-26/part_000.gz (16384 records)
+2025-11-10 02:09:05 - 🔍 Filtered chunk: 3540 records to process, 12844 skipped
+2025-11-10 02:09:06 - 🚀 Submitted 3540 tasks to executor
+2025-11-10 02:09:07 - ⚠️ Formatting issue on http://localhost:11449: Invalid format: 
+2025-11-10 02:09:08 - ⚠️ Formatting issue on http://localhost:11468: Invalid format: Q
+
+node0 QA Generation:   0%|          | 28/271335309 [00:20<847:19:26, 88.95it/s]node0 QA Generation:   0%|          | 16412/271335309 [00:20<94:12:39, 799.97it/s]2025-11-10 02:09:13 - ⚠️ Formatting issue on http://localhost:11440: Invalid format: 
+node0 QA Generation:   0%|          | 32796/271335309 [00:24<50:01:46, 1506.35it/s]2025-11-10 02:09:17 - ⚠️ Formatting issue on http://localhost:11440: Invalid format: Q
+
+2025-11-10 02:09:19 - ⚠️ Formatting issue on http://localhost:11469: Invalid format: 
+2025-11-10 02:09:20 - ⚠️ Formatting issue on http://localhost:11458: Invalid format: 
+2025-11-10 02:09:20 - ⚠️ Formatting issue on http://localhost:11438: Invalid format: Q
+
+2025-11-10 02:09:20 - ⚠️ Formatting issue on http://localhost:11438: Invalid format: Q
+
+2025-11-10 02:09:20 - ⚠️ Formatting issue on http://localhost:11442: Invalid format: Q: Is it true, false, possibly true, or possibly false that Rons
+2025-11-10 02:09:20 - ⚠️ Formatting issue on http://localhost:11458: Invalid format: 
+2025-11-10 02:09:21 - ⚠️ Formatting issue on http://localhost:11461: Invalid format: Q
+
+2025-11-10 02:09:21 - ⚠️ Formatting issue on http://localhost:11456: Invalid format: Q
+
+2025-11-10 02:09:22 - ⚠️ Formatting issue on http://localhost:11456: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:09:22 - ⚠️ Formatting issue on http://localhost:11478: Invalid format: Q
+
+2025-11-10 02:09:23 - ⚠️ Formatting issue on http://localhost:11445: Invalid format: Q
+
+2025-11-10 02:09:23 - ⚠️ Formatting issue on http://localhost:11447: Invalid format: Q
+
+2025-11-10 02:09:23 - ⚠️ Formatting issue on http://localhost:11473: Invalid format: Q
+
+2025-11-10 02:09:23 - ⚠️ Formatting issue on http://localhost:11444: Invalid format: Q
+
+2025-11-10 02:09:23 - ⚠️ Formatting issue on http://localhost:11446: Invalid format: Q
+
+2025-11-10 02:09:23 - ⚠️ Formatting issue on http://localhost:11459: Invalid format: Q
+
+2025-11-10 02:09:23 - ⚠️ Formatting issue on http://localhost:11457: Invalid format: Q
+
+2025-11-10 02:09:23 - ⚠️ Formatting issue on http://localhost:11476: Invalid format: Q
+
+2025-11-10 02:09:23 - ⚠️ Formatting issue on http://localhost:11466: Invalid format: 
+2025-11-10 02:09:23 - ⚠️ Formatting issue on http://localhost:11447: Invalid format: Q
+
+2025-11-10 02:09:24 - ⚠️ Formatting issue on http://localhost:11460: Invalid format: Q
+
+node0 QA Generation:   0%|          | 49180/271335309 [00:35<50:16:18, 1499.00it/s]2025-11-10 02:09:30 - ⚠️ Formatting issue on http://localhost:11458: Invalid format: Q
+
+2025-11-10 02:09:30 - ⚠️ Formatting issue on http://localhost:11478: Invalid format: Q
+
+2025-11-10 02:09:30 - ⚠️ Formatting issue on http://localhost:11442: Invalid format: Q Is it true, false, possibly true, or possibly false that <your
+2025-11-10 02:09:31 - ⚠️ Formatting issue on http://localhost:11461: Invalid format: Q
+
+2025-11-10 02:09:31 - ⚠️ Formatting issue on http://localhost:11468: Invalid format: Q
+
+2025-11-10 02:09:32 - ⚠️ Formatting issue on http://localhost:11455: Invalid format: Q
+
+2025-11-10 02:09:32 - ⚠️ Formatting issue on http://localhost:11464: Invalid format: Q
+
+2025-11-10 02:09:33 - ⚠️ Formatting issue on http://localhost:11438: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:09:33 - ⚠️ Formatting issue on http://localhost:11481: Invalid format: Q
+
+2025-11-10 02:09:33 - ⚠️ Formatting issue on http://localhost:11454: Invalid format: Q
+
+2025-11-10 02:09:33 - ⚠️ Formatting issue on http://localhost:11479: Invalid format: 
+2025-11-10 02:09:34 - ⚠️ Formatting issue on http://localhost:11459: Invalid format: Q
+
+2025-11-10 02:09:34 - ⚠️ Formatting issue on http://localhost:11454: Invalid format: Q
+
+2025-11-10 02:09:34 - ⚠️ Formatting issue on http://localhost:11463: Invalid format: Q
+
+2025-11-10 02:09:34 - ⚠️ Formatting issue on http://localhost:11437: Invalid format: Q
+
+2025-11-10 02:09:34 - ⚠️ Formatting issue on http://localhost:11450: Invalid format: Q
+
+2025-11-10 02:09:34 - ⚠️ Formatting issue on http://localhost:11448: Invalid format: Q
+
+2025-11-10 02:09:35 - ⚠️ Formatting issue on http://localhost:11443: Invalid format: Q
+
+2025-11-10 02:09:35 - ⚠️ Formatting issue on http://localhost:11463: Invalid format: Q
+
+2025-11-10 02:09:35 - ⚠️ Formatting issue on http://localhost:11476: Invalid format: Q
+
+2025-11-10 02:09:35 - ⚠️ Formatting issue on http://localhost:11480: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:09:35 - ⚠️ Formatting issue on http://localhost:11459: Invalid format: 
+2025-11-10 02:09:36 - ⚠️ Formatting issue on http://localhost:11468: Invalid format: Q
+
+2025-11-10 02:09:36 - ⚠️ Formatting issue on http://localhost:11480: Invalid format: Q
+
+2025-11-10 02:09:37 - ⚠️ Formatting issue on http://localhost:11459: Invalid format: Q
+
+2025-11-10 02:09:38 - ⚠️ Formatting issue on http://localhost:11440: Invalid format: Q
+
+2025-11-10 02:09:38 - ⚠️ Formatting issue on http://localhost:11447: Invalid format: 
+2025-11-10 02:09:38 - ⚠️ Formatting issue on http://localhost:11460: Invalid format: Q
+
+2025-11-10 02:09:38 - ⚠️ Formatting issue on http://localhost:11447: Invalid format: Q
+
+2025-11-10 02:09:39 - ⚠️ Formatting issue on http://localhost:11445: Invalid format: 
+2025-11-10 02:09:39 - ⚠️ Formatting issue on http://localhost:11438: Invalid format: Q
+
+node0 QA Generation:   0%|          | 49180/271335309 [00:50<50:16:18, 1499.00it/s]2025-11-10 02:09:40 - ⚠️ Formatting issue on http://localhost:11456: Invalid format: Q
+
+2025-11-10 02:09:40 - ⚠️ Formatting issue on http://localhost:11476: Invalid format: Q
+
+2025-11-10 02:09:40 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:09:41 - ⚠️ Formatting issue on http://localhost:11440: Invalid format: Q
+
+2025-11-10 02:09:41 - ⚠️ Formatting issue on http://localhost:11470: Invalid format: Q
+
+2025-11-10 02:09:41 - ⚠️ Formatting issue on http://localhost:11439: Invalid format: Q
+
+node0 QA Generation:   0%|          | 65564/271335309 [00:53<62:25:50, 1206.98it/s]2025-11-10 02:09:48 - ⚠️ Formatting issue on http://localhost:11439: Invalid format: 
+2025-11-10 02:09:48 - ⚠️ Formatting issue on http://localhost:11480: Invalid format: Q
+
+2025-11-10 02:09:48 - ⚠️ Formatting issue on http://localhost:11443: Invalid format: Q
+
+2025-11-10 02:09:48 - ⚠️ Formatting issue on http://localhost:11446: Invalid format: Q
+
+2025-11-10 02:09:48 - ⚠️ Formatting issue on http://localhost:11463: Invalid format: Q
+
+2025-11-10 02:09:48 - ⚠️ Formatting issue on http://localhost:11448: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:09:49 - ⚠️ Formatting issue on http://localhost:11462: Invalid format: Q
+
+2025-11-10 02:09:49 - ⚠️ Formatting issue on http://localhost:11469: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:09:49 - ⚠️ Formatting issue on http://localhost:11446: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:09:49 - ⚠️ Formatting issue on http://localhost:11455: Invalid format: Q
+
+2025-11-10 02:09:49 - ⚠️ Formatting issue on http://localhost:11457: Invalid format: Q
+
+2025-11-10 02:09:50 - ⚠️ Formatting issue on http://localhost:11442: Invalid format: Q
+
+2025-11-10 02:09:51 - ⚠️ Formatting issue on http://localhost:11468: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:09:51 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:09:51 - ❌ Skipping row due to generation failures: ❌ All attempts failed. Last response: None
+2025-11-10 02:09:51 - ⚠️ Formatting issue on http://localhost:11474: Invalid format: Q: Is it true, false, possibly true, or possibly false that indu
+2025-11-10 02:09:51 - ⚠️ Formatting issue on http://localhost:11466: Invalid format: Q
+
+2025-11-10 02:09:51 - ⚠️ Formatting issue on http://localhost:11451: Invalid format: 這樣의 답변은 다음과 같습니다.
+
+Question: Is it true, false, possibly true, o
+2025-11-10 02:09:52 - ⚠️ Formatting issue on http://localhost:11481: Invalid format: Q
+
+2025-11-10 02:09:52 - ⚠️ Formatting issue on http://localhost:11453: Invalid format: Q
+
+2025-11-10 02:09:52 - ⚠️ Formatting issue on http://localhost:11462: Invalid format: Q
+
+2025-11-10 02:09:52 - ⚠️ Formatting issue on http://localhost:11466: Invalid format: Q
+
+2025-11-10 02:09:52 - ⚠️ Formatting issue on http://localhost:11474: Invalid format: Q
+
+2025-11-10 02:09:53 - ⚠️ Formatting issue on http://localhost:11480: Invalid format: Q
+
+2025-11-10 02:09:54 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:09:54 - ⚠️ Formatting issue on http://localhost:11439: Invalid format: Q
+
+2025-11-10 02:09:55 - ⚠️ Formatting issue on http://localhost:11471: Invalid format: Q
+
+2025-11-10 02:09:55 - ⚠️ Formatting issue on http://localhost:11435: Invalid format: Q
+
+2025-11-10 02:09:55 - ⚠️ Formatting issue on http://localhost:11472: Invalid format: Q
+
+2025-11-10 02:09:55 - ⚠️ Formatting issue on http://localhost:11450: Invalid format: Q
+
+2025-11-10 02:09:56 - ⚠️ Formatting issue on http://localhost:11463: Invalid format: 
+2025-11-10 02:09:56 - ⚠️ Formatting issue on http://localhost:11467: Invalid format: Q
+
+2025-11-10 02:09:57 - ⚠️ Formatting issue on http://localhost:11480: Invalid format: Q
+
+2025-11-10 02:09:57 - ⚠️ Formatting issue on http://localhost:11475: Invalid format: Q
+
+2025-11-10 02:09:57 - ⚠️ Formatting issue on http://localhost:11467: Invalid format: venting the effects of visual experience on motion integration d
+2025-11-10 02:09:58 - ⚠️ Formatting issue on http://localhost:11477: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:09:58 - ❌ Skipping row due to generation failures: ❌ All attempts failed. Last response: None
+2025-11-10 02:09:58 - ⚠️ Formatting issue on http://localhost:11456: Invalid format: Q: Is it true, false, possibly true, or possibly false that my f
+2025-11-10 02:09:58 - ⚠️ Formatting issue on http://localhost:11466: Invalid format: Q
+
+2025-11-10 02:09:58 - ⚠️ Formatting issue on http://localhost:11447: Invalid format: Q
+
+2025-11-10 02:09:59 - ⚠️ Formatting issue on http://localhost:11459: Invalid format: Q
+
+2025-11-10 02:09:59 - ⚠️ Formatting issue on http://localhost:11453: Invalid format: Q
+
+node0 QA Generation:   0%|          | 65564/271335309 [01:10<62:25:50, 1206.98it/s]2025-11-10 02:09:59 - ⚠️ Formatting issue on http://localhost:11436: Invalid format: Q
+
+2025-11-10 02:09:59 - ⚠️ Formatting issue on http://localhost:11464: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:10:00 - ⚠️ Formatting issue on http://localhost:11440: Invalid format: 
+2025-11-10 02:10:00 - ⚠️ Formatting issue on http://localhost:11439: Invalid format: Q
+
+2025-11-10 02:10:00 - ⚠️ Formatting issue on http://localhost:11462: Invalid format: Q
+
+2025-11-10 02:10:01 - ⚠️ Formatting issue on http://localhost:11480: Invalid format: 
+2025-11-10 02:10:01 - ⚠️ Formatting issue on http://localhost:11450: Invalid format: Q
+
+2025-11-10 02:10:02 - ⚠️ Formatting issue on http://localhost:11480: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:10:02 - ⚠️ Formatting issue on http://localhost:11450: Invalid format: Q
+
+2025-11-10 02:10:02 - ⚠️ Formatting issue on http://localhost:11451: Invalid format: Q
+
+2025-11-10 02:10:02 - ⚠️ Formatting issue on http://localhost:11437: Invalid format: Q: Is it true, false, possibly true, or possibly false that soci
+2025-11-10 02:10:03 - ⚠️ Formatting issue on http://localhost:11436: Invalid format: Q
+
+2025-11-10 02:10:03 - ⚠️ Formatting issue on http://localhost:11447: Invalid format:  వాடு
+2025-11-10 02:10:04 - ⚠️ Formatting issue on http://localhost:11451: Invalid format: Q
+
+2025-11-10 02:10:04 - ⚠️ Formatting issue on http://localhost:11437: Invalid format: Q
+
+2025-11-10 02:10:04 - ⚠️ Formatting issue on http://localhost:11443: Invalid format: Q
+
+2025-11-10 02:10:05 - ⚠️ Formatting issue on http://localhost:11441: Invalid format: Okay, I understand. I am ready to receive your questions. Please
+node0 QA Generation:   0%|          | 81948/271335309 [01:17<79:52:35, 943.31it/s] 2025-11-10 02:10:12 - ⚠️ Formatting issue on http://localhost:11467: Invalid format: Q
+
+2025-11-10 02:10:12 - ⚠️ Formatting issue on http://localhost:11442: Invalid format: Q
+
+2025-11-10 02:10:12 - ⚠️ Formatting issue on http://localhost:11452: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:10:13 - ⚠️ Formatting issue on http://localhost:11457: Invalid format: Q
+
+2025-11-10 02:10:13 - ⚠️ Formatting issue on http://localhost:11458: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:10:13 - ⚠️ Formatting issue on http://localhost:11437: Invalid format: Q
+
+2025-11-10 02:10:13 - ⚠️ Formatting issue on http://localhost:11472: Invalid format: Q: Is it true, false, possibly true, or possibly false that Kore
+2025-11-10 02:10:13 - ⚠️ Formatting issue on http://localhost:11444: Invalid format: Q: Is it true, false, possibly true, or possibly false that Japa
+2025-11-10 02:10:13 - ⚠️ Formatting issue on http://localhost:11441: Invalid format: Q
+
+2025-11-10 02:10:14 - ⚠️ Formatting issue on http://localhost:11452: Invalid format: Okay, I understand. I will follow the format you've provided.
+
+2025-11-10 02:10:14 - ⚠️ Formatting issue on http://localhost:11468: Invalid format: Q
+
+2025-11-10 02:10:14 - ⚠️ Formatting issue on http://localhost:11478: Invalid format: Q
+
+2025-11-10 02:10:14 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:10:14 - ⚠️ Formatting issue on http://localhost:11440: Invalid format: Q: Is it true, false, possibly true, or possibly false that Japa
+2025-11-10 02:10:14 - ⚠️ Formatting issue on http://localhost:11474: Invalid format: 
+2025-11-10 02:10:15 - ⚠️ Formatting issue on http://localhost:11450: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:10:15 - ⚠️ Formatting issue on http://localhost:11452: Invalid format: Q
+
+2025-11-10 02:10:15 - ⚠️ Formatting issue on http://localhost:11470: Invalid format: Q
+
+2025-11-10 02:10:15 - ⚠️ Formatting issue on http://localhost:11440: Invalid format: Q
+
+2025-11-10 02:10:16 - ⚠️ Formatting issue on http://localhost:11451: Invalid format: Q
+
+2025-11-10 02:10:16 - ⚠️ Formatting issue on http://localhost:11449: Invalid format: Q
+
+2025-11-10 02:10:16 - ⚠️ Formatting issue on http://localhost:11435: Invalid format: 
+2025-11-10 02:10:17 - ⚠️ Formatting issue on http://localhost:11446: Invalid format: Q
+
+2025-11-10 02:10:17 - ⚠️ Formatting issue on http://localhost:11475: Invalid format: Q
+
+2025-11-10 02:10:17 - ⚠️ Formatting issue on http://localhost:11479: Invalid format:  brides
+
+2025-11-10 02:10:17 - ⚠️ Formatting issue on http://localhost:11469: Invalid format: Q
+
+2025-11-10 02:10:18 - ⚠️ Formatting issue on http://localhost:11435: Invalid format: Q
+
+2025-11-10 02:10:18 - ⚠️ Formatting issue on http://localhost:11456: Invalid format: Q
+
+2025-11-10 02:10:18 - ❌ Skipping row due to generation failures: ❌ All attempts failed. Last response: Q
+
+2025-11-10 02:10:18 - ⚠️ Formatting issue on http://localhost:11459: Invalid format: сутствие CO2 diffusion in the arms of olfactometers, while WT la
+2025-11-10 02:10:18 - ⚠️ Formatting issue on http://localhost:11464: Invalid format: Q
+
+2025-11-10 02:10:19 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: 
+2025-11-10 02:10:19 - ⚠️ Formatting issue on http://localhost:11477: Invalid format: Q
+
+node0 QA Generation:   0%|          | 81948/271335309 [01:30<79:52:35, 943.31it/s]2025-11-10 02:10:20 - ⚠️ Formatting issue on http://localhost:11460: Invalid format: 
+2025-11-10 02:10:20 - ⚠️ Formatting issue on http://localhost:11455: Invalid format: Q
+
+2025-11-10 02:10:20 - ⚠️ Formatting issue on http://localhost:11466: Invalid format: Q
+Is it true, false, possibly true, or possibly false that <your
+2025-11-10 02:10:20 - ⚠️ Formatting issue on http://localhost:11479: Invalid format: Q
+
+2025-11-10 02:10:20 - ⚠️ Formatting issue on http://localhost:11481: Invalid format: Q
+
+2025-11-10 02:10:21 - ⚠️ Formatting issue on http://localhost:11478: Invalid format: Q
+
+2025-11-10 02:10:21 - ⚠️ Formatting issue on http://localhost:11456: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:10:21 - ⚠️ Formatting issue on http://localhost:11473: Invalid format: Q
+
+2025-11-10 02:10:22 - ⚠️ Formatting issue on http://localhost:11476: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:10:22 - ⚠️ Formatting issue on http://localhost:11446: Invalid format: Q
+
+2025-11-10 02:10:22 - ⚠️ Formatting issue on http://localhost:11436: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:10:23 - ⚠️ Formatting issue on http://localhost:11435: Invalid format: Q
+
+2025-11-10 02:10:23 - ⚠️ Formatting issue on http://localhost:11477: Invalid format: Q
+
+2025-11-10 02:10:23 - ⚠️ Formatting issue on http://localhost:11446: Invalid format: Q
+
+2025-11-10 02:10:23 - ⚠️ Formatting issue on http://localhost:11450: Invalid format: Q
+
+2025-11-10 02:10:23 - ⚠️ Formatting issue on http://localhost:11441: Invalid format: Q
+
+2025-11-10 02:10:24 - ⚠️ Formatting issue on http://localhost:11449: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:10:24 - ⚠️ Formatting issue on http://localhost:11441: Invalid format: Q
+
+2025-11-10 02:10:24 - ⚠️ Formatting issue on http://localhost:11449: Invalid format: Q: Is it true, false, possibly true, or possibly false that Japa
+2025-11-10 02:10:24 - ⚠️ Formatting issue on http://localhost:11458: Invalid format: Q
+
+2025-11-10 02:10:25 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q: Is it true, false, possibly true, or possibly false that Ital
+2025-11-10 02:10:26 - ⚠️ Formatting issue on http://localhost:11444: Invalid format: Q
+
+2025-11-10 02:10:27 - ⚠️ Formatting issue on http://localhost:11474: Invalid format: 
+2025-11-10 02:10:27 - ⚠️ Formatting issue on http://localhost:11437: Invalid format: Q
+
+2025-11-10 02:10:28 - ⚠️ Formatting issue on http://localhost:11439: Invalid format: Q
+
+2025-11-10 02:10:28 - ⚠️ Formatting issue on http://localhost:11435: Invalid format: Q
+
+2025-11-10 02:10:29 - ⚠️ Formatting issue on http://localhost:11458: Invalid format: Q
+
+2025-11-10 02:10:29 - ⚠️ Formatting issue on http://localhost:11436: Invalid format: Q
+
+2025-11-10 02:10:29 - ⚠️ Formatting issue on http://localhost:11460: Invalid format: Q
+
+2025-11-10 02:10:29 - ⚠️ Formatting issue on http://localhost:11459: Invalid format: Q
+
+2025-11-10 02:10:30 - ⚠️ Formatting issue on http://localhost:11476: Invalid format: Q
+
+2025-11-10 02:10:30 - ⚠️ Formatting issue on http://localhost:11448: Invalid format: Q
+
+2025-11-10 02:10:30 - ⚠️ Formatting issue on http://localhost:11460: Invalid format: Q
+
+2025-11-10 02:10:30 - ⚠️ Formatting issue on http://localhost:11457: Invalid format: Q
+
+2025-11-10 02:10:31 - ⚠️ Formatting issue on http://localhost:11434: Invalid format: Q
+
+2025-11-10 02:10:31 - ⚠️ Formatting issue on http://localhost:11463: Invalid format: Q
+
+2025-11-10 02:10:32 - ⚠️ Formatting issue on http://localhost:11471: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+node0 QA Generation:   0%|          | 98332/271335309 [02:15<143:42:43, 524.27it/s]2025-11-10 02:11:11 - ⚠️ Formatting issue on http://localhost:11452: Invalid format: Q
+
+2025-11-10 02:11:11 - ⚠️ Formatting issue on http://localhost:11463: Invalid format: Q
+
+2025-11-10 02:11:11 - ⚠️ Formatting issue on http://localhost:11467: Invalid format: Q
+
+2025-11-10 02:11:11 - ⚠️ Formatting issue on http://localhost:11481: Invalid format: Q
+
+2025-11-10 02:11:12 - ⚠️ Formatting issue on http://localhost:11446: Invalid format: Q
+
+2025-11-10 02:11:12 - ⚠️ Formatting issue on http://localhost:11441: Invalid format: Q
+
+2025-11-10 02:11:12 - ⚠️ Formatting issue on http://localhost:11477: Invalid format: Q
+
+2025-11-10 02:11:12 - ⚠️ Formatting issue on http://localhost:11467: Invalid format: Q
+
+2025-11-10 02:11:12 - ⚠️ Formatting issue on http://localhost:11435: Invalid format: Q
+
+2025-11-10 02:11:12 - ⚠️ Formatting issue on http://localhost:11437: Invalid format: Q
+
+2025-11-10 02:11:13 - ⚠️ Formatting issue on http://localhost:11450: Invalid format: 
+2025-11-10 02:11:13 - ⚠️ Formatting issue on http://localhost:11457: Invalid format: Q
+
+2025-11-10 02:11:13 - ⚠️ Formatting issue on http://localhost:11436: Invalid format: 
+2025-11-10 02:11:13 - ⚠️ Formatting issue on http://localhost:11453: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:11:14 - ⚠️ Formatting issue on http://localhost:11435: Invalid format: 
+2025-11-10 02:11:14 - ⚠️ Formatting issue on http://localhost:11451: Invalid format: Q
+
+2025-11-10 02:11:15 - ⚠️ Formatting issue on http://localhost:11460: Invalid format: Q
+
+2025-11-10 02:11:15 - ⚠️ Formatting issue on http://localhost:11454: Invalid format: Q: Is it true, false, possibly true, or possibly false that cadr
+2025-11-10 02:11:15 - ⚠️ Formatting issue on http://localhost:11478: Invalid format: 
+2025-11-10 02:11:15 - ❌ Skipping row due to generation failures: ❌ All attempts failed. Last response: Q
+
+2025-11-10 02:11:15 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:11:16 - ⚠️ Formatting issue on http://localhost:11470: Invalid format: Q
+
+2025-11-10 02:11:16 - ⚠️ Formatting issue on http://localhost:11435: Invalid format: Q
+
+2025-11-10 02:11:16 - ⚠️ Formatting issue on http://localhost:11450: Invalid format: Q
+
+2025-11-10 02:11:17 - ⚠️ Formatting issue on http://localhost:11476: Invalid format: Q
+
+2025-11-10 02:11:17 - ⚠️ Formatting issue on http://localhost:11467: Invalid format: Q
+
+2025-11-10 02:11:17 - ⚠️ Formatting issue on http://localhost:11479: Invalid format: Q
+
+2025-11-10 02:11:17 - ⚠️ Formatting issue on http://localhost:11462: Invalid format: Q
+
+2025-11-10 02:11:18 - ⚠️ Formatting issue on http://localhost:11469: Invalid format: Q
+Is it true, false, possibly true, or possibly false that <your
+2025-11-10 02:11:18 - ⚠️ Formatting issue on http://localhost:11463: Invalid format: Q
+
+2025-11-10 02:11:19 - ⚠️ Formatting issue on http://localhost:11452: Invalid format: Q
+
+2025-11-10 02:11:19 - ⚠️ Formatting issue on http://localhost:11455: Invalid format: Q
+
+2025-11-10 02:11:20 - ⚠️ Formatting issue on http://localhost:11454: Invalid format: Q
+
+2025-11-10 02:11:20 - ⚠️ Formatting issue on http://localhost:11462: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+node0 QA Generation:   0%|          | 98332/271335309 [02:31<143:42:43, 524.27it/s]2025-11-10 02:11:20 - ⚠️ Formatting issue on http://localhost:11434: Invalid format: Q
+
+2025-11-10 02:11:21 - ⚠️ Formatting issue on http://localhost:11457: Invalid format: Q
+
+2025-11-10 02:11:21 - ⚠️ Formatting issue on http://localhost:11470: Invalid format: Q
+
+2025-11-10 02:11:21 - ⚠️ Formatting issue on http://localhost:11480: Invalid format: Q: Is it true, false, possibly true, or possibly false that Kore
+2025-11-10 02:11:21 - ⚠️ Formatting issue on http://localhost:11475: Invalid format: Q
+
+2025-11-10 02:11:21 - ⚠️ Formatting issue on http://localhost:11441: Invalid format: Q
+
+2025-11-10 02:11:21 - ⚠️ Formatting issue on http://localhost:11478: Invalid format: Q
+
+2025-11-10 02:11:22 - ⚠️ Formatting issue on http://localhost:11446: Invalid format: Q
+
+2025-11-10 02:11:22 - ⚠️ Formatting issue on http://localhost:11447: Invalid format: Q
+
+2025-11-10 02:11:23 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:11:23 - ⚠️ Formatting issue on http://localhost:11471: Invalid format: Q
+
+2025-11-10 02:11:23 - ⚠️ Formatting issue on http://localhost:11475: Invalid format: Q
+
+2025-11-10 02:11:23 - ⚠️ Formatting issue on http://localhost:11469: Invalid format: Q
+
+2025-11-10 02:11:23 - ⚠️ Formatting issue on http://localhost:11470: Invalid format: Q
+
+2025-11-10 02:11:24 - ⚠️ Formatting issue on http://localhost:11453: Invalid format: 
+2025-11-10 02:11:24 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:11:25 - ⚠️ Formatting issue on http://localhost:11451: Invalid format: Q
+
+2025-11-10 02:11:25 - ⚠️ Formatting issue on http://localhost:11471: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:11:26 - ⚠️ Formatting issue on http://localhost:11457: Invalid format:  banks of the same length.
+
+2025-11-10 02:11:26 - ⚠️ Formatting issue on http://localhost:11463: Invalid format: Q
+
+2025-11-10 02:11:27 - ⚠️ Formatting issue on http://localhost:11453: Invalid format: Q
+
+2025-11-10 02:11:27 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:11:28 - ⚠️ Formatting issue on http://localhost:11446: Invalid format: 
+2025-11-10 02:11:28 - ⚠️ Formatting issue on http://localhost:11472: Invalid format: Okay, I understand. I will follow your instructions and provide 
+2025-11-10 02:11:28 - ⚠️ Formatting issue on http://localhost:11449: Invalid format: Q
+
+2025-11-10 02:11:28 - ⚠️ Formatting issue on http://localhost:11477: Invalid format: Q
+
+2025-11-10 02:11:28 - ⚠️ Formatting issue on http://localhost:11469: Invalid format: Q: Is it true, false, possibly true, or possibly false that laic
+2025-11-10 02:11:28 - ⚠️ Formatting issue on http://localhost:11471: Invalid format: Q
+
+2025-11-10 02:11:29 - ⚠️ Formatting issue on http://localhost:11454: Invalid format: 
+2025-11-10 02:11:29 - ⚠️ Formatting issue on http://localhost:11473: Invalid format: Q
+
+2025-11-10 02:11:30 - ⚠️ Formatting issue on http://localhost:11452: Invalid format: Q
+
+2025-11-10 02:11:30 - ⚠️ Formatting issue on http://localhost:11474: Invalid format: Q
+
+2025-11-10 02:11:31 - ⚠️ Formatting issue on http://localhost:11435: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:11:31 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:11:31 - ⚠️ Formatting issue on http://localhost:11442: Invalid format: Q
+
+2025-11-10 02:11:31 - ⚠️ Formatting issue on http://localhost:11446: Invalid format: Q
+
+2025-11-10 02:11:32 - ⚠️ Formatting issue on http://localhost:11462: Invalid format: Q
+
+2025-11-10 02:11:32 - ❌ Skipping row due to generation failures: ❌ All attempts failed. Last response: Question: Is it true, false, possibly true, or possibly false that the study of paremiological units in Russian linguistics demonstrates the different positions of linguists?
+Answer: true
+
+2025-11-10 02:11:32 - ⚠️ Formatting issue on http://localhost:11453: Invalid format: Q
+
+2025-11-10 02:11:33 - ⚠️ Formatting issue on http://localhost:11449: Invalid format: Q: Is it true, false, possibly true, or possibly false that drug
+2025-11-10 02:11:35 - ⚠️ Formatting issue on http://localhost:11439: Invalid format: Q
+
+2025-11-10 02:11:35 - ⚠️ Formatting issue on http://localhost:11447: Invalid format: Q Is it true, false, possibly true, or possibly false that <your
+2025-11-10 02:11:36 - ⚠️ Formatting issue on http://localhost:11457: Invalid format: Q Is it true, false, possibly true, or possibly false that <your
+2025-11-10 02:11:36 - ⚠️ Formatting issue on http://localhost:11452: Invalid format: Q
+
+2025-11-10 02:11:36 - ⚠️ Formatting issue on http://localhost:11438: Invalid format: Q
+
+2025-11-10 02:11:36 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:11:36 - ⚠️ Formatting issue on http://localhost:11472: Invalid format: 
+2025-11-10 02:11:37 - ⚠️ Formatting issue on http://localhost:11444: Invalid format: Q
+
+2025-11-10 02:11:37 - ⚠️ Formatting issue on http://localhost:11459: Invalid format: Q
+
+2025-11-10 02:11:37 - ⚠️ Formatting issue on http://localhost:11466: Invalid format: Q
+
+2025-11-10 02:11:37 - ⚠️ Formatting issue on http://localhost:11439: Invalid format:  brides
+
+2025-11-10 02:11:37 - ⚠️ Formatting issue on http://localhost:11436: Invalid format: Q
+Is it true, false, possibly true, or possibly false that daily
+2025-11-10 02:11:38 - ⚠️ Formatting issue on http://localhost:11451: Invalid format: Q
+
+2025-11-10 02:11:38 - ⚠️ Formatting issue on http://localhost:11476: Invalid format: 
+2025-11-10 02:11:39 - ⚠️ Formatting issue on http://localhost:11443: Invalid format: Q: Is it true, false, possibly true, or possibly false that the 
+2025-11-10 02:11:39 - ⚠️ Formatting issue on http://localhost:11459: Invalid format: 
+2025-11-10 02:11:41 - ⚠️ Formatting issue on http://localhost:11479: Invalid format: Q
+
+2025-11-10 02:11:42 - ⚠️ Formatting issue on http://localhost:11479: Invalid format: Q
+
+2025-11-10 02:11:45 - ❌ Skipping row due to generation failures: ❌ All attempts failed. Last response: Q
+
+2025-11-10 02:11:48 - ⚠️ Formatting issue on http://localhost:11458: Invalid format: Q
+
+2025-11-10 02:11:48 - ⚠️ Formatting issue on http://localhost:11458: Invalid format: Q
+
+2025-11-10 02:11:48 - ⚠️ Formatting issue on http://localhost:11458: Invalid format: Q
+
+node0 QA Generation:   0%|          | 114716/271335309 [03:14<185:21:52, 406.44it/s]2025-11-10 02:12:10 - ⚠️ Formatting issue on http://localhost:11444: Invalid format: Q
+
+2025-11-10 02:12:11 - ⚠️ Formatting issue on http://localhost:11450: Invalid format: Q
+
+2025-11-10 02:12:11 - ⚠️ Formatting issue on http://localhost:11469: Invalid format: Q
+
+2025-11-10 02:12:11 - ⚠️ Formatting issue on http://localhost:11436: Invalid format: Q
+
+2025-11-10 02:12:11 - ⚠️ Formatting issue on http://localhost:11453: Invalid format: Q
+
+2025-11-10 02:12:11 - ⚠️ Formatting issue on http://localhost:11454: Invalid format: Q
+
+2025-11-10 02:12:11 - ⚠️ Formatting issue on http://localhost:11443: Invalid format: Q
+
+2025-11-10 02:12:11 - ⚠️ Formatting issue on http://localhost:11461: Invalid format: Q
+
+2025-11-10 02:12:12 - ⚠️ Formatting issue on http://localhost:11435: Invalid format: Q: Is it true, false, possibly true, or possibly false that civi
+2025-11-10 02:12:12 - ⚠️ Formatting issue on http://localhost:11475: Invalid format: Q
+
+2025-11-10 02:12:12 - ⚠️ Formatting issue on http://localhost:11464: Invalid format: Q
+
+2025-11-10 02:12:12 - ⚠️ Formatting issue on http://localhost:11479: Invalid format: Q
+
+2025-11-10 02:12:12 - ⚠️ Formatting issue on http://localhost:11444: Invalid format: Q
+
+2025-11-10 02:12:13 - ⚠️ Formatting issue on http://localhost:11467: Invalid format: 
+2025-11-10 02:12:13 - ⚠️ Formatting issue on http://localhost:11439: Invalid format: Q
+
+2025-11-10 02:12:13 - ⚠️ Formatting issue on http://localhost:11472: Invalid format: Q
+
+2025-11-10 02:12:13 - ⚠️ Formatting issue on http://localhost:11480: Invalid format: Q
+
+2025-11-10 02:12:13 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:12:14 - ⚠️ Formatting issue on http://localhost:11448: Invalid format: Q
+
+2025-11-10 02:12:14 - ⚠️ Formatting issue on http://localhost:11438: Invalid format: Q
+
+2025-11-10 02:12:16 - ⚠️ Formatting issue on http://localhost:11462: Invalid format: Q: Is it true, false, possibly true, or possibly false that new 
+2025-11-10 02:12:17 - ⚠️ Formatting issue on http://localhost:11458: Invalid format: Q
+
+2025-11-10 02:12:17 - ⚠️ Formatting issue on http://localhost:11456: Invalid format: Q
+
+2025-11-10 02:12:18 - ⚠️ Formatting issue on http://localhost:11451: Invalid format: Q
+
+2025-11-10 02:12:19 - ⚠️ Formatting issue on http://localhost:11481: Invalid format: Q
+
+2025-11-10 02:12:20 - ⚠️ Formatting issue on http://localhost:11467: Invalid format: Q
+
+2025-11-10 02:12:20 - ⚠️ Formatting issue on http://localhost:11455: Invalid format: Q
+
+node0 QA Generation:   0%|          | 114716/271335309 [03:31<185:21:52, 406.44it/s]2025-11-10 02:12:21 - ⚠️ Formatting issue on http://localhost:11460: Invalid format: 
+2025-11-10 02:12:21 - ⚠️ Formatting issue on http://localhost:11472: Invalid format: Q
+
+2025-11-10 02:12:22 - ⚠️ Formatting issue on http://localhost:11446: Invalid format: Q
+
+2025-11-10 02:12:22 - ⚠️ Formatting issue on http://localhost:11459: Invalid format: Q
+
+2025-11-10 02:12:23 - ⚠️ Formatting issue on http://localhost:11438: Invalid format: Q
+
+2025-11-10 02:12:23 - ⚠️ Formatting issue on http://localhost:11449: Invalid format: Q
+
+2025-11-10 02:12:23 - ⚠️ Formatting issue on http://localhost:11445: Invalid format: Q
+
+2025-11-10 02:12:24 - ⚠️ Formatting issue on http://localhost:11456: Invalid format: Q
+
+2025-11-10 02:12:25 - ⚠️ Formatting issue on http://localhost:11453: Invalid format: Q
+
+2025-11-10 02:12:25 - ⚠️ Formatting issue on http://localhost:11452: Invalid format: Q
+
+2025-11-10 02:12:25 - ⚠️ Formatting issue on http://localhost:11472: Invalid format: Q
+
+2025-11-10 02:12:23 - ⚠️ Formatting issue on http://localhost:11437: Invalid format: Q
+
+2025-11-10 02:12:24 - ⚠️ Formatting issue on http://localhost:11480: Invalid format: Q
+
+2025-11-10 02:12:27 - ⚠️ Node http://localhost:11457 exception: name 'answer_linenswer_line' is not defined
+2025-11-10 02:12:27 - ⚠️ Formatting issue on http://localhost:11450: Invalid format: Q
+
+2025-11-10 02:12:25 - ⚠️ Formatting issue on http://localhost:11455: Invalid format: Q
+
+2025-11-10 02:12:27 - ⚠️ Formatting issue on http://localhost:11481: Invalid format: Q
+
+2025-11-10 02:12:29 - ⚠️ Formatting issue on http://localhost:11460: Invalid format: Q
+
+2025-11-10 02:12:29 - ⚠️ Formatting issue on http://localhost:11459: Invalid format: Q
+
+2025-11-10 02:12:26 - ⚠️ Formatting issue on http://localhost:11474: Invalid format: Q
+
+2025-11-10 02:12:28 - ⚠️ Formatting issue on http://localhost:11477: Invalid format: Q
+
+2025-11-10 02:12:23 - ⚠️ Formatting issue on http://localhost:11440: Invalid format: Q
+
+2025-11-10 02:12:22 - ⚠️ Formatting issue on http://localhost:11448: Invalid format: Q
+
+2025-11-10 02:12:26 - ⚠️ Formatting issue on http://localhost:11451: Invalid format: Q
+
+2025-11-10 02:12:27 - ⚠️ Formatting issue on http://localhost:11448: Invalid format: Q
+
+2025-11-10 02:12:30 - ⚠️ Formatting issue on http://localhost:11454: Invalid format: Q
+
+2025-11-10 02:12:30 - ⚠️ Formatting issue on http://localhost:11444: Invalid format: no
+2025-11-10 02:12:27 - ⚠️ Formatting issue on http://localhost:11473: Invalid format: Q
+
+2025-11-10 02:12:30 - ⚠️ Formatting issue on http://localhost:11474: Invalid format: Q
+
+2025-11-10 02:12:30 - ⚠️ Formatting issue on http://localhost:11456: Invalid format: Q
+
+2025-11-10 02:12:31 - ⚠️ Formatting issue on http://localhost:11447: Invalid format: Q
+
+2025-11-10 02:12:31 - ⚠️ Formatting issue on http://localhost:11453: Invalid format: Q
+
+2025-11-10 02:12:31 - ⚠️ Formatting issue on http://localhost:11455: Invalid format: Q
+
+2025-11-10 02:12:32 - ⚠️ Formatting issue on http://localhost:11436: Invalid format: Q
+
+2025-11-10 02:12:32 - ⚠️ Formatting issue on http://localhost:11469: Invalid format: Q
+
+2025-11-10 02:12:32 - ⚠️ Formatting issue on http://localhost:11481: Invalid format: Q
+
+2025-11-10 02:12:32 - ⚠️ Formatting issue on http://localhost:11472: Invalid format: Q
+
+2025-11-10 02:12:32 - ⚠️ Formatting issue on http://localhost:11451: Invalid format: Q
+
+2025-11-10 02:12:32 - ⚠️ Formatting issue on http://localhost:11448: Invalid format: Q
+
+2025-11-10 02:12:33 - ⚠️ Formatting issue on http://localhost:11441: Invalid format: Q
+
+2025-11-10 02:12:33 - ⚠️ Formatting issue on http://localhost:11476: Invalid format: Q
+
+2025-11-10 02:12:33 - ⚠️ Formatting issue on http://localhost:11463: Invalid format: Q
+
+2025-11-10 02:12:33 - ⚠️ Formatting issue on http://localhost:11471: Invalid format: Q
+
+2025-11-10 02:12:33 - ⚠️ Formatting issue on http://localhost:11460: Invalid format: Q
+
+2025-11-10 02:12:33 - ⚠️ Formatting issue on http://localhost:11435: Invalid format: Q
+
+2025-11-10 02:12:34 - ⚠️ Formatting issue on http://localhost:11459: Invalid format: Q
+
+2025-11-10 02:12:34 - ⚠️ Formatting issue on http://localhost:11434: Invalid format: Q
+
+2025-11-10 02:12:34 - ⚠️ Formatting issue on http://localhost:11444: Invalid format: Q
+
+2025-11-10 02:12:35 - ⚠️ Formatting issue on http://localhost:11467: Invalid format: Q
+
+2025-11-10 02:12:35 - ⚠️ Formatting issue on http://localhost:11457: Invalid format: Q
+
+2025-11-10 02:12:35 - ⚠️ Formatting issue on http://localhost:11462: Invalid format: Q
+
+2025-11-10 02:12:35 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:12:35 - ⚠️ Formatting issue on http://localhost:11436: Invalid format: Q
+
+2025-11-10 02:12:36 - ⚠️ Formatting issue on http://localhost:11448: Invalid format: Q
+
+2025-11-10 02:12:36 - ⚠️ Formatting issue on http://localhost:11469: Invalid format: 
+2025-11-10 02:12:36 - ⚠️ Formatting issue on http://localhost:11471: Invalid format: Q
+
+2025-11-10 02:12:37 - ⚠️ Formatting issue on http://localhost:11459: Invalid format: Q
+
+2025-11-10 02:12:37 - ⚠️ Formatting issue on http://localhost:11441: Invalid format: Q
+
+2025-11-10 02:12:37 - ⚠️ Formatting issue on http://localhost:11450: Invalid format: Q
+
+2025-11-10 02:12:37 - ⚠️ Formatting issue on http://localhost:11444: Invalid format: Q
+
+2025-11-10 02:12:38 - ⚠️ Formatting issue on http://localhost:11446: Invalid format: Q
+
+2025-11-10 02:12:38 - ⚠️ Formatting issue on http://localhost:11454: Invalid format: Q
+
+2025-11-10 02:12:38 - ⚠️ Formatting issue on http://localhost:11474: Invalid format: Q
+
+2025-11-10 02:12:39 - ⚠️ Formatting issue on http://localhost:11456: Invalid format: Q
+
+2025-11-10 02:12:39 - ⚠️ Formatting issue on http://localhost:11449: Invalid format: Q
+
+2025-11-10 02:12:39 - ⚠️ Formatting issue on http://localhost:11437: Invalid format: Q
+
+2025-11-10 02:12:40 - ⚠️ Formatting issue on http://localhost:11440: Invalid format: Q
+
+2025-11-10 02:12:40 - ⚠️ Formatting issue on http://localhost:11475: Invalid format: Q
+
+2025-11-10 02:12:40 - ⚠️ Formatting issue on http://localhost:11434: Invalid format: Q
+
+2025-11-10 02:12:40 - ⚠️ Formatting issue on http://localhost:11452: Invalid format: Q
+
+2025-11-10 02:12:40 - ⚠️ Formatting issue on http://localhost:11476: Invalid format: Q
+
+2025-11-10 02:12:40 - ⚠️ Formatting issue on http://localhost:11441: Invalid format: Q
+
+2025-11-10 02:12:41 - ⚠️ Formatting issue on http://localhost:11458: Invalid format: Q
+
+2025-11-10 02:12:41 - ⚠️ Formatting issue on http://localhost:11448: Invalid format: Q
+
+2025-11-10 02:12:41 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:12:42 - ⚠️ Formatting issue on http://localhost:11456: Invalid format: Q
+
+2025-11-10 02:12:42 - ⚠️ Node http://localhost:11463 exception: name 'answer_linenswer_line' is not defined
+2025-11-10 02:12:43 - ⚠️ Formatting issue on http://localhost:11447: Invalid format: Q
+
+2025-11-10 02:12:43 - ⚠️ Formatting issue on http://localhost:11473: Invalid format: Q
+
+2025-11-10 02:12:43 - ⚠️ Formatting issue on http://localhost:11435: Invalid format: Q: Is it true, false, possibly true, or possibly false that Ital
+2025-11-10 02:12:43 - ⚠️ Formatting issue on http://localhost:11452: Invalid format: Q
+
+2025-11-10 02:12:44 - ⚠️ Formatting issue on http://localhost:11434: Invalid format: Q
+
+2025-11-10 02:12:44 - ⚠️ Formatting issue on http://localhost:11461: Invalid format: Q
+
+2025-11-10 02:12:44 - ⚠️ Formatting issue on http://localhost:11443: Invalid format: Q
+
+2025-11-10 02:12:44 - ⚠️ Formatting issue on http://localhost:11479: Invalid format: Q
+
+2025-11-10 02:12:45 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:12:45 - ⚠️ Formatting issue on http://localhost:11442: Invalid format: Q
+
+2025-11-10 02:12:46 - ⚠️ Formatting issue on http://localhost:11444: Invalid format: Q
+
+2025-11-10 02:12:46 - ⚠️ Formatting issue on http://localhost:11446: Invalid format: Q
+
+2025-11-10 02:12:47 - ⚠️ Formatting issue on http://localhost:11434: Invalid format: Q
+
+2025-11-10 02:12:48 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:12:48 - ⚠️ Formatting issue on http://localhost:11437: Invalid format: Q
+
+2025-11-10 02:12:48 - ⚠️ Formatting issue on http://localhost:11462: Invalid format: Q
+
+2025-11-10 02:12:49 - ⚠️ Formatting issue on http://localhost:11448: Invalid format: Q: Is it true, false, possibly true, or possibly false that Kore
+2025-11-10 02:12:49 - ⚠️ Formatting issue on http://localhost:11452: Invalid format: Q
+
+2025-11-10 02:12:49 - ⚠️ Formatting issue on http://localhost:11442: Invalid format: Q
+
+2025-11-10 02:12:50 - ⚠️ Formatting issue on http://localhost:11476: Invalid format: Q
+
+2025-11-10 02:12:51 - ⚠️ Formatting issue on http://localhost:11463: Invalid format: Q
+
+2025-11-10 02:12:51 - ⚠️ Formatting issue on http://localhost:11462: Invalid format: Q
+
+2025-11-10 02:12:52 - ⚠️ Formatting issue on http://localhost:11478: Invalid format: Q
+
+2025-11-10 02:12:52 - ⚠️ Formatting issue on http://localhost:11475: Invalid format: Q
+
+2025-11-10 02:12:52 - ⚠️ Node http://localhost:11480 exception: name 'answer_linenswer_line' is not defined
+2025-11-10 02:12:52 - ⚠️ Formatting issue on http://localhost:11436: Invalid format: Q
+
+2025-11-10 02:12:53 - ⚠️ Formatting issue on http://localhost:11439: Invalid format: Q
+
+2025-11-10 02:12:53 - ⚠️ Formatting issue on http://localhost:11451: Invalid format: Q
+
+2025-11-10 02:12:53 - ⚠️ Formatting issue on http://localhost:11444: Invalid format: Q
+
+2025-11-10 02:12:54 - ⚠️ Formatting issue on http://localhost:11466: Invalid format: Q
+
+2025-11-10 02:12:54 - ⚠️ Formatting issue on http://localhost:11447: Invalid format: Q
+
+2025-11-10 02:12:54 - ⚠️ Formatting issue on http://localhost:11462: Invalid format: Q
+
+2025-11-10 02:12:54 - ⚠️ Formatting issue on http://localhost:11459: Invalid format: Q
+
+2025-11-10 02:12:54 - ⚠️ Formatting issue on http://localhost:11476: Invalid format: Q
+
+2025-11-10 02:12:54 - ⚠️ Formatting issue on http://localhost:11446: Invalid format: Q
+
+2025-11-10 02:12:54 - ⚠️ Formatting issue on http://localhost:11481: Invalid format: Q
+
+2025-11-10 02:12:54 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:12:55 - ⚠️ Formatting issue on http://localhost:11470: Invalid format: Q
+
+2025-11-10 02:12:55 - ⚠️ Formatting issue on http://localhost:11464: Invalid format: Q
+
+2025-11-10 02:12:55 - ⚠️ Formatting issue on http://localhost:11475: Invalid format: Q
+
+2025-11-10 02:12:56 - ⚠️ Formatting issue on http://localhost:11473: Invalid format: Q
+
+2025-11-10 02:12:56 - ⚠️ Formatting issue on http://localhost:11462: Invalid format: Q
+
+2025-11-10 02:12:56 - ⚠️ Formatting issue on http://localhost:11467: Invalid format: Q
+
+2025-11-10 02:12:57 - ⚠️ Formatting issue on http://localhost:11458: Invalid format: Q
+
+2025-11-10 02:12:57 - ⚠️ Formatting issue on http://localhost:11437: Invalid format: Q
+
+2025-11-10 02:12:58 - ⚠️ Formatting issue on http://localhost:11476: Invalid format: Q
+
+2025-11-10 02:12:58 - ⚠️ Formatting issue on http://localhost:11447: Invalid format: Q Is it true, false, possibly true, or possibly false that <your
+2025-11-10 02:13:00 - ⚠️ Formatting issue on http://localhost:11466: Invalid format: Q
+
+2025-11-10 02:13:00 - ⚠️ Formatting issue on http://localhost:11451: Invalid format: Q
+
+2025-11-10 02:13:00 - ⚠️ Formatting issue on http://localhost:11460: Invalid format: Q
+
+2025-11-10 02:13:00 - ⚠️ Formatting issue on http://localhost:11457: Invalid format: Q
+
+2025-11-10 02:13:01 - ⚠️ Formatting issue on http://localhost:11438: Invalid format: Q
+
+2025-11-10 02:13:02 - ⚠️ Formatting issue on http://localhost:11474: Invalid format: Q
+
+2025-11-10 02:13:02 - ⚠️ Formatting issue on http://localhost:11465: Invalid format: Q
+
+2025-11-10 02:13:02 - ⚠️ Formatting issue on http://localhost:11437: Invalid format: Q
+
+2025-11-10 02:13:02 - ⚠️ Formatting issue on http://localhost:11447: Invalid format: Q
+
+2025-11-10 02:13:02 - ⚠️ Formatting issue on http://localhost:11463: Invalid format: Q
+
+2025-11-10 02:13:02 - ⚠️ Formatting issue on http://localhost:11470: Invalid format: Q
+
+2025-11-10 02:13:02 - ⚠️ Formatting issue on http://localhost:11439: Invalid format: Q
+
+2025-11-10 02:13:02 - ⚠️ Formatting issue on http://localhost:11477: Invalid format: Q
+
+2025-11-10 02:13:03 - ⚠️ Formatting issue on http://localhost:11443: Invalid format: Q
+
+2025-11-10 02:13:03 - ⚠️ Formatting issue on http://localhost:11478: Invalid format: 
+2025-11-10 02:13:04 - ⚠️ Formatting issue on http://localhost:11440: Invalid format: Q
+
+2025-11-10 02:13:04 - ⚠️ Formatting issue on http://localhost:11481: Invalid format: Q
+
+2025-11-10 02:13:04 - ⚠️ Formatting issue on http://localhost:11468: Invalid format: Q
+
+2025-11-10 02:13:04 - ⚠️ Formatting issue on http://localhost:11480: Invalid format: Q
+
+2025-11-10 02:13:05 - ⚠️ Formatting issue on http://localhost:11436: Invalid format: Q
+
+2025-11-10 02:13:05 - ⚠️ Formatting issue on http://localhost:11456: Invalid format: Q
+
+2025-11-10 02:13:06 - ⚠️ Formatting issue on http://localhost:11463: Invalid format: Q
+
+2025-11-10 02:13:06 - ⚠️ Formatting issue on http://localhost:11454: Invalid format: Q
+
+2025-11-10 02:13:06 - ⚠️ Formatting issue on http://localhost:11444: Invalid format: Q
+
+2025-11-10 02:13:06 - ⚠️ Formatting issue on http://localhost:11478: Invalid format: Q
+
+2025-11-10 02:13:06 - ⚠️ Node http://localhost:11465 exception: timed out
+2025-11-10 02:13:08 - ⚠️ Formatting issue on http://localhost:11440: Invalid format: Q
+
+2025-11-10 02:13:09 - ⚠️ Formatting issue on http://localhost:11469: Invalid format: 
+2025-11-10 02:13:09 - ⚠️ Formatting issue on http://localhost:11471: Invalid format: Q
+
+2025-11-10 02:13:09 - ⚠️ Formatting issue on http://localhost:11463: Invalid format: Q
+
+2025-11-10 02:13:10 - ⚠️ Formatting issue on http://localhost:11457: Invalid format: Q
+
+2025-11-10 02:13:11 - ⚠️ Formatting issue on http://localhost:11438: Invalid format: Q
+
+2025-11-10 02:13:13 - ⚠️ Formatting issue on http://localhost:11443: Invalid format: Q
+
+2025-11-10 02:13:13 - ⚠️ Formatting issue on http://localhost:11463: Invalid format: Q
+
+2025-11-10 02:13:14 - ⚠️ Node http://localhost:11463 exception: timed out
+2025-11-10 02:13:15 - ⚠️ Node http://localhost:11473 exception: timed out
+2025-11-10 02:13:17 - ⚠️ Formatting issue on http://localhost:11444: Invalid format: Q
+
+2025-11-10 02:13:21 - ⚠️ Formatting issue on http://localhost:11467: Invalid format: Q
+
+2025-11-10 02:13:24 - ⚠️ Formatting issue on http://localhost:11444: Invalid format: Q
+
+2025-11-10 02:13:24 - ⚠️ Formatting issue on http://localhost:11467: Invalid format: Q
+
+2025-11-10 02:13:25 - ⚠️ Formatting issue on http://localhost:11458: Invalid format: Q
+
+2025-11-10 02:13:28 - ⚠️ Formatting issue on http://localhost:11458: Invalid format: Q
+
+2025-11-10 02:13:29 - ⚠️ Formatting issue on http://localhost:11472: Invalid format: Q
+
+2025-11-10 02:13:29 - ⚠️ Formatting issue on http://localhost:11462: Invalid format: Q
+
+2025-11-10 02:13:31 - ⚠️ Formatting issue on http://localhost:11458: Invalid format: Q
+
+2025-11-10 02:13:31 - ⚠️ Formatting issue on http://localhost:11462: Invalid format: Q
+
+2025-11-10 02:13:40 - ⚠️ Formatting issue on http://localhost:11443: Invalid format: Q
+
+2025-11-10 02:13:49 - 📊 GPU Status: GPU 0: 4% util, 14477/24564MB | GPU 1: 21% util, 14479/24564MB | GPU 2: 38% util, 14475/24564MB
+2025-11-10 02:13:50 - 🔧 Active Ollama processes: 48
+2025-11-10 02:13:55 - ⚠️ Formatting issue on http://localhost:11451: Invalid format: Q
+
+2025-11-10 02:14:01 - ⚠️ Formatting issue on http://localhost:11456: Invalid format: Q
+
+2025-11-10 02:14:04 - ⚠️ Formatting issue on http://localhost:11476: Invalid format: Q
+
+2025-11-10 02:14:06 - ⚠️ Formatting issue on http://localhost:11453: Invalid format: Q
+
+2025-11-10 02:14:10 - ❌ Skipping row due to generation failures: ❌ All attempts failed. Last response: Q
+
+2025-11-10 02:14:10 - ⚠️ Formatting issue on http://localhost:11453: Invalid format: Q
+
+2025-11-10 02:14:11 - ❌ Skipping row due to generation failures: ❌ All attempts failed. Last response: None
+2025-11-10 02:14:11 - ⚠️ Formatting issue on http://localhost:11437: Invalid format: Q
+
+2025-11-10 02:14:12 - ❌ Skipping row due to generation failures: ❌ All attempts failed. Last response: None
+2025-11-10 02:14:16 - ⚠️ Formatting issue on http://localhost:11475: Invalid format: Q
+
+2025-11-10 02:14:16 - ⚠️ Formatting issue on http://localhost:11446: Invalid format: Q
+
+2025-11-10 02:14:16 - ⚠️ Node http://localhost:11437 exception: name 'answer_linenswer_line' is not defined
+2025-11-10 02:14:17 - ⚠️ Formatting issue on http://localhost:11434: Invalid format: 
+2025-11-10 02:14:19 - ⚠️ Formatting issue on http://localhost:11475: Invalid format: Q
+
+2025-11-10 02:14:19 - ❌ Skipping row due to generation failures: ❌ All attempts failed. Last response: Q
+

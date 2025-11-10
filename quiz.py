@@ -20,8 +20,6 @@ from collections import defaultdict
 # ────────── config ──────────
 INSTANCES: List[Dict[str, str]] = []
 OLLAMA_NODES: List[str] = []
-GPU_MEMORY_RESERVE_MB = 512
-DEFAULT_INSTANCE_MEMORY_MB = 2048
 MODEL_MEMORY_OVERRIDES_MB = {
     "smollm:135m": 906,
     "smollm2:135m": 906,
@@ -30,8 +28,7 @@ MODEL_MEMORY_OVERRIDES_MB = {
     "gemma3:1b": 2000,
     "gemma3:270m": 1200,
 }
-BASE_PORT = 11434
-TIMEOUT_SEC  = 30
+# Dynamic values will be calculated after GPU_MEMORY_MB is set
 QUESTIONS_PER_FIELD = 1_000
 MAX_REPROMPTS = 2
 
@@ -415,8 +412,11 @@ def stop_model_on_all_nodes(model: str) -> None:
             ollama.Client(host=node).stop(model)
 
 def ask(model:str,prompt:str,node:str)->str:
+    # Calculate timeout dynamically based on current worker count
+    num_nodes = len(OLLAMA_NODES) if OLLAMA_NODES else 1
+    timeout_sec = _calculate_timeout_sec(WORKERS_PER_NODE, num_nodes)
     try:
-        client = ollama.Client(host=node, timeout=TIMEOUT_SEC)
+        client = ollama.Client(host=node, timeout=timeout_sec)
         r = client.generate(
             model=model,
             prompt=prompt,
@@ -637,7 +637,8 @@ def _query_gpu_memory_mb() -> List[int]:
             return values
     except Exception:
         pass
-    return [24576]
+    # Fallback to 8 GB GPU if detection fails (more conservative)
+    return [8192]
 
 
 def _detect_cpu_cores() -> int:
@@ -668,8 +669,8 @@ def _detect_cpu_cores() -> int:
     except Exception:
         pass
     
-    # Fallback to 8 cores if detection fails
-    return 8
+    # Fallback to 4 cores if detection fails (more conservative)
+    return 4
 
 
 def _detect_available_ram_gb() -> float:
@@ -698,27 +699,68 @@ def _detect_available_ram_gb() -> float:
     except Exception:
         pass
     
-    # Fallback to 32 GB if detection fails
-    return 32.0
+    # Fallback to 16 GB if detection fails (more conservative)
+    return 16.0
 
 
 def calculate_workers_per_node() -> int:
-    """Calculate optimal workers per node based on CPU cores and GPU count."""
+    """Calculate optimal workers per node based on CPU cores, GPU count, and RAM."""
     cpu_cores = _detect_cpu_cores()
     num_gpus = len(GPU_MEMORY_MB)
+    ram_gb = _detect_available_ram_gb()
     
-    # Formula: workers = min(max(2, cpu_cores // num_gpus), 16)
-    # Minimum 2, scale with CPU cores divided by GPUs, cap at 16
+    # Formula: workers = min(max(2, cpu_cores // num_gpus), min(16, ram_gb // 8))
+    # Minimum 2, scale with CPU cores divided by GPUs, cap at 16 and RAM-based limit
     if num_gpus > 0:
-        workers = min(max(2, cpu_cores // num_gpus), 16)
+        workers = min(max(2, cpu_cores // num_gpus), min(16, int(ram_gb // 8)))
     else:
         # If no GPUs detected, use a conservative value
-        workers = min(max(2, cpu_cores // 4), 16)
+        workers = min(max(2, cpu_cores // 4), min(16, int(ram_gb // 8)))
     
     return workers
 
 
+def _calculate_gpu_reserve_mb(gpu_memory_mb: List[int]) -> int:
+    """Calculate GPU memory reserve as 2% of average GPU memory."""
+    if not gpu_memory_mb:
+        return 512
+    avg = sum(gpu_memory_mb) // len(gpu_memory_mb)
+    reserve = max(256, min(1024, int(avg * 0.02)))
+    return reserve
+
+
+def _get_base_port() -> int:
+    """Get base port from env var or use default."""
+    return int(os.environ.get('OLLAMA_BASE_PORT', '11434'))
+
+
+def _calculate_default_instance_memory(gpu_memory_mb: List[int]) -> int:
+    """Calculate default instance memory as 8% of average GPU memory."""
+    if not gpu_memory_mb:
+        return 2048
+    avg = sum(gpu_memory_mb) // len(gpu_memory_mb)
+    instance_mem = int(avg * 0.08)
+    return max(1024, min(4096, instance_mem))
+
+
+def _calculate_timeout_sec(workers_per_node: int, num_nodes: int) -> int:
+    """Calculate timeout based on worker count."""
+    total_workers = workers_per_node * num_nodes if num_nodes > 0 else workers_per_node
+    timeout = 20 + (total_workers // 1000) * 2
+    return min(timeout, 60)
+
+
+def _calculate_max_instances_per_gpu(gpu_memory_mb: int) -> int:
+    """Calculate max instances per GPU based on GPU memory."""
+    return min(8, max(1, gpu_memory_mb // 2000))
+
+
 GPU_MEMORY_MB = _query_gpu_memory_mb()
+CPU_CORES = _detect_cpu_cores()
+RAM_GB = _detect_available_ram_gb()
+GPU_MEMORY_RESERVE_MB = _calculate_gpu_reserve_mb(GPU_MEMORY_MB)
+DEFAULT_INSTANCE_MEMORY_MB = _calculate_default_instance_memory(GPU_MEMORY_MB)
+BASE_PORT = _get_base_port()
 WORKERS_PER_NODE = calculate_workers_per_node()
 
 def estimate_model_memory_mb(model: str) -> int:
@@ -743,14 +785,16 @@ def plan_instances_for_model(model: str) -> List[Dict[str, str]]:
     """Produce an Ollama instance plan sized for the requested model."""
     mem_needed = max(estimate_model_memory_mb(model), 1)
     plan: List[Dict[str, str]] = []
-    port = BASE_PORT
+    port = _get_base_port()
     for gpu_index, total_mem in enumerate(GPU_MEMORY_MB):
         available = max(0, total_mem - GPU_MEMORY_RESERVE_MB)
         if available >= mem_needed:
             count = max(1, available // mem_needed)
         else:
             count = 1
-        count = max(1, min(count, 8))
+        # Dynamic cap based on GPU memory
+        max_instances = _calculate_max_instances_per_gpu(total_mem)
+        count = max(1, min(count, max_instances))
         for _ in range(count):
             plan.append({
                 "host": f"http://127.0.0.1:{port}",
@@ -759,7 +803,8 @@ def plan_instances_for_model(model: str) -> List[Dict[str, str]]:
             })
             port += 1
     if not plan:
-        plan.append({"host": f"http://127.0.0.1:{BASE_PORT}", "port": str(BASE_PORT), "gpu": "0"})
+        base_port = _get_base_port()
+        plan.append({"host": f"http://127.0.0.1:{base_port}", "port": str(base_port), "gpu": "0"})
     return plan
 
 
@@ -771,14 +816,17 @@ def main():
     GLOBAL_SALVAGE_BY_FIELD = defaultdict(int)
     
     # Log system specs and calculated concurrency
-    cpu_cores = _detect_cpu_cores()
-    ram_gb = _detect_available_ram_gb()
     num_gpus = len(GPU_MEMORY_MB)
-    log(f"💻 System specs: {cpu_cores} CPU cores, {ram_gb:.1f} GB RAM, {num_gpus} GPU(s)")
+    timeout_sec = _calculate_timeout_sec(WORKERS_PER_NODE, num_gpus)  # Estimate before nodes are known
+    log(f"💻 System specs: {CPU_CORES} CPU cores, {RAM_GB:.1f} GB RAM, {num_gpus} GPU(s)")
     log(f"⚙️  Calculated concurrency: {WORKERS_PER_NODE} workers per node")
+    log(f"⚙️  Dynamic config: GPU reserve={GPU_MEMORY_RESERVE_MB}MB, default instance={DEFAULT_INSTANCE_MEMORY_MB}MB, timeout={timeout_sec}s")
     
     completed=done(); hdr=CSV_PATH.exists()
-    mongo=MongoClient(MONGO_URI)
+    # Calculate pool size based on worker count
+    num_nodes = len(OLLAMA_NODES) if OLLAMA_NODES else 1
+    pool_size = max(5, min(50, WORKERS_PER_NODE * num_nodes))
+    mongo=MongoClient(MONGO_URI, maxPoolSize=pool_size, minPoolSize=min(5, pool_size // 2))
     cols={db:mongo[db]["sources"] for db in DATABASES}
 
     for model in MODEL_LIST:

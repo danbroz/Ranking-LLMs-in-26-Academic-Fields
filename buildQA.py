@@ -28,18 +28,16 @@ import signal
 from scripts import backup_field_databases, prune_field_databases
 
 # Dynamic Ollama configuration will be computed at runtime
-GPU_MEMORY_RESERVE_MB = 512
 SMOLLM2_MEMORY_MB = 906
 MODEL_NAME = 'gemma3:270m'
 MODEL_MEMORY_MB = 1500
-BASE_PORT = 11434
 
 nodes = []
 INSTANCES = []
 
 
 def _query_gpu_memory_mb():
-    """Return total VRAM per visible GPU in megabytes (fallback to 24 GB)."""
+    """Return total VRAM per visible GPU in megabytes (fallback to 8 GB)."""
     try:
         result = subprocess.run(
             [
@@ -57,8 +55,8 @@ def _query_gpu_memory_mb():
             return values
     except Exception:
         pass
-    # Fallback to a single 24 GB GPU if detection fails
-    return [24576]
+    # Fallback to a single 8 GB GPU if detection fails (more conservative)
+    return [8192]
 
 
 def _detect_cpu_cores():
@@ -89,8 +87,8 @@ def _detect_cpu_cores():
     except Exception:
         pass
     
-    # Fallback to 8 cores if detection fails
-    return 8
+    # Fallback to 4 cores if detection fails (more conservative)
+    return 4
 
 
 def _detect_available_ram_gb():
@@ -119,50 +117,111 @@ def _detect_available_ram_gb():
     except Exception:
         pass
     
-    # Fallback to 32 GB if detection fails
-    return 32.0
+    # Fallback to 16 GB if detection fails (more conservative)
+    return 16.0
 
 
 GPU_MEMORY_MB = _query_gpu_memory_mb()
 
 
+def _calculate_gpu_reserve_mb(gpu_memory_mb):
+    """Calculate GPU memory reserve as 2% of average GPU memory."""
+    if not gpu_memory_mb:
+        return 512
+    avg = sum(gpu_memory_mb) // len(gpu_memory_mb)
+    reserve = max(256, min(1024, int(avg * 0.02)))
+    return reserve
+
+
+def _get_base_port():
+    """Get base port from env var or use default."""
+    return int(os.environ.get('OLLAMA_BASE_PORT', '11434'))
+
+
+def _calculate_task_timeout(workers_per_node, num_nodes):
+    """Calculate task timeout based on worker count."""
+    total_workers = workers_per_node * num_nodes if num_nodes > 0 else workers_per_node
+    timeout = 30 + (total_workers // 1000) * 5
+    return min(timeout, 120)
+
+
+def _calculate_log_timeout(ram_gb):
+    """Calculate log timeout based on RAM."""
+    timeout_minutes = 30 + int((ram_gb - 16) // 8) * 1
+    timeout_seconds = timeout_minutes * 60
+    return min(timeout_seconds, 7200)  # Max 2 hours
+
+
+def _calculate_retry_delay(cpu_cores):
+    """Calculate retry delay inversely with CPU cores."""
+    delay = 0.02 - ((cpu_cores // 4) * 0.001)
+    return max(0.005, delay)
+
+
+def _calculate_batch_size(ram_gb):
+    """Calculate batch size based on RAM."""
+    batch_size = 20 + int((ram_gb - 16) // 16) * 5
+    return min(max(20, batch_size), 100)
+
+
+def _calculate_node_backoff(task_timeout):
+    """Calculate node backoff based on task timeout."""
+    backoff = int(task_timeout * 0.75)
+    return min(max(15, backoff), 60)
+
+
+def _calculate_chunksize(ram_gb):
+    """Calculate pandas chunksize based on available RAM."""
+    chunksize = 8192 + int((ram_gb - 16) // 8) * 2048
+    return min(max(8192, chunksize), 32768)
+
+
 def calculate_workers_per_node():
-    """Calculate optimal workers per node based on CPU cores, GPU count, and model size."""
+    """Calculate optimal workers per node based on CPU cores, GPU count, RAM, and model size."""
     cpu_cores = _detect_cpu_cores()
     num_gpus = len(GPU_MEMORY_MB)
+    ram_gb = _detect_available_ram_gb()
     
     # For small models (like gemma3:270m), we can be more aggressive with concurrency
     # Base calculation: workers = cpu_cores // num_gpus, but scale up for small models
     if num_gpus > 0:
         base_workers = cpu_cores // num_gpus
-        # For small models (< 2GB), allow much higher concurrency (up to 50 workers per node)
+        # For small models (< 2GB), allow much higher concurrency
         # This helps saturate GPU utilization when model inference is fast
         if MODEL_MEMORY_MB < 2000:
-            # Small model: allow 3-4x base workers, cap at 50
-            workers = min(max(10, base_workers * 3), 50)
+            # Small model: allow 3x base workers, cap at 50 and RAM-based limit
+            workers = min(max(10, base_workers * 3), min(50, int(ram_gb // 4)))
         else:
-            # Larger models: more conservative, cap at 20
-            workers = min(max(5, base_workers * 2), 20)
+            # Larger models: more conservative, cap at 20 and RAM-based limit
+            workers = min(max(5, base_workers * 2), min(20, int(ram_gb // 8)))
     else:
         # If no GPUs detected, use a conservative value
-        workers = min(max(5, cpu_cores // 4), 20)
+        workers = min(max(5, cpu_cores // 4), min(20, int(ram_gb // 8)))
     
     return workers
 
 
-# Calculate dynamic concurrency values at module initialization
+# Calculate dynamic configuration values at module initialization
+GPU_MEMORY_MB = _query_gpu_memory_mb()
+CPU_CORES = _detect_cpu_cores()
+RAM_GB = _detect_available_ram_gb()
+GPU_MEMORY_RESERVE_MB = _calculate_gpu_reserve_mb(GPU_MEMORY_MB)
+BASE_PORT = _get_base_port()
 WORKERS_PER_NODE = calculate_workers_per_node()
 MAX_CONCURRENT_REQUESTS_PER_NODE = WORKERS_PER_NODE  # Match workers per node
+
+# Calculate dynamic timeouts and delays
+TASK_TIMEOUT_SECONDS = _calculate_task_timeout(WORKERS_PER_NODE, 1)  # Will be recalculated when nodes are known
+LOG_TIMEOUT_SECONDS = _calculate_log_timeout(RAM_GB)
+RETRY_DELAY = _calculate_retry_delay(CPU_CORES)
+NODE_BACKOFF_SECONDS = _calculate_node_backoff(TASK_TIMEOUT_SECONDS)
+BATCH_SIZE = _calculate_batch_size(RAM_GB)
+PANDAS_CHUNKSIZE = _calculate_chunksize(RAM_GB)
 
 MONGO_URI = "mongodb://localhost:27017/"
 DATABASES = [f'field_{fid}' for fid in range(11, 37)]
 
 MAX_ATTEMPTS = 3
-TASK_TIMEOUT_SECONDS = 45  # Reduced from 60s for faster failure detection
-LOG_TIMEOUT_SECONDS = 3600  # 1 hour - only restart if truly stuck
-BATCH_SIZE = 40
-RETRY_DELAY = 0.01  # Reduced from 0.05s for faster retries
-NODE_BACKOFF_SECONDS = 30  # Back off a node for 30 seconds after timeout
 
 last_log_time = datetime.now()
 
@@ -252,16 +311,16 @@ def ensure_ollama_instances():
     """
     global nodes, INSTANCES, node_semaphores, node_timeout_counts, node_last_timeout
 
-    hostname = get_hostname()
-    if hostname != 'node0':
-        log(f"⚠️ Hostname is '{hostname}', not 'node0'; proceeding with local Ollama setup anyway.")
+    # Removed hostname check - script works on any system
 
     # Log system specs and calculated concurrency
-    cpu_cores = _detect_cpu_cores()
-    ram_gb = _detect_available_ram_gb()
     num_gpus = len(GPU_MEMORY_MB)
-    log(f"💻 System specs: {cpu_cores} CPU cores, {ram_gb:.1f} GB RAM, {num_gpus} GPU(s)")
+    # Recalculate timeout based on estimated node count (will be updated after instances are created)
+    estimated_nodes = sum(max(1, (gpu_mem - GPU_MEMORY_RESERVE_MB) // MODEL_MEMORY_MB) for gpu_mem in GPU_MEMORY_MB)
+    estimated_timeout = _calculate_task_timeout(WORKERS_PER_NODE, estimated_nodes)
+    log(f"💻 System specs: {CPU_CORES} CPU cores, {RAM_GB:.1f} GB RAM, {num_gpus} GPU(s)")
     log(f"⚙️  Calculated concurrency: {WORKERS_PER_NODE} workers per node, {MAX_CONCURRENT_REQUESTS_PER_NODE} max concurrent requests per node")
+    log(f"⚙️  Dynamic config: GPU reserve={GPU_MEMORY_RESERVE_MB}MB, timeout={estimated_timeout}s, retry_delay={RETRY_DELAY:.3f}s, chunksize={PANDAS_CHUNKSIZE}")
 
     ensure_ollama_installed()
 
@@ -284,7 +343,7 @@ def ensure_ollama_instances():
 
     # Build instance plan based on GPU memory
     INSTANCES = []
-    port = BASE_PORT
+    port = _get_base_port()
     gpu_instance_counts = defaultdict(int)
     for gpu_index, total_mem in enumerate(GPU_MEMORY_MB):
         available = max(0, total_mem - GPU_MEMORY_RESERVE_MB)
@@ -370,6 +429,11 @@ def ensure_ollama_instances():
         nodes = healthy_nodes
     else:
         log("⚠️ No healthy Ollama instances found, using all nodes anyway")
+
+    # Recalculate timeout now that we know actual node count
+    global TASK_TIMEOUT_SECONDS, NODE_BACKOFF_SECONDS
+    TASK_TIMEOUT_SECONDS = _calculate_task_timeout(WORKERS_PER_NODE, len(nodes))
+    NODE_BACKOFF_SECONDS = _calculate_node_backoff(TASK_TIMEOUT_SECONDS)
 
     for node in nodes:
         node_semaphores[node] = Semaphore(MAX_CONCURRENT_REQUESTS_PER_NODE)
@@ -579,7 +643,7 @@ def generate_question_answer(node, abstract):
                     else:
                         question = question_line
                     answer_line = answer_line.strip()
-                    if answer_linenswer_line.startswith("Answer:"):
+                    if answer_line.startswith("Answer:"):
                         answer = answer_line[len("Answer:"):].strip()
                     else:
                         answer = answer_line
@@ -963,8 +1027,11 @@ if __name__ == '__main__':
 
     # Use connection pooling for better performance with high concurrency
     log("🔌 Connecting to MongoDB...")
-    mongo_client = MongoClient(MONGO_URI, maxPoolSize=100, minPoolSize=10)
-    log("✅ MongoDB connected")
+    # Calculate pool size based on worker count
+    num_nodes = len(nodes) if nodes else 1
+    pool_size = max(10, min(100, WORKERS_PER_NODE * num_nodes))
+    mongo_client = MongoClient(MONGO_URI, maxPoolSize=pool_size, minPoolSize=min(10, pool_size // 2))
+    log(f"✅ MongoDB connected (pool size: {pool_size})")
 
     log("📥 Downloading OpenAlex manifest...")
     manifest_url = 'https://openalex.s3.amazonaws.com/data/works/manifest'
@@ -1001,7 +1068,7 @@ if __name__ == '__main__':
             executor = ThreadPoolExecutor(max_workers=max_workers)
             
             chunk_count = 0
-            for chunk in pd.read_json(url, lines=True, chunksize=16384):  # Increased from 8192 for faster I/O
+            for chunk in pd.read_json(url, lines=True, chunksize=PANDAS_CHUNKSIZE):
                 chunk_count += 1
                 if chunk_count == 1:
                     log(f"📊 Processing first chunk from {url} ({len(chunk)} records)")

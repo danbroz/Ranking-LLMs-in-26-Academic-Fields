@@ -1,0 +1,995 @@
+time=2025-11-09T23:13:40.240-07:00 level=INFO source=routes.go:1524 msg="server config" env="map[CUDA_VISIBLE_DEVICES:1 GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:4096 OLLAMA_DEBUG:INFO OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://0.0.0.0:11471 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/dan/.ollama-11471 OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2025-11-09T23:13:40.241-07:00 level=INFO source=images.go:522 msg="total blobs: 0"
+time=2025-11-09T23:13:40.241-07:00 level=INFO source=images.go:529 msg="total unused blobs removed: 0"
+time=2025-11-09T23:13:40.241-07:00 level=INFO source=routes.go:1577 msg="Listening on [::]:11471 (version 0.12.9)"
+time=2025-11-09T23:13:40.241-07:00 level=INFO source=runner.go:76 msg="discovering available GPUs..."
+time=2025-11-09T23:13:40.241-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 32843"
+time=2025-11-09T23:13:40.548-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 41681"
+time=2025-11-09T23:13:40.758-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 34263"
+time=2025-11-09T23:13:40.758-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 36379"
+time=2025-11-09T23:13:40.968-07:00 level=INFO source=types.go:42 msg="inference compute" id=GPU-874c91aa-3bb2-54a0-534f-860241e77353 filtered_id="" library=CUDA compute=8.9 name=CUDA0 description="NVIDIA GeForce RTX 4090" libdirs=ollama,cuda_v13 driver=13.0 pci_id=0000:09:00.0 type=discrete total="24.0 GiB" available="23.5 GiB"
+[GIN] 2025/11/09 - 23:13:45 | 200 |      27.632µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2025/11/09 - 23:13:45 | 404 |     254.909µs |       127.0.0.1 | POST     "/api/show"
+[GIN] 2025/11/09 - 23:13:45 | 200 |      21.009µs |       127.0.0.1 | HEAD     "/"
+time=2025-11-09T23:13:45.753-07:00 level=INFO source=download.go:177 msg="downloading f535f83ec568 in 3 100 MB part(s)"
+time=2025-11-09T23:13:49.017-07:00 level=INFO source=download.go:177 msg="downloading fbacade46b4d in 1 68 B part(s)"
+time=2025-11-09T23:13:50.247-07:00 level=INFO source=download.go:177 msg="downloading d502d55c1d60 in 1 675 B part(s)"
+time=2025-11-09T23:13:51.475-07:00 level=INFO source=download.go:177 msg="downloading 58d1e17ffe51 in 1 11 KB part(s)"
+time=2025-11-09T23:13:52.731-07:00 level=INFO source=download.go:177 msg="downloading f02dd72bb242 in 1 59 B part(s)"
+time=2025-11-09T23:13:53.968-07:00 level=INFO source=download.go:177 msg="downloading b0f58c4c1a3c in 1 561 B part(s)"
+[GIN] 2025/11/09 - 23:13:55 | 200 |   9.94451792s |       127.0.0.1 | POST     "/api/pull"
+[GIN] 2025/11/09 - 23:24:07 | 200 |     238.858µs |       127.0.0.1 | GET      "/api/tags"
+time=2025-11-09T23:24:26.741-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 45423"
+llama_model_loader: loaded meta data with 33 key-value pairs and 272 tensors from /home/dan/.ollama-11471/blobs/sha256-f535f83ec568d040f88ddc04a199fa6da90923bbb41d4dcaed02caa924d6ef57 (version GGUF V3 (latest))
+llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output.
+llama_model_loader: - kv   0:                       general.architecture str              = llama
+llama_model_loader: - kv   1:                               general.type str              = model
+llama_model_loader: - kv   2:                               general.name str              = Smollm2 135M 8k Lc100K Mix1 Ep2
+llama_model_loader: - kv   3:                       general.organization str              = HuggingFaceTB
+llama_model_loader: - kv   4:                           general.finetune str              = 8k-lc100k-mix1-ep2
+llama_model_loader: - kv   5:                           general.basename str              = smollm2
+llama_model_loader: - kv   6:                         general.size_label str              = 135M
+llama_model_loader: - kv   7:                            general.license str              = apache-2.0
+llama_model_loader: - kv   8:                          general.languages arr[str,1]       = ["en"]
+llama_model_loader: - kv   9:                          llama.block_count u32              = 30
+llama_model_loader: - kv  10:                       llama.context_length u32              = 8192
+llama_model_loader: - kv  11:                     llama.embedding_length u32              = 576
+llama_model_loader: - kv  12:                  llama.feed_forward_length u32              = 1536
+llama_model_loader: - kv  13:                 llama.attention.head_count u32              = 9
+llama_model_loader: - kv  14:              llama.attention.head_count_kv u32              = 3
+llama_model_loader: - kv  15:                       llama.rope.freq_base f32              = 100000.000000
+llama_model_loader: - kv  16:     llama.attention.layer_norm_rms_epsilon f32              = 0.000010
+llama_model_loader: - kv  17:                          general.file_type u32              = 1
+llama_model_loader: - kv  18:                           llama.vocab_size u32              = 49152
+llama_model_loader: - kv  19:                 llama.rope.dimension_count u32              = 64
+llama_model_loader: - kv  20:            tokenizer.ggml.add_space_prefix bool             = false
+llama_model_loader: - kv  21:               tokenizer.ggml.add_bos_token bool             = false
+llama_model_loader: - kv  22:                       tokenizer.ggml.model str              = gpt2
+llama_model_loader: - kv  23:                         tokenizer.ggml.pre str              = smollm
+llama_model_loader: - kv  24:                      tokenizer.ggml.tokens arr[str,49152]   = ["<|endoftext|>", "<|im_start|>", "<|...
+llama_model_loader: - kv  25:                  tokenizer.ggml.token_type arr[i32,49152]   = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, ...
+llama_model_loader: - kv  26:                      tokenizer.ggml.merges arr[str,48900]   = ["Ġ t", "Ġ a", "i n", "h e", "Ġ Ġ...
+llama_model_loader: - kv  27:                tokenizer.ggml.bos_token_id u32              = 1
+llama_model_loader: - kv  28:                tokenizer.ggml.eos_token_id u32              = 2
+llama_model_loader: - kv  29:            tokenizer.ggml.unknown_token_id u32              = 0
+llama_model_loader: - kv  30:            tokenizer.ggml.padding_token_id u32              = 2
+llama_model_loader: - kv  31:                    tokenizer.chat_template str              = {% for message in messages %}{% if lo...
+llama_model_loader: - kv  32:               general.quantization_version u32              = 2
+llama_model_loader: - type  f32:   61 tensors
+llama_model_loader: - type  f16:  211 tensors
+print_info: file format = GGUF V3 (latest)
+print_info: file type   = F16
+print_info: file size   = 256.63 MiB (16.00 BPW) 
+load: printing all EOG tokens:
+load:   - 0 ('<|endoftext|>')
+load:   - 2 ('<|im_end|>')
+load:   - 4 ('<reponame>')
+load: special tokens cache size = 17
+load: token to piece cache size = 0.3170 MB
+print_info: arch             = llama
+print_info: vocab_only       = 1
+print_info: model type       = ?B
+print_info: model params     = 134.52 M
+print_info: general.name     = Smollm2 135M 8k Lc100K Mix1 Ep2
+print_info: vocab type       = BPE
+print_info: n_vocab          = 49152
+print_info: n_merges         = 48900
+print_info: BOS token        = 1 '<|im_start|>'
+print_info: EOS token        = 2 '<|im_end|>'
+print_info: EOT token        = 0 '<|endoftext|>'
+print_info: UNK token        = 0 '<|endoftext|>'
+print_info: PAD token        = 2 '<|im_end|>'
+print_info: LF token         = 198 'Ċ'
+print_info: FIM REP token    = 4 '<reponame>'
+print_info: EOG token        = 0 '<|endoftext|>'
+print_info: EOG token        = 2 '<|im_end|>'
+print_info: EOG token        = 4 '<reponame>'
+print_info: max token length = 162
+llama_model_load: vocab only - skipping tensors
+time=2025-11-09T23:24:27.611-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --model /home/dan/.ollama-11471/blobs/sha256-f535f83ec568d040f88ddc04a199fa6da90923bbb41d4dcaed02caa924d6ef57 --port 35741"
+time=2025-11-09T23:24:27.612-07:00 level=INFO source=server.go:470 msg="system memory" total="123.6 GiB" free="102.4 GiB" free_swap="0 B"
+time=2025-11-09T23:24:27.612-07:00 level=INFO source=memory.go:37 msg="new model will fit in available VRAM across minimum required GPUs, loading" model=/home/dan/.ollama-11471/blobs/sha256-f535f83ec568d040f88ddc04a199fa6da90923bbb41d4dcaed02caa924d6ef57 library=CUDA parallel=1 required="910.5 MiB" gpus=1
+time=2025-11-09T23:24:27.612-07:00 level=INFO source=server.go:522 msg=offload library=CUDA layers.requested=-1 layers.model=31 layers.offload=31 layers.split=[31] memory.available="[20.8 GiB]" memory.gpu_overhead="0 B" memory.required.full="910.5 MiB" memory.required.partial="910.5 MiB" memory.required.kv="90.0 MiB" memory.required.allocations="[910.5 MiB]" memory.weights.total="256.6 MiB" memory.weights.repeating="202.6 MiB" memory.weights.nonrepeating="54.0 MiB" memory.graph.full="97.1 MiB" memory.graph.partial="120.4 MiB"
+time=2025-11-09T23:24:27.626-07:00 level=INFO source=runner.go:910 msg="starting go runner"
+load_backend: loaded CPU backend from /usr/local/lib/ollama/libggml-cpu-icelake.so
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA GeForce RTX 4090, compute capability 8.9, VMM: yes, ID: GPU-874c91aa-3bb2-54a0-534f-860241e77353
+load_backend: loaded CUDA backend from /usr/local/lib/ollama/cuda_v13/libggml-cuda.so
+time=2025-11-09T23:24:28.364-07:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=750,800,860,870,890,900,1000,1030,1100,1200,1210 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-11-09T23:24:28.364-07:00 level=INFO source=runner.go:946 msg="Server listening on 127.0.0.1:35741"
+time=2025-11-09T23:24:28.370-07:00 level=INFO source=runner.go:845 msg=load request="{Operation:commit LoraPath:[] Parallel:1 BatchSize:512 FlashAttention:false KvSize:4096 KvCacheType: NumThreads:8 GPULayers:31[ID:GPU-874c91aa-3bb2-54a0-534f-860241e77353 Layers:31(0..30)] MultiUserCache:false ProjectorPath: MainGPU:0 UseMmap:true}"
+time=2025-11-09T23:24:28.373-07:00 level=INFO source=server.go:1251 msg="waiting for llama runner to start responding"
+time=2025-11-09T23:24:28.374-07:00 level=INFO source=server.go:1285 msg="waiting for server to become available" status="llm server loading model"
+ggml_backend_cuda_device_get_memory device GPU-874c91aa-3bb2-54a0-534f-860241e77353 utilizing NVML memory reporting free: 22369206272 total: 25757220864
+llama_model_load_from_file_impl: using device CUDA0 (NVIDIA GeForce RTX 4090) (0000:09:00.0) - 21332 MiB free
+llama_model_loader: loaded meta data with 33 key-value pairs and 272 tensors from /home/dan/.ollama-11471/blobs/sha256-f535f83ec568d040f88ddc04a199fa6da90923bbb41d4dcaed02caa924d6ef57 (version GGUF V3 (latest))
+llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output.
+llama_model_loader: - kv   0:                       general.architecture str              = llama
+llama_model_loader: - kv   1:                               general.type str              = model
+llama_model_loader: - kv   2:                               general.name str              = Smollm2 135M 8k Lc100K Mix1 Ep2
+llama_model_loader: - kv   3:                       general.organization str              = HuggingFaceTB
+llama_model_loader: - kv   4:                           general.finetune str              = 8k-lc100k-mix1-ep2
+llama_model_loader: - kv   5:                           general.basename str              = smollm2
+llama_model_loader: - kv   6:                         general.size_label str              = 135M
+llama_model_loader: - kv   7:                            general.license str              = apache-2.0
+llama_model_loader: - kv   8:                          general.languages arr[str,1]       = ["en"]
+llama_model_loader: - kv   9:                          llama.block_count u32              = 30
+llama_model_loader: - kv  10:                       llama.context_length u32              = 8192
+llama_model_loader: - kv  11:                     llama.embedding_length u32              = 576
+llama_model_loader: - kv  12:                  llama.feed_forward_length u32              = 1536
+llama_model_loader: - kv  13:                 llama.attention.head_count u32              = 9
+llama_model_loader: - kv  14:              llama.attention.head_count_kv u32              = 3
+llama_model_loader: - kv  15:                       llama.rope.freq_base f32              = 100000.000000
+llama_model_loader: - kv  16:     llama.attention.layer_norm_rms_epsilon f32              = 0.000010
+llama_model_loader: - kv  17:                          general.file_type u32              = 1
+llama_model_loader: - kv  18:                           llama.vocab_size u32              = 49152
+llama_model_loader: - kv  19:                 llama.rope.dimension_count u32              = 64
+llama_model_loader: - kv  20:            tokenizer.ggml.add_space_prefix bool             = false
+llama_model_loader: - kv  21:               tokenizer.ggml.add_bos_token bool             = false
+llama_model_loader: - kv  22:                       tokenizer.ggml.model str              = gpt2
+llama_model_loader: - kv  23:                         tokenizer.ggml.pre str              = smollm
+llama_model_loader: - kv  24:                      tokenizer.ggml.tokens arr[str,49152]   = ["<|endoftext|>", "<|im_start|>", "<|...
+llama_model_loader: - kv  25:                  tokenizer.ggml.token_type arr[i32,49152]   = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, ...
+llama_model_loader: - kv  26:                      tokenizer.ggml.merges arr[str,48900]   = ["Ġ t", "Ġ a", "i n", "h e", "Ġ Ġ...
+llama_model_loader: - kv  27:                tokenizer.ggml.bos_token_id u32              = 1
+llama_model_loader: - kv  28:                tokenizer.ggml.eos_token_id u32              = 2
+llama_model_loader: - kv  29:            tokenizer.ggml.unknown_token_id u32              = 0
+llama_model_loader: - kv  30:            tokenizer.ggml.padding_token_id u32              = 2
+llama_model_loader: - kv  31:                    tokenizer.chat_template str              = {% for message in messages %}{% if lo...
+llama_model_loader: - kv  32:               general.quantization_version u32              = 2
+llama_model_loader: - type  f32:   61 tensors
+llama_model_loader: - type  f16:  211 tensors
+print_info: file format = GGUF V3 (latest)
+print_info: file type   = F16
+print_info: file size   = 256.63 MiB (16.00 BPW) 
+load: printing all EOG tokens:
+load:   - 0 ('<|endoftext|>')
+load:   - 2 ('<|im_end|>')
+load:   - 4 ('<reponame>')
+load: special tokens cache size = 17
+load: token to piece cache size = 0.3170 MB
+print_info: arch             = llama
+print_info: vocab_only       = 0
+print_info: n_ctx_train      = 8192
+print_info: n_embd           = 576
+print_info: n_layer          = 30
+print_info: n_head           = 9
+print_info: n_head_kv        = 3
+print_info: n_rot            = 64
+print_info: n_swa            = 0
+print_info: is_swa_any       = 0
+print_info: n_embd_head_k    = 64
+print_info: n_embd_head_v    = 64
+print_info: n_gqa            = 3
+print_info: n_embd_k_gqa     = 192
+print_info: n_embd_v_gqa     = 192
+print_info: f_norm_eps       = 0.0e+00
+print_info: f_norm_rms_eps   = 1.0e-05
+print_info: f_clamp_kqv      = 0.0e+00
+print_info: f_max_alibi_bias = 0.0e+00
+print_info: f_logit_scale    = 0.0e+00
+print_info: f_attn_scale     = 0.0e+00
+print_info: n_ff             = 1536
+print_info: n_expert         = 0
+print_info: n_expert_used    = 0
+print_info: causal attn      = 1
+print_info: pooling type     = 0
+print_info: rope type        = 0
+print_info: rope scaling     = linear
+print_info: freq_base_train  = 100000.0
+print_info: freq_scale_train = 1
+print_info: n_ctx_orig_yarn  = 8192
+print_info: rope_finetuned   = unknown
+print_info: model type       = 256M
+print_info: model params     = 134.52 M
+print_info: general.name     = Smollm2 135M 8k Lc100K Mix1 Ep2
+print_info: vocab type       = BPE
+print_info: n_vocab          = 49152
+print_info: n_merges         = 48900
+print_info: BOS token        = 1 '<|im_start|>'
+print_info: EOS token        = 2 '<|im_end|>'
+print_info: EOT token        = 0 '<|endoftext|>'
+print_info: UNK token        = 0 '<|endoftext|>'
+print_info: PAD token        = 2 '<|im_end|>'
+print_info: LF token         = 198 'Ċ'
+print_info: FIM REP token    = 4 '<reponame>'
+print_info: EOG token        = 0 '<|endoftext|>'
+print_info: EOG token        = 2 '<|im_end|>'
+print_info: EOG token        = 4 '<reponame>'
+print_info: max token length = 162
+load_tensors: loading model tensors, this can take a while... (mmap = true)
+load_tensors: offloading 30 repeating layers to GPU
+load_tensors: offloading output layer to GPU
+load_tensors: offloaded 31/31 layers to GPU
+load_tensors:        CUDA0 model buffer size =   256.63 MiB
+load_tensors:   CPU_Mapped model buffer size =    54.00 MiB
+llama_init_from_model: model default pooling_type is [0], but [-1] was specified
+llama_context: constructing llama_context
+llama_context: n_seq_max     = 1
+llama_context: n_ctx         = 4096
+llama_context: n_ctx_per_seq = 4096
+llama_context: n_batch       = 512
+llama_context: n_ubatch      = 512
+llama_context: causal_attn   = 1
+llama_context: flash_attn    = disabled
+llama_context: kv_unified    = false
+llama_context: freq_base     = 100000.0
+llama_context: freq_scale    = 1
+llama_context: n_ctx_per_seq (4096) < n_ctx_train (8192) -- the full capacity of the model will not be utilized
+llama_context:  CUDA_Host  output buffer size =     0.19 MiB
+llama_kv_cache:      CUDA0 KV buffer size =    90.00 MiB
+llama_kv_cache: size =   90.00 MiB (  4096 cells,  30 layers,  1/1 seqs), K (f16):   45.00 MiB, V (f16):   45.00 MiB
+llama_context:      CUDA0 compute buffer size =    97.12 MiB
+llama_context:  CUDA_Host compute buffer size =     9.88 MiB
+llama_context: graph nodes  = 1086
+llama_context: graph splits = 2
+time=2025-11-09T23:24:31.382-07:00 level=INFO source=server.go:1289 msg="llama runner started in 3.77 seconds"
+time=2025-11-09T23:24:31.382-07:00 level=INFO source=sched.go:493 msg="loaded runners" count=1
+time=2025-11-09T23:24:31.382-07:00 level=INFO source=server.go:1251 msg="waiting for llama runner to start responding"
+time=2025-11-09T23:24:31.383-07:00 level=INFO source=server.go:1289 msg="llama runner started in 3.77 seconds"
+[GIN] 2025/11/09 - 23:24:31 | 200 |  4.885851889s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:31 | 200 |   140.12505ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:32 | 200 |  155.022969ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:37 | 200 |  212.789866ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:39 | 200 |  1.964579337s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:40 | 200 |  572.853139ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:47 | 200 |  126.381033ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:47 | 200 |  134.168423ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:50 | 200 |  132.917146ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:51 | 200 |  183.513962ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:51 | 200 |  299.204119ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:51 | 200 |  221.253555ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:51 | 200 |  245.347228ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:52 | 200 |  139.579907ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:54 | 200 |  375.254822ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:54 | 200 |  335.204262ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:58 | 200 |  305.611187ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:59 | 200 |  186.559229ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:24:59 | 200 |  242.187607ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:00 | 200 |  204.174961ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:00 | 200 |  173.069703ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:10 | 200 |  150.501657ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:10 | 200 |  113.098783ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:11 | 200 |   330.85912ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:12 | 200 |  156.643812ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:12 | 200 |  135.736025ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:14 | 200 |  207.853271ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:14 | 200 |  245.033239ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:14 | 200 |  119.629387ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:18 | 200 |  264.441976ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:18 | 200 |  106.117477ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:19 | 200 |  167.115844ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:35 | 200 |  243.495912ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:36 | 200 |  138.434509ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:36 | 200 |  105.520955ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:40 | 200 |  214.338448ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:41 | 200 |   92.741078ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:41 | 200 |  111.355063ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:42 | 200 |  253.683792ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:43 | 200 |   312.05874ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:47 | 200 |  165.206056ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:47 | 200 |   87.618818ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:59 | 200 |  243.905007ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:25:59 | 200 |  129.313856ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:09 | 200 |  180.075558ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:09 | 200 |  129.840357ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:13 | 200 |  216.412311ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:13 | 200 |  511.434834ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:14 | 200 |  495.595394ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:15 | 200 |  248.485754ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:15 | 200 |   89.420478ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:15 | 200 |   76.237611ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:15 | 200 |  126.612142ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:16 | 200 |  294.535672ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:16 | 200 |  136.106939ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:17 | 200 |   92.962143ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:18 | 200 |  232.575923ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:18 | 200 |   72.316935ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:19 | 200 |  224.879182ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:19 | 200 |  179.587116ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:19 | 200 |  124.169872ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:20 | 200 |  160.357955ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:21 | 200 |  112.961381ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:25 | 200 |   141.85563ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:26 | 200 |   131.09595ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:26 | 200 |  113.370991ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:31 | 200 |   206.33332ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:31 | 200 |  206.239043ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:31 | 200 |  184.971526ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:33 | 200 |  137.980382ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:33 | 200 |  186.953395ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:34 | 200 |  200.977462ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:34 | 200 |  213.639631ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:35 | 200 |  411.855822ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:40 | 200 |  139.850503ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:40 | 200 |  119.105185ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:43 | 200 |  141.945405ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:43 | 200 |   94.660067ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:44 | 200 |  211.593628ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:44 | 200 |  352.080799ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:44 | 200 |  118.234694ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:46 | 200 |    379.8831ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:47 | 200 |  554.380803ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:26:48 | 200 |  595.483592ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:27:01 | 200 |  215.571604ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:27:01 | 200 |   64.925323ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:27:01 | 200 |   61.678831ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:27:27 | 200 |  132.339607ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:27:27 | 200 |  122.191734ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:27:38 | 200 |  231.664034ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:27:39 | 200 |  472.061558ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:27:39 | 200 |  528.832014ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:27:39 | 200 |  145.587431ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:27:39 | 200 |  274.618814ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:27:41 | 200 |  127.171062ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:27:41 | 200 |  103.761641ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:28 | 200 |  188.972081ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:29 | 200 |  148.496469ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:30 | 200 |  289.008424ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:31 | 200 |  428.032437ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:31 | 200 |  563.278028ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:32 | 200 |  895.985506ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:32 | 200 |   887.43017ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:32 | 200 |  901.167793ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:34 | 200 |  1.987181622s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:34 | 200 |  2.012916061s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:35 | 200 |  2.319713575s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:35 | 200 |   442.62049ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:36 | 200 |  1.512483069s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:36 | 200 |  1.424627477s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:37 | 200 |  1.464632727s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:38 | 200 |  2.127494041s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:39 | 200 |  596.513935ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:40 | 200 |  1.702304632s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:41 | 200 |   1.24155648s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:41 | 200 |  1.330449031s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:45 | 200 |  4.536667925s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:45 | 200 |  4.029991743s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:46 | 200 |  4.059684953s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:46 | 200 |  370.150871ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:53 | 200 |  162.091843ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:54 | 200 |  448.623394ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:54 | 200 |  552.114896ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:54 | 200 |  670.176243ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:54 | 200 |  359.385122ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:54 | 200 |   314.91949ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:28:55 | 200 |  519.705181ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:06 | 200 |  588.472528ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:07 | 200 |  567.552386ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:09 | 200 |  313.931605ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:09 | 200 |   591.32182ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:10 | 200 |  353.723209ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:13 | 200 |  211.621559ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:13 | 200 |  180.431049ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:17 | 200 |  211.565796ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:17 | 200 |  139.090842ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:36 | 200 |  316.840042ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:36 | 200 |  143.415455ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:37 | 200 |  466.308047ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:37 | 200 |  441.330588ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:39 | 200 |  1.803476846s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:43 | 200 |  449.358941ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/09 - 23:29:43 | 200 |  293.806856ms |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-09T23:39:07.262-07:00 level=INFO source=routes.go:1524 msg="server config" env="map[CUDA_VISIBLE_DEVICES:2 GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:4096 OLLAMA_DEBUG:INFO OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://0.0.0.0:11471 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/dan/.ollama-11471 OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2025-11-09T23:39:07.262-07:00 level=INFO source=images.go:522 msg="total blobs: 6"
+time=2025-11-09T23:39:07.262-07:00 level=INFO source=images.go:529 msg="total unused blobs removed: 0"
+time=2025-11-09T23:39:07.263-07:00 level=INFO source=routes.go:1577 msg="Listening on [::]:11471 (version 0.12.9)"
+time=2025-11-09T23:39:07.263-07:00 level=INFO source=runner.go:76 msg="discovering available GPUs..."
+time=2025-11-09T23:39:07.264-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 36799"
+time=2025-11-09T23:39:07.458-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 42665"
+time=2025-11-09T23:39:07.649-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 45095"
+time=2025-11-09T23:39:07.649-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 34337"
+time=2025-11-09T23:39:08.153-07:00 level=INFO source=types.go:42 msg="inference compute" id=GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f filtered_id="" library=CUDA compute=8.9 name=CUDA0 description="NVIDIA GeForce RTX 4090" libdirs=ollama,cuda_v13 driver=13.0 pci_id=0000:0d:00.0 type=discrete total="24.0 GiB" available="23.5 GiB"
+[GIN] 2025/11/09 - 23:39:12 | 200 |      33.523µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2025/11/09 - 23:39:12 | 404 |     233.769µs |       127.0.0.1 | POST     "/api/show"
+[GIN] 2025/11/09 - 23:39:12 | 200 |      18.083µs |       127.0.0.1 | HEAD     "/"
+time=2025-11-09T23:39:12.798-07:00 level=INFO source=download.go:177 msg="downloading 735af2139dc6 in 3 100 MB part(s)"
+time=2025-11-09T23:39:16.016-07:00 level=INFO source=download.go:177 msg="downloading 4b19ac7dd2fb in 1 476 B part(s)"
+time=2025-11-09T23:39:17.237-07:00 level=INFO source=download.go:177 msg="downloading 3e2c24001f9e in 1 8.4 KB part(s)"
+time=2025-11-09T23:39:18.472-07:00 level=INFO source=download.go:177 msg="downloading 339e884a40f6 in 1 61 B part(s)"
+time=2025-11-09T23:39:19.686-07:00 level=INFO source=download.go:177 msg="downloading 74156d92caf6 in 1 490 B part(s)"
+[GIN] 2025/11/09 - 23:39:20 | 200 |  8.652381952s |       127.0.0.1 | POST     "/api/pull"
+[GIN] 2025/11/09 - 23:41:50 | 200 |     677.442µs |       127.0.0.1 | GET      "/api/tags"
+time=2025-11-09T23:50:19.433-07:00 level=INFO source=routes.go:1524 msg="server config" env="map[CUDA_VISIBLE_DEVICES:2 GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:4096 OLLAMA_DEBUG:INFO OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://0.0.0.0:11471 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/dan/.ollama-11471 OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2025-11-09T23:50:19.433-07:00 level=INFO source=images.go:522 msg="total blobs: 11"
+time=2025-11-09T23:50:19.434-07:00 level=INFO source=images.go:529 msg="total unused blobs removed: 0"
+time=2025-11-09T23:50:19.434-07:00 level=INFO source=routes.go:1577 msg="Listening on [::]:11471 (version 0.12.9)"
+time=2025-11-09T23:50:19.434-07:00 level=INFO source=runner.go:76 msg="discovering available GPUs..."
+time=2025-11-09T23:50:19.434-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 45043"
+time=2025-11-09T23:50:19.638-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 45863"
+time=2025-11-09T23:50:19.837-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 38195"
+time=2025-11-09T23:50:19.837-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 44277"
+time=2025-11-09T23:50:20.058-07:00 level=INFO source=types.go:42 msg="inference compute" id=GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f filtered_id="" library=CUDA compute=8.9 name=CUDA0 description="NVIDIA GeForce RTX 4090" libdirs=ollama,cuda_v13 driver=13.0 pci_id=0000:0d:00.0 type=discrete total="24.0 GiB" available="23.5 GiB"
+[GIN] 2025/11/09 - 23:50:24 | 200 |      59.702µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2025/11/09 - 23:50:24 | 200 |   46.695946ms |       127.0.0.1 | POST     "/api/show"
+[GIN] 2025/11/09 - 23:51:25 | 200 |     580.721µs |       127.0.0.1 | GET      "/api/tags"
+time=2025-11-09T23:58:26.601-07:00 level=INFO source=routes.go:1524 msg="server config" env="map[CUDA_VISIBLE_DEVICES:2 GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:4096 OLLAMA_DEBUG:INFO OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://0.0.0.0:11471 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/dan/.ollama-11471 OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2025-11-09T23:58:26.602-07:00 level=INFO source=images.go:522 msg="total blobs: 11"
+time=2025-11-09T23:58:26.602-07:00 level=INFO source=images.go:529 msg="total unused blobs removed: 0"
+time=2025-11-09T23:58:26.602-07:00 level=INFO source=routes.go:1577 msg="Listening on [::]:11471 (version 0.12.9)"
+time=2025-11-09T23:58:26.603-07:00 level=INFO source=runner.go:76 msg="discovering available GPUs..."
+time=2025-11-09T23:58:26.603-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 44905"
+time=2025-11-09T23:58:26.863-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 37899"
+time=2025-11-09T23:58:27.057-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 34839"
+time=2025-11-09T23:58:27.057-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 45269"
+time=2025-11-09T23:58:27.274-07:00 level=INFO source=types.go:42 msg="inference compute" id=GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f filtered_id="" library=CUDA compute=8.9 name=CUDA0 description="NVIDIA GeForce RTX 4090" libdirs=ollama,cuda_v13 driver=13.0 pci_id=0000:0d:00.0 type=discrete total="24.0 GiB" available="23.5 GiB"
+[GIN] 2025/11/09 - 23:58:31 | 200 |      60.424µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2025/11/09 - 23:58:31 | 200 |   45.736445ms |       127.0.0.1 | POST     "/api/show"
+[GIN] 2025/11/09 - 23:59:32 | 200 |     558.709µs |       127.0.0.1 | GET      "/api/tags"
+time=2025-11-10T00:05:45.799-07:00 level=INFO source=routes.go:1524 msg="server config" env="map[CUDA_VISIBLE_DEVICES:2 GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:4096 OLLAMA_DEBUG:INFO OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://0.0.0.0:11471 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/dan/.ollama-11471 OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2025-11-10T00:05:45.800-07:00 level=INFO source=images.go:522 msg="total blobs: 11"
+time=2025-11-10T00:05:45.800-07:00 level=INFO source=images.go:529 msg="total unused blobs removed: 0"
+time=2025-11-10T00:05:45.800-07:00 level=INFO source=routes.go:1577 msg="Listening on [::]:11471 (version 0.12.9)"
+time=2025-11-10T00:05:45.800-07:00 level=INFO source=runner.go:76 msg="discovering available GPUs..."
+time=2025-11-10T00:05:45.801-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 36617"
+time=2025-11-10T00:05:46.043-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 32917"
+time=2025-11-10T00:05:46.236-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 33095"
+time=2025-11-10T00:05:46.236-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 38933"
+time=2025-11-10T00:05:46.460-07:00 level=INFO source=types.go:42 msg="inference compute" id=GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f filtered_id="" library=CUDA compute=8.9 name=CUDA0 description="NVIDIA GeForce RTX 4090" libdirs=ollama,cuda_v13 driver=13.0 pci_id=0000:0d:00.0 type=discrete total="24.0 GiB" available="23.5 GiB"
+[GIN] 2025/11/10 - 00:05:50 | 200 |      43.561µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2025/11/10 - 00:05:50 | 200 |   46.970056ms |       127.0.0.1 | POST     "/api/show"
+[GIN] 2025/11/10 - 00:06:52 | 200 |     498.646µs |       127.0.0.1 | GET      "/api/tags"
+time=2025-11-10T00:12:00.637-07:00 level=INFO source=routes.go:1524 msg="server config" env="map[CUDA_VISIBLE_DEVICES:2 GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:4096 OLLAMA_DEBUG:INFO OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://0.0.0.0:11471 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/dan/.ollama-11471 OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2025-11-10T00:12:00.637-07:00 level=INFO source=images.go:522 msg="total blobs: 11"
+time=2025-11-10T00:12:00.638-07:00 level=INFO source=images.go:529 msg="total unused blobs removed: 0"
+time=2025-11-10T00:12:00.638-07:00 level=INFO source=routes.go:1577 msg="Listening on [::]:11471 (version 0.12.9)"
+time=2025-11-10T00:12:00.638-07:00 level=INFO source=runner.go:76 msg="discovering available GPUs..."
+time=2025-11-10T00:12:00.638-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 45643"
+time=2025-11-10T00:12:01.071-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 38219"
+time=2025-11-10T00:12:01.271-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 43021"
+time=2025-11-10T00:12:01.271-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 41197"
+time=2025-11-10T00:12:01.498-07:00 level=INFO source=types.go:42 msg="inference compute" id=GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f filtered_id="" library=CUDA compute=8.9 name=CUDA0 description="NVIDIA GeForce RTX 4090" libdirs=ollama,cuda_v13 driver=13.0 pci_id=0000:0d:00.0 type=discrete total="24.0 GiB" available="23.5 GiB"
+[GIN] 2025/11/10 - 00:12:05 | 200 |      34.334µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2025/11/10 - 00:12:05 | 200 |   47.396975ms |       127.0.0.1 | POST     "/api/show"
+[GIN] 2025/11/10 - 00:13:06 | 200 |     572.365µs |       127.0.0.1 | GET      "/api/tags"
+time=2025-11-10T00:18:38.709-07:00 level=INFO source=routes.go:1524 msg="server config" env="map[CUDA_VISIBLE_DEVICES:2 GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:4096 OLLAMA_DEBUG:INFO OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://0.0.0.0:11471 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/dan/.ollama-11471 OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2025-11-10T00:18:38.710-07:00 level=INFO source=images.go:522 msg="total blobs: 11"
+time=2025-11-10T00:18:38.710-07:00 level=INFO source=images.go:529 msg="total unused blobs removed: 0"
+time=2025-11-10T00:18:38.710-07:00 level=INFO source=routes.go:1577 msg="Listening on [::]:11471 (version 0.12.9)"
+time=2025-11-10T00:18:38.710-07:00 level=INFO source=runner.go:76 msg="discovering available GPUs..."
+time=2025-11-10T00:18:38.710-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 45995"
+time=2025-11-10T00:18:38.991-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 32953"
+time=2025-11-10T00:18:39.217-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 41405"
+time=2025-11-10T00:18:39.217-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 37939"
+time=2025-11-10T00:18:39.460-07:00 level=INFO source=types.go:42 msg="inference compute" id=GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f filtered_id="" library=CUDA compute=8.9 name=CUDA0 description="NVIDIA GeForce RTX 4090" libdirs=ollama,cuda_v13 driver=13.0 pci_id=0000:0d:00.0 type=discrete total="24.0 GiB" available="23.5 GiB"
+[GIN] 2025/11/10 - 00:18:43 | 200 |      64.391µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2025/11/10 - 00:18:43 | 200 |   54.107557ms |       127.0.0.1 | POST     "/api/show"
+[GIN] 2025/11/10 - 00:19:45 | 200 |     556.906µs |       127.0.0.1 | GET      "/api/tags"
+time=2025-11-10T00:27:01.999-07:00 level=INFO source=routes.go:1524 msg="server config" env="map[CUDA_VISIBLE_DEVICES:2 GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:4096 OLLAMA_DEBUG:INFO OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://0.0.0.0:11471 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/dan/.ollama-11471 OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2025-11-10T00:27:02.000-07:00 level=INFO source=images.go:522 msg="total blobs: 11"
+time=2025-11-10T00:27:02.000-07:00 level=INFO source=images.go:529 msg="total unused blobs removed: 0"
+time=2025-11-10T00:27:02.000-07:00 level=INFO source=routes.go:1577 msg="Listening on [::]:11471 (version 0.12.9)"
+time=2025-11-10T00:27:02.001-07:00 level=INFO source=runner.go:76 msg="discovering available GPUs..."
+time=2025-11-10T00:27:02.001-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 46305"
+time=2025-11-10T00:27:02.225-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 42909"
+time=2025-11-10T00:27:02.448-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 46461"
+time=2025-11-10T00:27:02.448-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 45751"
+time=2025-11-10T00:27:02.691-07:00 level=INFO source=types.go:42 msg="inference compute" id=GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f filtered_id="" library=CUDA compute=8.9 name=CUDA0 description="NVIDIA GeForce RTX 4090" libdirs=ollama,cuda_v13 driver=13.0 pci_id=0000:0d:00.0 type=discrete total="24.0 GiB" available="23.5 GiB"
+[GIN] 2025/11/10 - 00:27:07 | 200 |   14.924049ms |       127.0.0.1 | HEAD     "/"
+[GIN] 2025/11/10 - 00:27:07 | 200 |   57.224583ms |       127.0.0.1 | POST     "/api/show"
+[GIN] 2025/11/10 - 00:28:08 | 200 |     618.953µs |       127.0.0.1 | GET      "/api/tags"
+time=2025-11-10T00:38:00.031-07:00 level=INFO source=routes.go:1524 msg="server config" env="map[CUDA_VISIBLE_DEVICES:2 GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:4096 OLLAMA_DEBUG:INFO OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://0.0.0.0:11471 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/dan/.ollama-11471 OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2025-11-10T00:38:00.032-07:00 level=INFO source=images.go:522 msg="total blobs: 11"
+time=2025-11-10T00:38:00.032-07:00 level=INFO source=images.go:529 msg="total unused blobs removed: 0"
+time=2025-11-10T00:38:00.032-07:00 level=INFO source=routes.go:1577 msg="Listening on [::]:11471 (version 0.12.9)"
+time=2025-11-10T00:38:00.032-07:00 level=INFO source=runner.go:76 msg="discovering available GPUs..."
+time=2025-11-10T00:38:00.033-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 44343"
+time=2025-11-10T00:38:00.235-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 44637"
+time=2025-11-10T00:38:00.702-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 37145"
+time=2025-11-10T00:38:00.702-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 35739"
+time=2025-11-10T00:38:00.919-07:00 level=INFO source=types.go:42 msg="inference compute" id=GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f filtered_id="" library=CUDA compute=8.9 name=CUDA0 description="NVIDIA GeForce RTX 4090" libdirs=ollama,cuda_v13 driver=13.0 pci_id=0000:0d:00.0 type=discrete total="24.0 GiB" available="23.5 GiB"
+[GIN] 2025/11/10 - 00:38:05 | 200 |       32.08µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2025/11/10 - 00:38:05 | 200 |   49.611936ms |       127.0.0.1 | POST     "/api/show"
+[GIN] 2025/11/10 - 00:39:06 | 200 |     362.872µs |       127.0.0.1 | GET      "/api/tags"
+time=2025-11-10T00:48:34.342-07:00 level=INFO source=routes.go:1524 msg="server config" env="map[CUDA_VISIBLE_DEVICES:2 GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:4096 OLLAMA_DEBUG:INFO OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://0.0.0.0:11471 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/dan/.ollama-11471 OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2025-11-10T00:48:34.344-07:00 level=INFO source=images.go:522 msg="total blobs: 11"
+time=2025-11-10T00:48:34.344-07:00 level=INFO source=images.go:529 msg="total unused blobs removed: 0"
+time=2025-11-10T00:48:34.344-07:00 level=INFO source=routes.go:1577 msg="Listening on [::]:11471 (version 0.12.9)"
+time=2025-11-10T00:48:34.345-07:00 level=INFO source=runner.go:76 msg="discovering available GPUs..."
+time=2025-11-10T00:48:34.345-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 41037"
+time=2025-11-10T00:48:34.549-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 43371"
+time=2025-11-10T00:48:34.761-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 40341"
+time=2025-11-10T00:48:34.761-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 35361"
+time=2025-11-10T00:48:35.017-07:00 level=INFO source=types.go:42 msg="inference compute" id=GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f filtered_id="" library=CUDA compute=8.9 name=CUDA0 description="NVIDIA GeForce RTX 4090" libdirs=ollama,cuda_v13 driver=13.0 pci_id=0000:0d:00.0 type=discrete total="24.0 GiB" available="23.5 GiB"
+[GIN] 2025/11/10 - 00:48:39 | 200 |       68.79µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2025/11/10 - 00:48:39 | 200 |   52.636186ms |       127.0.0.1 | POST     "/api/show"
+[GIN] 2025/11/10 - 00:49:40 | 200 |     338.956µs |       127.0.0.1 | GET      "/api/tags"
+time=2025-11-10T01:08:33.862-07:00 level=INFO source=routes.go:1524 msg="server config" env="map[CUDA_VISIBLE_DEVICES:2 GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:4096 OLLAMA_DEBUG:INFO OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://0.0.0.0:11471 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/dan/.ollama-11471 OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2025-11-10T01:08:33.863-07:00 level=INFO source=images.go:522 msg="total blobs: 11"
+time=2025-11-10T01:08:33.863-07:00 level=INFO source=images.go:529 msg="total unused blobs removed: 0"
+time=2025-11-10T01:08:33.864-07:00 level=INFO source=routes.go:1577 msg="Listening on [::]:11471 (version 0.12.9)"
+time=2025-11-10T01:08:33.864-07:00 level=INFO source=runner.go:76 msg="discovering available GPUs..."
+time=2025-11-10T01:08:33.864-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 44297"
+time=2025-11-10T01:08:34.087-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 40385"
+time=2025-11-10T01:08:34.306-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 37677"
+time=2025-11-10T01:08:34.306-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 35025"
+time=2025-11-10T01:08:34.561-07:00 level=INFO source=types.go:42 msg="inference compute" id=GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f filtered_id="" library=CUDA compute=8.9 name=CUDA0 description="NVIDIA GeForce RTX 4090" libdirs=ollama,cuda_v13 driver=13.0 pci_id=0000:0d:00.0 type=discrete total="24.0 GiB" available="23.5 GiB"
+[GIN] 2025/11/10 - 01:08:38 | 200 |      33.493µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2025/11/10 - 01:08:38 | 200 |    55.02812ms |       127.0.0.1 | POST     "/api/show"
+[GIN] 2025/11/10 - 01:09:40 | 200 |     632.398µs |       127.0.0.1 | GET      "/api/tags"
+time=2025-11-10T01:15:44.789-07:00 level=INFO source=routes.go:1524 msg="server config" env="map[CUDA_VISIBLE_DEVICES:2 GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:4096 OLLAMA_DEBUG:INFO OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://0.0.0.0:11471 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/dan/.ollama-11471 OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2025-11-10T01:15:44.789-07:00 level=INFO source=images.go:522 msg="total blobs: 11"
+time=2025-11-10T01:15:44.789-07:00 level=INFO source=images.go:529 msg="total unused blobs removed: 0"
+time=2025-11-10T01:15:44.790-07:00 level=INFO source=routes.go:1577 msg="Listening on [::]:11471 (version 0.12.9)"
+time=2025-11-10T01:15:44.790-07:00 level=INFO source=runner.go:76 msg="discovering available GPUs..."
+time=2025-11-10T01:15:44.790-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 34929"
+time=2025-11-10T01:15:45.018-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 43037"
+time=2025-11-10T01:15:45.199-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 46129"
+time=2025-11-10T01:15:45.199-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 37725"
+time=2025-11-10T01:15:45.423-07:00 level=INFO source=types.go:42 msg="inference compute" id=GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f filtered_id="" library=CUDA compute=8.9 name=CUDA0 description="NVIDIA GeForce RTX 4090" libdirs=ollama,cuda_v13 driver=13.0 pci_id=0000:0d:00.0 type=discrete total="24.0 GiB" available="23.5 GiB"
+[GIN] 2025/11/10 - 01:15:49 | 200 |      78.407µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2025/11/10 - 01:15:49 | 200 |   45.602031ms |       127.0.0.1 | POST     "/api/show"
+[GIN] 2025/11/10 - 01:16:51 | 200 |     316.705µs |       127.0.0.1 | GET      "/api/tags"
+time=2025-11-10T01:39:55.869-07:00 level=INFO source=routes.go:1524 msg="server config" env="map[CUDA_VISIBLE_DEVICES:2 GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:4096 OLLAMA_DEBUG:INFO OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://0.0.0.0:11471 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/dan/.ollama-11471 OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2025-11-10T01:39:55.870-07:00 level=INFO source=images.go:522 msg="total blobs: 11"
+time=2025-11-10T01:39:55.870-07:00 level=INFO source=images.go:529 msg="total unused blobs removed: 0"
+time=2025-11-10T01:39:55.870-07:00 level=INFO source=routes.go:1577 msg="Listening on [::]:11471 (version 0.12.9)"
+time=2025-11-10T01:39:55.870-07:00 level=INFO source=runner.go:76 msg="discovering available GPUs..."
+time=2025-11-10T01:39:55.871-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 41087"
+time=2025-11-10T01:39:56.073-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 40221"
+time=2025-11-10T01:39:56.275-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 33459"
+time=2025-11-10T01:39:56.275-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 43473"
+time=2025-11-10T01:39:56.760-07:00 level=INFO source=types.go:42 msg="inference compute" id=GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f filtered_id="" library=CUDA compute=8.9 name=CUDA0 description="NVIDIA GeForce RTX 4090" libdirs=ollama,cuda_v13 driver=13.0 pci_id=0000:0d:00.0 type=discrete total="24.0 GiB" available="23.5 GiB"
+[GIN] 2025/11/10 - 01:39:57 | 200 |      41.758µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2025/11/10 - 01:39:57 | 200 |   46.542628ms |       127.0.0.1 | POST     "/api/show"
+[GIN] 2025/11/10 - 01:40:24 | 200 |     480.212µs |       127.0.0.1 | GET      "/api/tags"
+time=2025-11-10T01:41:26.869-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 40597"
+time=2025-11-10T01:41:27.710-07:00 level=INFO source=server.go:215 msg="enabling flash attention"
+time=2025-11-10T01:41:27.711-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --model /home/dan/.ollama-11471/blobs/sha256-735af2139dc652bf01112746474883d79a52fa1c19038265d363e3d42556f7a2 --port 40865"
+time=2025-11-10T01:41:27.714-07:00 level=INFO source=server.go:653 msg="loading model" "model layers"=19 requested=-1
+time=2025-11-10T01:41:27.714-07:00 level=INFO source=server.go:658 msg="system memory" total="123.6 GiB" free="84.5 GiB" free_swap="0 B"
+time=2025-11-10T01:41:27.714-07:00 level=INFO source=server.go:665 msg="gpu memory" id=GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f library=CUDA available="11.6 GiB" free="12.0 GiB" minimum="457.0 MiB" overhead="0 B"
+time=2025-11-10T01:41:27.743-07:00 level=INFO source=runner.go:1349 msg="starting ollama engine"
+time=2025-11-10T01:41:27.744-07:00 level=INFO source=runner.go:1384 msg="Server listening on 127.0.0.1:40865"
+time=2025-11-10T01:41:27.748-07:00 level=INFO source=runner.go:1222 msg=load request="{Operation:fit LoraPath:[] Parallel:1 BatchSize:512 FlashAttention:true KvSize:4096 KvCacheType: NumThreads:8 GPULayers:19[ID:GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f Layers:19(0..18)] MultiUserCache:false ProjectorPath: MainGPU:0 UseMmap:false}"
+time=2025-11-10T01:41:27.876-07:00 level=INFO source=ggml.go:136 msg="" architecture=gemma3 file_type=Q8_0 name="" description="" num_tensors=236 num_key_values=37
+load_backend: loaded CPU backend from /usr/local/lib/ollama/libggml-cpu-icelake.so
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA GeForce RTX 4090, compute capability 8.9, VMM: yes, ID: GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f
+load_backend: loaded CUDA backend from /usr/local/lib/ollama/cuda_v13/libggml-cuda.so
+time=2025-11-10T01:41:28.193-07:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=750,800,860,870,890,900,1000,1030,1100,1200,1210 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-11-10T01:41:29.124-07:00 level=INFO source=runner.go:1222 msg=load request="{Operation:alloc LoraPath:[] Parallel:1 BatchSize:512 FlashAttention:true KvSize:4096 KvCacheType: NumThreads:8 GPULayers:19[ID:GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f Layers:19(0..18)] MultiUserCache:false ProjectorPath: MainGPU:0 UseMmap:false}"
+time=2025-11-10T01:41:29.475-07:00 level=INFO source=runner.go:1222 msg=load request="{Operation:commit LoraPath:[] Parallel:1 BatchSize:512 FlashAttention:true KvSize:4096 KvCacheType: NumThreads:8 GPULayers:19[ID:GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f Layers:19(0..18)] MultiUserCache:false ProjectorPath: MainGPU:0 UseMmap:false}"
+time=2025-11-10T01:41:29.475-07:00 level=INFO source=device.go:212 msg="model weights" device=CUDA0 size="271.9 MiB"
+time=2025-11-10T01:41:29.475-07:00 level=INFO source=device.go:217 msg="model weights" device=CPU size="170.0 MiB"
+time=2025-11-10T01:41:29.475-07:00 level=INFO source=device.go:223 msg="kv cache" device=CUDA0 size="27.0 MiB"
+time=2025-11-10T01:41:29.475-07:00 level=INFO source=device.go:234 msg="compute graph" device=CUDA0 size="155.5 MiB"
+time=2025-11-10T01:41:29.475-07:00 level=INFO source=device.go:239 msg="compute graph" device=CPU size="1.2 MiB"
+time=2025-11-10T01:41:29.475-07:00 level=INFO source=device.go:244 msg="total memory" size="625.6 MiB"
+time=2025-11-10T01:41:29.475-07:00 level=INFO source=sched.go:493 msg="loaded runners" count=1
+time=2025-11-10T01:41:29.475-07:00 level=INFO source=server.go:1251 msg="waiting for llama runner to start responding"
+time=2025-11-10T01:41:29.475-07:00 level=INFO source=server.go:1285 msg="waiting for server to become available" status="llm server loading model"
+time=2025-11-10T01:41:29.475-07:00 level=INFO source=ggml.go:482 msg="offloading 18 repeating layers to GPU"
+time=2025-11-10T01:41:29.475-07:00 level=INFO source=ggml.go:489 msg="offloading output layer to GPU"
+time=2025-11-10T01:41:29.475-07:00 level=INFO source=ggml.go:494 msg="offloaded 19/19 layers to GPU"
+time=2025-11-10T01:41:30.229-07:00 level=INFO source=server.go:1289 msg="llama runner started in 2.51 seconds"
+[GIN] 2025/11/10 - 01:41:31 | 200 |  5.262484997s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:41:34 | 200 |  2.326021578s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:42:11 | 200 |  2.401661691s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:42:15 | 200 |  3.958736373s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:42:22 | 200 |   8.29756096s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:42:27 | 200 | 11.518622447s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:42:32 | 200 | 17.415154619s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:42:38 | 200 | 19.519059079s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:42:41 | 200 | 22.117849613s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:42:44 | 200 | 20.436281588s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:42:48 | 200 | 16.680104695s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:42:51 | 200 |  14.01488876s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:42:57 | 200 | 15.241451038s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:42:59 | 200 |   15.8945626s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:43:03 | 200 | 13.232230125s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:43:09 | 200 |  13.33608784s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:43:13 | 200 | 12.891744682s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:43:16 | 200 | 15.258551574s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:43:20 | 200 | 12.071433391s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:43:25 | 200 | 11.761576749s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:43:29 | 200 | 11.958164894s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:43:35 | 200 |  16.00267616s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:43:42 | 200 |  16.81404032s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:43:46 | 200 | 14.671008386s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:43:52 | 200 |  16.89368286s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:43:57 | 200 | 18.749973424s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:44:01 | 200 | 17.345677069s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:44:04 | 200 | 13.220388255s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:44:07 | 200 |  9.432736433s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:44:11 | 200 | 13.322898611s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:44:15 | 200 | 11.053658222s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:44:20 | 200 | 16.089436815s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:44:26 | 200 |  15.99037965s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:44:31 | 200 | 20.138848354s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:44:36 | 200 |  19.69763888s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:44:42 | 200 | 18.409671768s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:44:48 | 200 | 18.721614759s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:44:52 | 200 | 15.797637326s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:44:59 | 200 | 16.128625793s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:45:03 | 200 | 14.228904676s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:45:06 | 200 | 17.481501879s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:45:11 | 200 | 16.868931107s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:45:16 | 200 | 14.951076686s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:45:21 | 200 | 13.837409193s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:45:25 | 200 | 12.021609358s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:45:30 | 200 | 10.469760054s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:45:35 | 200 |  9.340475883s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:45:38 | 200 |  5.914291664s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:45:42 | 200 |  4.679720675s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:45:48 | 200 |  9.860407203s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:45:53 | 200 | 10.535661717s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:45:59 | 200 | 15.359031469s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:46:01 | 200 | 13.212170724s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:46:04 | 200 | 14.728003921s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:46:14 | 200 | 17.686750185s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:46:18 | 200 | 16.452427014s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:46:23 | 200 | 13.980049274s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:46:27 | 200 | 13.030889897s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:46:37 | 200 |  22.70528816s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:46:42 | 200 | 21.396325439s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:46:46 | 200 | 22.882457706s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:46:49 | 200 | 21.630444582s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:46:53 | 200 | 18.463525454s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:46:58 | 200 | 21.136673908s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:47:01 | 200 | 18.932727276s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:47:31 | 200 |  7.853699418s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:47:34 | 200 | 10.308848374s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:47:38 | 200 | 13.497884818s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:47:41 | 200 | 15.435359533s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:47:44 | 200 |  19.53956277s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:47:49 | 200 |  18.32023327s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:47:55 | 200 | 20.835335736s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:48:00 | 200 | 21.066588248s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:48:05 | 200 | 22.446643938s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:48:09 | 200 | 24.304033677s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:48:14 | 200 | 24.227347971s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:48:18 | 200 | 22.401247044s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:48:23 | 200 | 22.185283251s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:48:27 | 200 | 21.446252887s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:48:30 | 200 | 21.089129475s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:48:33 | 200 | 18.497537845s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:48:37 | 200 | 16.940734634s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:48:40 | 200 | 14.974953382s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:48:46 | 200 | 18.545583478s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:48:51 | 200 | 19.490062198s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:48:57 | 200 | 19.519411788s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:49:02 | 200 | 24.800147649s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:49:07 | 200 | 26.633014523s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:49:12 | 200 |  26.10944174s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:49:15 | 200 | 23.547798444s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:49:18 | 200 | 20.479136414s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:49:25 | 200 | 22.632871723s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:49:29 | 200 | 21.244938027s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:49:35 | 200 | 21.826368376s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:49:39 | 200 | 22.653014467s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:49:42 | 200 |  19.38013884s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:49:46 | 200 | 16.542628705s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:49:50 | 200 | 14.436741708s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:49:56 | 200 | 16.412326628s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:49:59 | 200 | 18.233846316s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:50:04 | 200 | 17.247336419s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:50:09 | 200 | 15.182982742s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:50:12 | 200 | 11.219963129s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:50:16 | 200 |  9.013729881s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:50:20 | 200 | 11.106790096s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:50:24 | 200 | 11.012329461s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:50:27 | 200 | 11.234854957s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:50:31 | 200 | 11.156478262s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:50:36 | 200 | 15.840595386s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:50:42 | 200 | 17.286721285s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:50:45 | 200 | 18.783183552s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:50:49 | 200 | 16.868568488s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:50:53 | 200 | 14.753671112s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:50:55 | 200 | 11.591005563s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:51:00 | 200 |  9.419120542s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:51:04 | 200 |  9.079130207s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:51:08 | 200 |  6.009429224s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:51:14 | 200 |   5.88577289s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:51:18 | 200 |  9.500453303s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:51:22 | 200 |  7.673990164s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:51:29 | 200 |  9.838492651s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:51:31 | 200 | 10.059054046s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:51:35 | 200 |  6.718158029s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:51:39 | 200 |   7.17368711s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:51:41 | 200 |  7.763757118s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:51:43 | 200 |  4.182917636s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:51:52 | 200 |  8.227167575s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:51:58 | 200 | 10.793640951s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:52:01 | 200 |  7.719241432s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:52:05 | 200 |  5.222118721s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:52:10 | 200 |  3.673775203s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:52:17 | 200 |  6.910913661s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:52:20 | 200 |  6.585479635s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:52:24 | 200 |  4.151540503s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:52:32 | 200 |  7.218647999s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:52:36 | 200 |   7.95406824s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:52:42 | 200 |  6.974521295s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:52:48 | 200 |  6.622891922s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:52:54 | 200 |  5.286823241s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:52:59 | 200 |  4.758063983s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:53:02 | 200 |  7.613815113s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:53:10 | 200 |  6.454579765s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:53:16 | 200 | 12.820537341s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:53:22 | 200 | 11.845687009s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:53:30 | 200 | 19.703994314s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:53:35 | 200 | 18.767890335s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:53:41 | 200 | 19.058527831s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:53:45 | 200 | 22.077753901s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:53:49 | 200 | 19.624565874s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:53:54 | 200 | 23.827045597s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:53:58 | 200 | 19.869489263s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:54:01 | 200 |  16.60073834s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:54:06 | 200 |  20.59511312s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:54:11 | 200 |  19.05867898s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:54:16 | 200 |  18.23194152s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:54:19 | 200 | 14.394275717s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:54:24 | 200 | 12.054625699s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:54:27 | 200 |  7.147169033s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:54:28 | 200 |  8.023481689s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:54:31 | 200 |  3.133462617s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:54:40 | 200 |  5.259224843s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:54:47 | 200 |   5.73629494s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:54:56 | 200 |  7.900453947s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-10T01:55:40.155-07:00 level=INFO source=server.go:1433 msg="aborting completion request due to client closing the connection"
+[GIN] 2025/11/10 - 01:55:40 | 500 | 45.060286513s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-10T01:55:46.478-07:00 level=INFO source=server.go:1433 msg="aborting completion request due to client closing the connection"
+[GIN] 2025/11/10 - 01:55:46 | 500 |  45.07418668s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:55:46 | 200 | 55.829018023s |       127.0.0.1 | POST     "/api/generate"
+Error #01: write tcp 127.0.0.1:11471->127.0.0.1:59732: write: broken pipe
+[GIN] 2025/11/10 - 01:55:52 | 200 | 43.864142291s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:55:55 | 200 |  38.87119998s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:55:59 | 200 | 23.265634368s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:56:02 | 200 | 21.834112557s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:56:06 | 200 | 18.168759168s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:56:11 | 200 | 18.646321412s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:56:16 | 200 |  21.27814814s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:56:19 | 200 | 19.861761948s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:56:22 | 200 | 20.020182316s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:56:27 | 200 | 21.015257415s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:56:32 | 200 | 20.841521145s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:56:36 | 200 | 19.788332173s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:56:41 | 200 |  20.99627565s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:56:47 | 200 | 24.699439913s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:56:52 | 200 | 24.397997074s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:56:57 | 200 | 24.843535777s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:57:02 | 200 |  25.60684965s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:57:10 | 200 | 28.597897742s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:57:16 | 200 | 28.281391688s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:57:20 | 200 | 27.169229181s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:57:28 | 200 | 30.648243571s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:57:35 | 200 | 32.608319819s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:57:39 | 200 | 29.489448723s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:57:43 | 200 | 26.390603336s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:57:46 | 200 | 26.096752286s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:57:51 | 200 | 22.030023735s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:57:55 | 200 |  19.56338983s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:58:00 | 200 | 20.332437494s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:58:03 | 200 | 19.029071356s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:58:09 | 200 | 21.887050216s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:58:14 | 200 | 22.946217779s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:58:20 | 200 | 24.658388525s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:58:23 | 200 | 22.690592125s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:58:28 | 200 | 23.942133719s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:58:30 | 200 | 20.955492497s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:58:35 | 200 | 20.673142764s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:58:41 | 200 | 20.673046604s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:58:45 | 200 | 22.153555868s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:58:49 | 200 | 20.658327076s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:58:52 | 200 | 21.220205273s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:58:58 | 200 | 22.008547391s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:59:04 | 200 | 21.662125153s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:59:08 | 200 | 22.386521506s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:59:14 | 200 | 25.705288207s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:59:20 | 200 | 27.859825054s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:59:24 | 200 | 26.129603613s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:59:28 | 200 |  23.68740656s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:59:34 | 200 | 26.117921284s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:59:39 | 200 | 24.426416612s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:59:44 | 200 | 23.655206363s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:59:49 | 200 | 24.563304329s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:59:53 | 200 | 25.073981879s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 01:59:58 | 200 | 23.771623172s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:00:04 | 200 | 23.853831691s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:00:10 | 200 | 25.738270628s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:00:17 | 200 | 27.584504576s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:00:25 | 200 | 31.004705534s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:00:31 | 200 | 32.570123652s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:00:37 | 200 | 33.494636799s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:00:44 | 200 | 33.632299535s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:00:50 | 200 | 32.832574542s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:00:56 | 200 | 31.017729112s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:02 | 200 | 30.891957097s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:09 | 200 | 30.423520859s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:12 | 200 |  27.80085381s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:18 | 200 | 27.110661526s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:21 | 200 | 23.947629592s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:25 | 200 |  22.47453421s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:30 | 200 | 20.291290053s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:34 | 200 | 21.532495704s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:38 | 200 | 20.584888513s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:43 | 200 | 22.104335472s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:47 | 200 | 21.933825264s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:50 | 200 | 20.392797261s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:52 | 200 | 17.566728869s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:55 | 200 | 16.048108786s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:57 | 200 | 13.671994688s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:01:59 | 200 | 11.392990234s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:02:00 | 200 |  9.885570535s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:02:01 | 200 |   8.77233959s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:02:02 | 200 |  6.953286199s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:02:03 | 200 |  5.352997898s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:02:04 | 200 |  4.975379537s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:02:28 | 200 |  8.007595934s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:02:33 | 200 |  12.62294805s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:02:37 | 200 | 16.591497574s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:02:42 | 200 | 22.668064576s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:02:47 | 200 | 26.394413749s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:02:51 | 200 | 22.890248727s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:02:55 | 200 | 21.694922346s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:02:58 | 200 | 20.081124193s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:03:04 | 200 | 20.596408513s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:03:09 | 200 |  18.90811273s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:03:14 | 200 | 18.872514246s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:03:19 | 200 | 20.054292834s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:03:21 | 200 |  19.95754083s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:03:26 | 200 | 18.143975313s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:03:30 | 200 | 16.435699086s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:03:33 | 200 | 18.956787002s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:03:35 | 200 |  15.25443684s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:03:37 | 200 | 10.643849316s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:03:40 | 200 |  8.162747261s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:03:46 | 200 | 10.851433263s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:03:52 | 200 | 13.669300322s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:03:57 | 200 |   16.3381093s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:04:01 | 200 | 16.276041579s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:04:04 | 200 | 12.133873328s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:04:06 | 200 |  8.829938895s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:04:09 | 200 |  5.778402107s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:04:13 | 200 |  8.896595622s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:04:18 | 200 |  8.455203188s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:04:22 | 200 |  7.154263868s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:04:29 | 200 |  6.968180399s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:04:33 | 200 |  6.069496985s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:04:39 | 200 |  5.620497541s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:04:48 | 200 |  7.782776408s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:04:53 | 200 |  6.775160874s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:05:00 | 200 |  7.797986448s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:05:04 | 200 |  6.716030063s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:05:10 | 200 |   5.89419046s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:05:14 | 200 |  4.264572669s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:05:18 | 200 |     7.741156s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:05:23 | 200 |  5.783314023s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:05:28 | 200 |  5.203064823s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:05:33 | 200 | 10.141069615s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:05:38 | 200 |   9.55775827s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:05:42 | 200 | 12.994450748s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:05:48 | 200 | 17.665174136s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:05:51 | 200 |   15.9783606s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:05:54 | 200 | 12.161223696s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:05:58 | 200 | 10.514807841s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:06:04 | 200 | 13.099955404s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:06:09 | 200 | 15.173122375s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:06:12 | 200 | 16.983097096s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:06:14 | 200 | 12.496643677s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:06:16 | 200 |  8.355077766s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:06:21 | 200 |  6.618343942s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:06:24 | 200 |  9.245298634s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:06:30 | 200 |  8.990158441s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:06:34 | 200 |  9.604553058s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:06:38 | 200 | 10.159643428s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:06:45 | 200 | 15.063138882s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:06:50 | 200 | 16.026564958s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:06:53 | 200 | 13.342242377s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:06:58 | 200 | 11.405442188s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:07:00 | 500 |  6.366095298s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-10T02:07:00.433-07:00 level=INFO source=runner.go:868 msg="aborting completion request due to client closing the connection"
+time=2025-11-10T02:08:20.888-07:00 level=INFO source=routes.go:1524 msg="server config" env="map[CUDA_VISIBLE_DEVICES:2 GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:4096 OLLAMA_DEBUG:INFO OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://0.0.0.0:11471 OLLAMA_INTEL_GPU:false OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/home/dan/.ollama-11471 OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2025-11-10T02:08:20.889-07:00 level=INFO source=images.go:522 msg="total blobs: 11"
+time=2025-11-10T02:08:20.889-07:00 level=INFO source=images.go:529 msg="total unused blobs removed: 0"
+time=2025-11-10T02:08:20.889-07:00 level=INFO source=routes.go:1577 msg="Listening on [::]:11471 (version 0.12.9)"
+time=2025-11-10T02:08:20.889-07:00 level=INFO source=runner.go:76 msg="discovering available GPUs..."
+time=2025-11-10T02:08:20.890-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 40215"
+time=2025-11-10T02:08:21.087-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 33707"
+time=2025-11-10T02:08:21.290-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 43111"
+time=2025-11-10T02:08:21.290-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 36769"
+time=2025-11-10T02:08:21.528-07:00 level=INFO source=types.go:42 msg="inference compute" id=GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f filtered_id="" library=CUDA compute=8.9 name=CUDA0 description="NVIDIA GeForce RTX 4090" libdirs=ollama,cuda_v13 driver=13.0 pci_id=0000:0d:00.0 type=discrete total="24.0 GiB" available="23.5 GiB"
+[GIN] 2025/11/10 - 02:08:22 | 200 |      34.104µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2025/11/10 - 02:08:22 | 200 |    44.44204ms |       127.0.0.1 | POST     "/api/show"
+[GIN] 2025/11/10 - 02:08:49 | 200 |      293.23µs |       127.0.0.1 | GET      "/api/tags"
+time=2025-11-10T02:09:51.108-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 41399"
+time=2025-11-10T02:09:51.623-07:00 level=INFO source=server.go:215 msg="enabling flash attention"
+time=2025-11-10T02:09:51.623-07:00 level=INFO source=server.go:400 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --model /home/dan/.ollama-11471/blobs/sha256-735af2139dc652bf01112746474883d79a52fa1c19038265d363e3d42556f7a2 --port 39209"
+time=2025-11-10T02:09:51.627-07:00 level=INFO source=server.go:653 msg="loading model" "model layers"=19 requested=-1
+time=2025-11-10T02:09:51.627-07:00 level=INFO source=server.go:658 msg="system memory" total="123.6 GiB" free="85.6 GiB" free_swap="0 B"
+time=2025-11-10T02:09:51.627-07:00 level=INFO source=server.go:665 msg="gpu memory" id=GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f library=CUDA available="13.3 GiB" free="13.8 GiB" minimum="457.0 MiB" overhead="0 B"
+time=2025-11-10T02:09:51.657-07:00 level=INFO source=runner.go:1349 msg="starting ollama engine"
+time=2025-11-10T02:09:51.657-07:00 level=INFO source=runner.go:1384 msg="Server listening on 127.0.0.1:39209"
+time=2025-11-10T02:09:51.662-07:00 level=INFO source=runner.go:1222 msg=load request="{Operation:fit LoraPath:[] Parallel:1 BatchSize:512 FlashAttention:true KvSize:4096 KvCacheType: NumThreads:8 GPULayers:19[ID:GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f Layers:19(0..18)] MultiUserCache:false ProjectorPath: MainGPU:0 UseMmap:false}"
+time=2025-11-10T02:09:51.753-07:00 level=INFO source=ggml.go:136 msg="" architecture=gemma3 file_type=Q8_0 name="" description="" num_tensors=236 num_key_values=37
+load_backend: loaded CPU backend from /usr/local/lib/ollama/libggml-cpu-icelake.so
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA GeForce RTX 4090, compute capability 8.9, VMM: yes, ID: GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f
+load_backend: loaded CUDA backend from /usr/local/lib/ollama/cuda_v13/libggml-cuda.so
+time=2025-11-10T02:09:52.030-07:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.AVX512=1 CPU.0.AVX512_VBMI=1 CPU.0.AVX512_VNNI=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=750,800,860,870,890,900,1000,1030,1100,1200,1210 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-11-10T02:09:53.280-07:00 level=INFO source=runner.go:1222 msg=load request="{Operation:alloc LoraPath:[] Parallel:1 BatchSize:512 FlashAttention:true KvSize:4096 KvCacheType: NumThreads:8 GPULayers:19[ID:GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f Layers:19(0..18)] MultiUserCache:false ProjectorPath: MainGPU:0 UseMmap:false}"
+time=2025-11-10T02:09:53.493-07:00 level=INFO source=runner.go:1222 msg=load request="{Operation:commit LoraPath:[] Parallel:1 BatchSize:512 FlashAttention:true KvSize:4096 KvCacheType: NumThreads:8 GPULayers:19[ID:GPU-6cab3899-f78d-7304-2676-e0fbf97a3f8f Layers:19(0..18)] MultiUserCache:false ProjectorPath: MainGPU:0 UseMmap:false}"
+time=2025-11-10T02:09:53.493-07:00 level=INFO source=ggml.go:482 msg="offloading 18 repeating layers to GPU"
+time=2025-11-10T02:09:53.493-07:00 level=INFO source=ggml.go:489 msg="offloading output layer to GPU"
+time=2025-11-10T02:09:53.494-07:00 level=INFO source=ggml.go:494 msg="offloaded 19/19 layers to GPU"
+time=2025-11-10T02:09:53.496-07:00 level=INFO source=device.go:212 msg="model weights" device=CUDA0 size="271.9 MiB"
+time=2025-11-10T02:09:53.496-07:00 level=INFO source=device.go:217 msg="model weights" device=CPU size="170.0 MiB"
+time=2025-11-10T02:09:53.496-07:00 level=INFO source=device.go:223 msg="kv cache" device=CUDA0 size="27.0 MiB"
+time=2025-11-10T02:09:53.496-07:00 level=INFO source=device.go:234 msg="compute graph" device=CUDA0 size="155.5 MiB"
+time=2025-11-10T02:09:53.496-07:00 level=INFO source=device.go:239 msg="compute graph" device=CPU size="1.2 MiB"
+time=2025-11-10T02:09:53.496-07:00 level=INFO source=device.go:244 msg="total memory" size="625.6 MiB"
+time=2025-11-10T02:09:53.496-07:00 level=INFO source=sched.go:493 msg="loaded runners" count=1
+time=2025-11-10T02:09:53.496-07:00 level=INFO source=server.go:1251 msg="waiting for llama runner to start responding"
+time=2025-11-10T02:09:53.498-07:00 level=INFO source=server.go:1285 msg="waiting for server to become available" status="llm server loading model"
+time=2025-11-10T02:09:54.017-07:00 level=INFO source=server.go:1289 msg="llama runner started in 2.39 seconds"
+[GIN] 2025/11/10 - 02:09:55 | 200 |  4.613899759s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:09:56 | 200 |  1.328158714s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:10:31 | 200 |  1.710228982s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:10:33 | 200 |  1.079263332s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:10:34 | 200 |  890.612833ms |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:11:23 | 200 |  2.896117888s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:11:25 | 200 |  2.936264901s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:11:27 | 200 |  4.020420823s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:11:28 | 200 |  5.576634403s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:11:31 | 200 |  5.702388632s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:11:33 | 200 |  4.221842467s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:11:36 | 200 |    4.4296129s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:12:27 | 200 | 12.323480269s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:12:33 | 200 | 16.981362964s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:12:36 | 200 | 20.299321706s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:12:42 | 200 | 24.440694263s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:12:47 | 200 | 25.712329501s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:12:51 | 200 | 29.451820752s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:12:55 | 200 | 29.368149043s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:12:59 | 200 | 32.068127489s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:13:01 | 200 | 34.595091456s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:13:05 | 200 |  39.21461768s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:13:09 | 200 | 40.532932436s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:13:14 | 200 | 44.993809775s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:13:15 | 500 | 45.044091413s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-10T02:13:17.398-07:00 level=INFO source=runner.go:868 msg="aborting completion request due to client closing the connection"
+[GIN] 2025/11/10 - 02:13:19 | 500 | 45.051119837s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:13:22 | 200 | 45.734244172s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:13:26 | 200 | 43.415348192s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:13:29 | 200 | 42.268434565s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:13:33 | 200 | 41.307932936s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:13:37 | 200 | 41.760712673s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:13:41 | 200 | 41.868959837s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:13:45 | 200 | 43.259646737s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:13:49 | 200 | 43.142932599s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:13:51 | 500 | 45.047838728s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-10T02:13:53.016-07:00 level=INFO source=runner.go:868 msg="aborting completion request due to client closing the connection"
+[GIN] 2025/11/10 - 02:13:54 | 500 | 45.039033382s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:13:55 | 500 | 45.061341667s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-10T02:13:57.493-07:00 level=INFO source=runner.go:868 msg="aborting completion request due to client closing the connection"
+[GIN] 2025/11/10 - 02:13:57 | 500 | 45.063472046s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-10T02:14:00.744-07:00 level=INFO source=server.go:1433 msg="aborting completion request due to client closing the connection"
+[GIN] 2025/11/10 - 02:14:00 | 500 | 45.066697244s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:14:01 | 200 | 46.592549962s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:14:04 | 500 | 45.044510767s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:14:06 | 200 | 43.927703318s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:14:12 | 200 | 45.578131501s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:14:16 | 200 | 46.500774663s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:14:18 | 500 | 45.046057089s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-10T02:14:21.446-07:00 level=INFO source=server.go:1433 msg="aborting completion request due to client closing the connection"
+[GIN] 2025/11/10 - 02:14:21 | 500 | 31.137538177s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-10T02:14:21.447-07:00 level=INFO source=server.go:1433 msg="aborting completion request due to client closing the connection"
+[GIN] 2025/11/10 - 02:14:21 | 500 | 25.407028504s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-10T02:14:21.449-07:00 level=INFO source=server.go:1433 msg="aborting completion request due to client closing the connection"
+[GIN] 2025/11/10 - 02:14:21 | 500 | 25.900642293s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-10T02:14:21.453-07:00 level=INFO source=server.go:1433 msg="aborting completion request due to client closing the connection"
+[GIN] 2025/11/10 - 02:14:21 | 500 | 39.792832012s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-10T02:14:21.455-07:00 level=INFO source=server.go:1433 msg="aborting completion request due to client closing the connection"
+[GIN] 2025/11/10 - 02:14:21 | 500 | 13.061499856s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:14:21 | 500 | 43.283248707s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-10T02:14:21.457-07:00 level=INFO source=server.go:1433 msg="aborting completion request due to client closing the connection"
+[GIN] 2025/11/10 - 02:14:21 | 500 |  5.798205989s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-10T02:14:21.466-07:00 level=INFO source=server.go:1433 msg="aborting completion request due to client closing the connection"
+[GIN] 2025/11/10 - 02:14:21 | 500 | 36.042768245s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2025/11/10 - 02:14:21 | 500 | 28.936361319s |       127.0.0.1 | POST     "/api/generate"
