@@ -39,7 +39,7 @@ INSTANCES = [
 OLLAMA_NODES = [inst["host"] for inst in INSTANCES]
 TIMEOUT_SEC  = 30
 QUESTIONS_PER_FIELD = 1_000
-MAX_REPROMPTS = 1
+MAX_REPROMPTS = 2
 
 VALID_ANSWERS     = {"true", "false", "possibly true", "possibly false", "unknown"}
 TRUE_SET, FALSE_SET = {"true", "possibly true"}, {"false", "possibly false"}
@@ -52,10 +52,6 @@ NUMERIC_CHOICES = {
     "5": "unknown",
 }
 FILLER_PHRASES = {
-    "the answer is yes": "true",
-    "answer is yes": "true",
-    "answer is true": "true",
-    "it is true": "true",
     "possible truth": "possibly true",
     "possibly truth": "possibly true",
     "possible true": "possibly true",
@@ -71,15 +67,31 @@ FILLER_PHRASES = {
     "no idea": "unknown",
 }
 FILLER_SYNONYMS = {
-    "true": {"yes", "yeah", "yep", "affirmative", "correct", "certainly", "definitely", "absolutely", "sure"},
+    "true": {"yes", "yeah", "yep"},
     "false": {"no", "nope", "nah", "negative", "incorrect"},
     "possibly true": {"maybe", "probably", "likely", "perhaps"},
     "possibly false": {"unlikely"},
     "unknown": {"unknown", "unsure", "uncertain", "indeterminate"},
 }
+FILLER_HINTS = (
+    "the paper",
+    "here is",
+    "here's",
+    "the question is",
+    "to answer this question",
+    "what a fascinating question",
+    "the answer to this question",
+    "the answer to the above question",
+    "this paper",
+    "the abstract",
+)
+def looks_like_filler_response(text: str) -> bool:
+    lowered = text.lower()
+    return any(hint in lowered for hint in FILLER_HINTS)
 REPROMPT_TEMPLATE = (
     "\n\nYour previous answer \"{answer}\" was invalid because {reason}. "
-    "Do not repeat or describe the question. Do not write yes/no/maybe. Reply with the single lowercase word only (example: true):"
+    "Do not repeat the question, mention titles/abstracts, or say phrases like \"here is\" or \"the paper\". "
+    "Reply with the single lowercase word only (example: true):"
     "\n1) true\n2) false\n3) possibly true\n4) possibly false\n5) unknown"
     "\nAnything else is discarded and counted as unknown."
 )
@@ -472,22 +484,31 @@ def get_validated_answer(model: str, base_prompt: str, node: str) -> Tuple[str, 
                 reason_tag = "exact"
             return normalized, raw_response, attempts + 1, True, reason_tag
 
+        filler_hit = looks_like_filler_response(raw_response) if raw_response else False
+        reprompt_reason = reason
+        if filler_hit:
+            log(f"Filler invalid -> raw='{raw_response}' | skipping reprompt")
+            normalized = normalized if normalized in VALID_ANSWERS else "unknown"
+            return normalized, raw_response, attempts + 1, False, "filler_skipped"
+
         attempts += 1
         last_raw = raw_response
         if attempts >= MAX_REPROMPTS:
-            return normalized, last_raw, attempts, False, "invalid"
+            final_tag = "filler_invalid" if filler_hit else "invalid"
+            return normalized, last_raw, attempts, False, final_tag
 
-        prompt = build_reprompt_prompt(base_prompt, reason, last_raw)
+        prompt = build_reprompt_prompt(base_prompt, reprompt_reason, last_raw)
 
     return "unknown", last_raw, attempts, False, "invalid"
 
 def build_prompt(field:str,q:str,year:int|None)->str:
     yr = f"The paper was published in {year}. " if year else ""
     instructions = (
-        "Choose the correct number and reply with only that lowercase word. Do not write yes/no/maybe or any explanation.\n"
+        "Choose the correct number and reply with only that lowercase word. Do not mention the question, titles, abstracts, years, or say phrases like \"here is\" or \"the paper\". "
+        "Do not write yes/no/maybe or any explanation. Respond with exactly one of the following words:\n"
         "1) true\n2) false\n3) possibly true\n4) possibly false\n5) unknown\n"
         "Example response: true\n"
-        "Any extra words are discarded and treated as unknown.\n"
+        "Any extra words (for example, \"The paper is...\" or \"Here is the answer\") are discarded and treated as unknown. No human reads this—only the lowercase word is stored.\n"
     )
     context = f"You are being quizzed in {field}. {yr}"
     return f"{instructions}{context}Question:\n{q}"
@@ -513,16 +534,30 @@ def process_batch(node: str, batch: List[Tuple[int, Dict]], model: str, field_na
         if not valid_answer:
             if normalized not in VALID_ANSWERS:
                 normalized = "unknown"
-            message = (
-                f"{field_name} | {idx}/{QUESTIONS_PER_FIELD} | {year or '—'} | {model} | "
-                f"invalid response after {attempts_used} attempts; raw='{raw_answer}' -> using '{normalized}'"
-            )
-            if normalized == "unknown" and attempts_used > 1:
+            filler_notice = reason_tag.startswith("filler_")
+            if filler_notice:
+                if reason_tag == "filler_skipped":
+                    message = (
+                        f"{field_name} | {idx}/{QUESTIONS_PER_FIELD} | {year or '—'} | {model} | "
+                        f"filler response detected; no retry issued; raw='{raw_answer}' -> using '{normalized}'"
+                    )
+                else:
+                    message = (
+                        f"{field_name} | {idx}/{QUESTIONS_PER_FIELD} | {year or '—'} | {model} | "
+                        f"filler response ignored after {attempts_used} attempts; raw='{raw_answer}' -> using '{normalized}'"
+                    )
                 log_err(message)
-            elif normalized == "unknown":
-                log(message)
             else:
-                log(message)
+                message = (
+                    f"{field_name} | {idx}/{QUESTIONS_PER_FIELD} | {year or '—'} | {model} | "
+                    f"invalid response after {attempts_used} attempts; raw='{raw_answer}' -> using '{normalized}'"
+                )
+                if normalized == "unknown" and attempts_used > 1:
+                    log_err(message)
+                elif normalized == "unknown":
+                    log(message)
+                else:
+                    log(message)
 
         sc = score(gt, normalized)
         res = "✅" if sc > 0 else "❌" if sc < 0 else "☐"
