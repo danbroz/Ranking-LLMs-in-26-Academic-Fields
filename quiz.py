@@ -1,18 +1,5 @@
 #!/usr/bin/env python3
-"""
-quiz_llms.py — resilient, resumable, round-robin quiz-runner
-===========================================================
-
-Changes in this patch
----------------------
-* **pred_norm always defined** – even when a reply is invalid or timed-out.
-* Normalisation map now covers: “possbilytrue” → possibly true,
-  “possiblyfalse” → possibly false.
-* Scoring unchanged (+0.01 correct class, 0 unknown, -0.01 wrong).
-
-Everything else (prompt with “unknown”, 30 s timeout, 1 000 Q/A, CSV order
-model|overall|fields|timestamp, trimmed model list fallback for RTX 4090) is intact.
-"""
+"""Adaptive quiz runner that evaluates many LLMs with dynamic Ollama scaling."""
 
 from __future__ import annotations
 import csv, logging, sys, re, signal
@@ -393,6 +380,7 @@ def ensure_ollama_running() -> None:
 
 
 def restart_ollama_instances(model: str) -> None:
+    """Stop any running Ollama servers and relaunch workers sized for *model*."""
     global INSTANCES, OLLAMA_NODES
     INSTANCES = plan_instances_for_model(model)
     OLLAMA_NODES = [inst["host"] for inst in INSTANCES]
@@ -631,6 +619,7 @@ def done()->set[str]:
         r=csv.reader(f); next(r,None); return {row[0] for row in r}
 
 def _query_gpu_memory_mb() -> List[int]:
+    """Return a list of total VRAM values (MB) for each detected GPU."""
     try:
         result = subprocess.run(
             [
@@ -654,6 +643,7 @@ def _query_gpu_memory_mb() -> List[int]:
 GPU_MEMORY_MB = _query_gpu_memory_mb()
 
 def estimate_model_memory_mb(model: str) -> int:
+    """Estimate VRAM per instance required to serve *model* via Ollama."""
     normalized = model.lower()
     if normalized in MODEL_MEMORY_OVERRIDES_MB:
         return MODEL_MEMORY_OVERRIDES_MB[normalized]
@@ -671,6 +661,7 @@ def estimate_model_memory_mb(model: str) -> int:
 
 
 def plan_instances_for_model(model: str) -> List[Dict[str, str]]:
+    """Produce an Ollama instance plan sized for the requested model."""
     mem_needed = max(estimate_model_memory_mb(model), 1)
     plan: List[Dict[str, str]] = []
     port = BASE_PORT
@@ -691,6 +682,7 @@ def plan_instances_for_model(model: str) -> List[Dict[str, str]]:
     if not plan:
         plan.append({"host": f"http://127.0.0.1:{BASE_PORT}", "port": str(BASE_PORT), "gpu": "0"})
     return plan
+
 
 # ────────── main ──────────
 def main():

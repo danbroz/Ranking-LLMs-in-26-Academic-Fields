@@ -1,3 +1,12 @@
+"""Pipeline for building field_* QA datasets with dynamic Ollama scaling.
+
+This script downloads OpenAlex works manifests, spins up as many Ollama
+instances as available GPU memory allows, generates question/answer pairs
+(one per field) with the selected LLM, persists them to MongoDB, and finally
+runs backup and pruning maintenance tasks so the databases remain ready for
+consumption.
+"""
+
 import ollama
 from pymongo import MongoClient
 import random
@@ -30,6 +39,7 @@ INSTANCES = []
 
 
 def _query_gpu_memory_mb():
+    """Return total VRAM per visible GPU in megabytes (fallback to 24 GB)."""
     try:
         result = subprocess.run(
             [
@@ -142,7 +152,13 @@ def check_ollama_health(node_url):
 
 
 def ensure_ollama_instances():
-    """Start smollm2:135m instances scaled to GPU VRAM."""
+    """Launch Ollama servers sized for the target model across all GPUs.
+
+    The routine stops any existing servers, computes how many instances of the
+    configured model fit into each GPU after leaving a small cushion, and then
+    starts dedicated `ollama serve` processes per port. Each server is also
+    primed with the model so subsequent generate calls do not block on pulls.
+    """
     global nodes, INSTANCES, node_semaphores, node_timeout_counts, node_last_timeout
 
     hostname = get_hostname()
@@ -624,6 +640,7 @@ def timeout_monitor():
             os.execv(sys.executable, ['python'] + sys.argv)
 
 def run_database_backup(mongo_uri: str) -> None:
+    """Execute the backup script with force/drop semantics for all field DBs."""
     log("💾 Starting field database backup...")
     original_argv = sys.argv
     try:
@@ -641,6 +658,7 @@ def run_database_backup(mongo_uri: str) -> None:
 
 
 def run_database_prune(mongo_uri: str, limit: int = 1000) -> None:
+    """Prune each field database down to the working-set size via helper script."""
     log("🧹 Pruning field databases to working set...")
     original_argv = sys.argv
     try:
