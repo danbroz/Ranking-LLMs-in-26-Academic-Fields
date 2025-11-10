@@ -395,7 +395,7 @@ def normalize_and_validate(raw: str) -> Tuple[str, bool, str]:
         return mapped, True, "Numeric choice"
 
     if normalized in VALID_ANSWERS and stripped.lower() == normalized:
-        return normalized, True, ""
+        return normalized, True, "Exact match"
 
     stripped_no_punct = stripped.rstrip(".!,?:;")
     collapsed_no_punct = " ".join(stripped_no_punct.lower().split())
@@ -414,6 +414,10 @@ def normalize_and_validate(raw: str) -> Tuple[str, bool, str]:
             for synonym in synonyms:
                 if synonym in word_tokens:
                     return target, True, f"Alias keyword '{synonym}'"
+
+    for token in VALID_ANSWERS:
+        if token in normalized:
+            return token, True, "Salvaged token from verbose response"
 
     return "unknown", False, "Answer must be exactly one of: true, false, possibly true, possibly false, unknown."
 
@@ -437,8 +441,14 @@ def get_validated_answer(model: str, base_prompt: str, node: str) -> Tuple[str, 
             if reason:
                 if reason.startswith("Alias"):
                     log(f"Alias normalization -> {normalized} | {reason} | raw='{raw_response}'")
+                elif reason == "Numeric choice":
+                    log(f"Numeric choice -> {normalized} | raw='{raw_response}'")
+                elif reason == "Salvaged token from verbose response":
+                    log(f"Salvaged verbose -> {normalized} | raw='{raw_response}'")
+                elif reason == "Exact match":
+                    log(f"Exact match -> {normalized}")
                 else:
-                    log(f"Matched token from free-form response -> {normalized} | raw='{raw_response}'")
+                    log(f"{reason} -> {normalized} | raw='{raw_response}'")
             return normalized, raw_response, attempts + 1, True
 
         attempts += 1
