@@ -356,6 +356,14 @@ def ensure_ollama_running() -> None:
     for pid in _detect_pids_for_ports(ports):
         _register_pid(pid)
 
+
+def restart_ollama_instances() -> None:
+    """Forcefully stop any running Ollama servers and start fresh instances."""
+    shutdown_ollama_instances(force_all=True)
+    time.sleep(0.5)
+    ensure_ollama_running()
+
+
 # ────────── helpers ──────────
 EMBEDMODELS:set[str]=set()
 def pull(model:str)->bool:
@@ -590,14 +598,17 @@ def main():
     GLOBAL_SALVAGE_TOTAL = 0
     GLOBAL_SALVAGE_BY_MODEL = {}
     GLOBAL_SALVAGE_BY_FIELD = defaultdict(int)
-    ensure_ollama_running()
+    restart_ollama_instances()
     completed=done(); hdr=CSV_PATH.exists()
     mongo=MongoClient(MONGO_URI)
     cols={db:mongo[db]["sources"] for db in DATABASES}
 
     for model in MODEL_LIST:
         if model in completed: log(f"skip {model}"); continue
-        if not pull(model): continue
+        restart_ollama_instances()
+        if not pull(model):
+            shutdown_ollama_instances(force_all=True)
+            continue
         log(f"=== MODEL {model} ===")
 
         field_scores:Dict[str,float]={}
@@ -652,8 +663,10 @@ def main():
             log(f"{model} salvaged verbose answers: total={model_salvage_total}"
                 f"{' | '+per_field if per_field else ''}")
         delete(model); log(f"done {model}")
+        shutdown_ollama_instances(force_all=True)
 
     mongo.close(); log("🎉 all models done")
+    shutdown_ollama_instances(force_all=True)
     if GLOBAL_SALVAGE_TOTAL:
         log(
             "Verbose answer salvage summary — "
