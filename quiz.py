@@ -10,27 +10,71 @@ Changes in this patch
   “possiblyfalse” → possibly false.
 * Scoring unchanged (+0.01 correct class, 0 unknown, -0.01 wrong).
 
-Everything else (prompt with “unknown”, 30 s timeout, 10 000 Q/A, CSV order
-model|overall|fields|timestamp, trimmed model list for RTX 4090) is intact.
+Everything else (prompt with “unknown”, 30 s timeout, 1 000 Q/A, CSV order
+model|overall|fields|timestamp, trimmed model list fallback for RTX 4090) is intact.
 """
 
 from __future__ import annotations
-import csv, itertools, logging, sys, signal
+import csv, logging, sys, re
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Tuple
+from contextlib import suppress
+import subprocess
+import shutil
+import time
+import os
+import atexit
 import ollama
 from pymongo import MongoClient
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ────────── config ──────────
-OLLAMA_NODES = ["http://laptop0:11434", "http://laptop1:11434", "http://laptop2:11434"]
+INSTANCES = [
+    {"host": "http://127.0.0.1:11434", "port": "11434", "gpu": "0"},
+    {"host": "http://127.0.0.1:11435", "port": "11435", "gpu": "1"},
+    {"host": "http://127.0.0.1:11436", "port": "11436", "gpu": "2"},
+]
+OLLAMA_NODES = [inst["host"] for inst in INSTANCES]
 TIMEOUT_SEC  = 30
-QUESTIONS_PER_FIELD = 10_000
-MAX_REPROMPTS = 3
+QUESTIONS_PER_FIELD = 1_000
+MAX_REPROMPTS = 1
 
 VALID_ANSWERS     = {"true", "false", "possibly true", "possibly false", "unknown"}
 TRUE_SET, FALSE_SET = {"true", "possibly true"}, {"false", "possibly false"}
 ALIAS = {"possbilytrue": "possibly true", "possiblyfalse": "possibly false"}
+FILLER_PHRASES = {
+    "the answer is yes": "true",
+    "answer is yes": "true",
+    "answer is true": "true",
+    "it is true": "true",
+    "possible truth": "possibly true",
+    "possibly truth": "possibly true",
+    "possible true": "possibly true",
+    "it is false": "false",
+    "the answer is no": "false",
+    "answer is no": "false",
+    "answer is false": "false",
+    "possible false": "possibly false",
+    "possibly false": "possibly false",
+    "not sure": "unknown",
+    "can't tell": "unknown",
+    "cannot tell": "unknown",
+    "no idea": "unknown",
+}
+FILLER_SYNONYMS = {
+    "true": {"yes", "yeah", "yep", "affirmative", "correct", "certainly", "definitely", "absolutely", "sure"},
+    "false": {"no", "nope", "nah", "negative", "incorrect"},
+    "possibly true": {"maybe", "probably", "likely", "perhaps"},
+    "possibly false": {"unlikely"},
+    "unknown": {"unknown", "unsure", "uncertain", "indeterminate"},
+}
+REPROMPT_TEMPLATE = (
+    "\n\nYour previous answer \"{answer}\" was invalid because {reason}. "
+    "Do not repeat or describe the question. Do not write yes/no/maybe. Reply with the single lowercase word only (example: true):"
+    "\n1) true\n2) false\n3) possibly true\n4) possibly false\n5) unknown"
+    "\nAnything else is discarded and counted as unknown."
+)
 
 FIELD_MAP = {  # … unchanged … (same mapping dictionary) ...
     "field_11":"agricultural-and-biological-sciences","field_12":"arts-and-humanities",
@@ -47,8 +91,79 @@ FIELD_MAP = {  # … unchanged … (same mapping dictionary) ...
 DATABASES = list(FIELD_MAP.keys())
 
 # --- model list trimmed to chat-capable models that fit on a 4090 ---
-MODEL_LIST = ["gemma:2b","gemma:7b","llama3:8b","mistral","phi3-mini","tinyllama",
-              "qwen2:7b","mixtral-8x7b","gemma2b-it","mistral-openorca"]
+MODEL_LIST = [
+    "smollm2:135m",
+    "smollm:135m",
+    "gemma3:270m",
+    "smollm2:360m",
+    "smollm:360m",
+    "qwen:0.5b",
+    "qwen2:0.5b",
+    "qwen2.5:0.5b",
+    "qwen3:0.6b",
+    "gemma3:1b",
+    "tinyllama:1.1b",
+    "tinydolphin:1.1b",
+    "deepscaler:1.5b",
+    "qwen2:1.5b",
+    "qwen2.5:1.5b",
+    "smollm2:1.7b",
+    "smollm:1.7b",
+    "qwen3:1.7b",
+    "qwen:1.8b",
+    "gemma:2b",
+    "gemma2:2b",
+    "granite3.3:2b",
+    "granite3.2:2b",
+    "exaone-deep:2.4b",
+    "phi-2:2.7b",
+    "dolphin-phi:2.7b",
+    "qwen2.5:3b",
+    "orca-mini:3b",
+    "cogito:3b",
+    "phi3:3.8b",
+    "phi-4-mini:3.8b",
+    "qwen:4b",
+    "qwen3:4b",
+    "gemma3:4b",
+    "mistral:7b",
+    "qwen:7b",
+    "qwen2:7b",
+    "qwen2.5:7b",
+    "llama2:7b",
+    "openchat:7b",
+    "orca-mini:7b",
+    "wizard-vicuna-uncensored:7b",
+    "nous-hermes:7b",
+    "olmo2:7b",
+    "vicuna:7b",
+    "dolphin-mistral:7b",
+    "wizardlm2:7b",
+    "openthinker:7b",
+    "llama3:8b",
+    "llama3.1:8b",
+    "deepseek-r1:8b",
+    "qwen3:8b",
+    "dolphin3:8b",
+    "aya:8b",
+    "hermes3:8b",
+    "gemma2:9b",
+    "glm4:9b",
+    "falcon3:10b",
+    "nous-hermes2:10.7b",
+    "mistral-nemo:12b",
+    "llama2:13b",
+    "orca-mini:13b",
+    "wizard-vicuna-uncensored:13b",
+    "vicuna:13b",
+    "qwen:14b",
+    "qwen3:14b",
+    "qwen2.5:14b",
+    "deepseek-r1:14b",
+    "phi3:14b",
+    "phi-4:14b",
+    "cogito:14b",
+]
 
 MONGO_URI, LOG_PATH, CSV_PATH = "mongodb://localhost:27017/", Path("quiz_llms.log"), Path("results.csv")
 
@@ -56,7 +171,91 @@ MONGO_URI, LOG_PATH, CSV_PATH = "mongodb://localhost:27017/", Path("quiz_llms.lo
 logging.basicConfig(level=logging.INFO,
     format="%(asctime)s — %(levelname)s — %(message)s",
     handlers=[logging.StreamHandler(sys.stdout), logging.FileHandler(LOG_PATH,encoding="utf-8")])
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("ollama").setLevel(logging.WARNING)
+logging.getLogger("ollama._client").setLevel(logging.WARNING)
 log, log_err = logging.getLogger(__name__).info, logging.getLogger(__name__).error
+
+#if not MODEL_LIST:
+#    MODEL_LIST = ["gemma:2b","gemma:7b","llama3:8b","mistral","phi3-mini","tinyllama",
+#                  "qwen2:7b","mixtral-8x7b","gemma2b-it","mistral-openorca"]#
+#    log_err(f"models.txt not found or empty; using fallback MODEL_LIST ({len(MODEL_LIST)} entries)")
+
+# ────────── scoring constants ──────────
+CORRECT_SCORE = 0.1   # 1000 correct answers → 100 points
+INCORRECT_SCORE = -0.1
+
+OLLAMA_PROCESSES: List[subprocess.Popen] = []
+
+
+def _cleanup_processes():
+    for proc in OLLAMA_PROCESSES:
+        if proc.poll() is None:
+            with suppress(Exception):
+                proc.terminate()
+    for proc in OLLAMA_PROCESSES:
+        with suppress(Exception):
+            proc.wait(timeout=5)
+
+
+atexit.register(_cleanup_processes)
+
+# ────────── environment helpers ──────────
+
+def _run(cmd: list[str]) -> subprocess.CompletedProcess:
+    return subprocess.run(cmd, check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+
+def ensure_ollama_installed() -> None:
+    if shutil.which("ollama"):
+        return
+    install_cmd = ["bash", "-lc", "curl -fsSL https://ollama.com/install.sh | sh"]
+    result = subprocess.run(install_cmd, check=False)
+    if result.returncode != 0:
+        raise RuntimeError("Failed to install Ollama automatically. Please install it manually.")
+
+
+def _service_action(args: list[str]) -> bool:
+    return _run(args).returncode == 0
+
+
+def ensure_ollama_running() -> None:
+    ensure_ollama_installed()
+    primary_hosts = [inst["host"] for inst in INSTANCES]
+
+    def ping(host: str) -> bool:
+        with suppress(Exception):
+            ollama.Client(host=host).list()
+            return True
+        return False
+
+    all_available = all(ping(host) for host in primary_hosts)
+    if all_available:
+        return
+
+    if shutil.which("systemctl"):
+        _service_action(["systemctl", "stop", "ollama"])
+        time.sleep(1)
+
+    for inst in INSTANCES:
+        if ping(inst["host"]):
+            continue
+
+        env = os.environ.copy()
+        env["CUDA_VISIBLE_DEVICES"] = inst["gpu"]
+        env["OLLAMA_HOST"] = f"0.0.0.0:{inst['port']}"
+
+        log(f"Starting Ollama instance on port {inst['port']} using GPU {inst['gpu']}")
+        proc = subprocess.Popen(
+            ["ollama", "serve"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            env=env,
+        )
+        OLLAMA_PROCESSES.append(proc)
+        time.sleep(2)
+        if not ping(inst["host"]):
+            raise RuntimeError(f"Unable to reach Ollama at {inst['host']}. Please ensure the service is running.")
 
 # ────────── helpers ──────────
 EMBEDMODELS:set[str]=set()
@@ -77,35 +276,143 @@ def delete(model:str):
         except Exception: pass
 
 def ask(model:str,prompt:str,node:str)->str:
-    def handler(signum,frame): raise TimeoutError
-    signal.signal(signal.SIGALRM,handler); signal.alarm(TIMEOUT_SEC)
     try:
-        r=ollama.Client(host=node).generate(model=model,prompt=prompt,stream=False)
+        client = ollama.Client(host=node, timeout=TIMEOUT_SEC)
+        r = client.generate(
+            model=model,
+            prompt=prompt,
+            stream=False,
+            options={
+                "temperature": 0.0,
+                "top_p": 0.9,
+                "num_predict": 6,  # enough tokens for "possibly false" while preventing rambling
+            },
+        )
         return r["response"].strip()
-    except TimeoutError: return "unknown"
     except ollama.ResponseError as e:
-        if "does not support generate" in str(e).lower(): EMBEDMODELS.add(model)
-        log_err(f"gen error {node} {model}: {e}"); return "unknown"
+        if "does not support generate" in str(e).lower():
+            EMBEDMODELS.add(model)
+        log_err(f"gen error {node} {model}: {e}")
+        return "unknown"
     except Exception as e:
-        log_err(f"gen exc {node} {model}: {e}"); return "unknown"
-    finally: signal.alarm(0)
+        log_err(f"gen exc {node} {model}: {e}")
+        return "unknown"
+
+
+def normalize_and_validate(raw: str) -> Tuple[str, bool, str]:
+    if raw is None:
+        return "unknown", False, "Empty response"
+
+    stripped = raw.strip()
+    if not stripped:
+        return "unknown", False, "Empty response"
+
+    normalized = " ".join(stripped.lower().split())
+    normalized = ALIAS.get(normalized, normalized)
+
+    if normalized in VALID_ANSWERS and stripped.lower() == normalized:
+        return normalized, True, ""
+
+    stripped_no_punct = stripped.rstrip(".!,?:;")
+    collapsed_no_punct = " ".join(stripped_no_punct.lower().split())
+    collapsed_no_punct = ALIAS.get(collapsed_no_punct, collapsed_no_punct)
+
+    if collapsed_no_punct in VALID_ANSWERS:
+        return collapsed_no_punct, False, "Answer must be exactly one word/phrase with no punctuation."
+
+    for phrase, mapped in FILLER_PHRASES.items():
+        if phrase in normalized:
+            return mapped, True, f"Alias phrase '{phrase}'"
+
+    word_tokens = [token for token in re.split(r"[^a-z]+", normalized) if token]
+    if word_tokens:
+        for target, synonyms in FILLER_SYNONYMS.items():
+            for synonym in synonyms:
+                if synonym in word_tokens:
+                    return target, True, f"Alias keyword '{synonym}'"
+
+    for token in VALID_ANSWERS:
+        if token in normalized:
+            return token, True, "Matched valid token inside longer response."
+
+    return "unknown", False, "Answer must be exactly one of: true, false, possibly true, possibly false, unknown."
+
+
+def build_reprompt_prompt(base_prompt: str, reason: str, previous: str) -> str:
+    reason_text = reason or "the answer was not in the valid list"
+    normalized_previous = " ".join(previous.strip().split()) or "∅"
+    normalized_previous = normalized_previous.replace('"', "'")
+    return f"{base_prompt}{REPROMPT_TEMPLATE.format(answer=normalized_previous, reason=reason_text)}"
+
+
+def get_validated_answer(model: str, base_prompt: str, node: str) -> Tuple[str, str, int, bool]:
+    attempts = 0
+    prompt = base_prompt
+    last_raw = ""
+
+    while attempts < MAX_REPROMPTS:
+        raw_response = ask(model, prompt, node)
+        normalized, valid, reason = normalize_and_validate(raw_response)
+        if valid:
+            if reason:
+                if reason.startswith("Alias"):
+                    log(f"Alias normalization -> {normalized} | {reason} | raw='{raw_response}'")
+                else:
+                    log(f"Matched token from free-form response -> {normalized} | raw='{raw_response}'")
+            return normalized, raw_response, attempts + 1, True
+
+        attempts += 1
+        last_raw = raw_response
+        if attempts >= MAX_REPROMPTS:
+            return normalized, last_raw, attempts, False
+
+        prompt = build_reprompt_prompt(base_prompt, reason, last_raw)
+
+    return "unknown", last_raw, attempts, False
 
 def build_prompt(field:str,q:str,year:int|None)->str:
-    yr=f"The paper was published in {year}. " if year else ""
-    return (f"You are being quizzed in {field}. {yr}"
-            "You are being quizzed. Only the single word true, false, possibly true, "
-            "possibly false, or unknown is valid as your answer. No explanation, no punctuation.\n\n"
-            f"Question:\n{q}")
-
-def norm(ans:str)->str:
-    a=ans.lower().strip().rstrip(".")
-    return ALIAS.get(a,a)
+    yr = f"The paper was published in {year}. " if year else ""
+    instructions = (
+        "Choose the correct number and reply with only that lowercase word. Do not write yes/no/maybe or any explanation.\n"
+        "1) true\n2) false\n3) possibly true\n4) possibly false\n5) unknown\n"
+        "Example response: true\n"
+        "Any extra words are discarded and treated as unknown.\n"
+    )
+    context = f"You are being quizzed in {field}. {yr}"
+    return f"{instructions}{context}Question:\n{q}"
 
 def score(gt:str,pred:str)->float:
     if pred=="unknown": return 0.0
     if (gt in TRUE_SET and pred in TRUE_SET) or (gt in FALSE_SET and pred in FALSE_SET):
-        return 0.01
-    return -0.01
+        return CORRECT_SCORE
+    return INCORRECT_SCORE
+
+
+def process_batch(node: str, batch: List[Tuple[int, Dict]], model: str, field_name: str) -> float:
+    total = 0.0
+    for idx, doc in batch:
+        q, gt = doc["Question"], doc["Answer"].lower()
+        year = doc.get("publication_year")
+        prompt = build_prompt(field_name, q, year)
+
+        normalized, raw_answer, attempts_used, valid_answer = get_validated_answer(model, prompt, node)
+        if not valid_answer:
+            if normalized not in VALID_ANSWERS:
+                normalized = "unknown"
+            log_err(
+                f"{field_name} | {idx}/{QUESTIONS_PER_FIELD} | {year or '—'} | {model} | "
+                f"invalid response after {attempts_used} attempts; raw='{raw_answer}' -> using '{normalized}'"
+            )
+
+        sc = score(gt, normalized)
+        res = "✅" if sc > 0 else "❌" if sc < 0 else "☐"
+        attempt_info = f"attempts:{attempts_used}"
+        log(
+            f"{field_name} | {idx}/{QUESTIONS_PER_FIELD} | {year or '—'} | {model} | "
+            f"GT:{gt} | LLM:{raw_answer} -> {normalized} | {res} | {attempt_info}"
+        )
+        total += sc
+    return total
 
 def header()->List[str]: return ["model","overall",*FIELD_MAP.values(),"timestamp"]
 def done()->set[str]:
@@ -115,10 +422,10 @@ def done()->set[str]:
 
 # ────────── main ──────────
 def main():
+    ensure_ollama_running()
     completed=done(); hdr=CSV_PATH.exists()
     mongo=MongoClient(MONGO_URI)
     cols={db:mongo[db]["sources"] for db in DATABASES}
-    nodes=itertools.cycle(OLLAMA_NODES)
 
     for model in MODEL_LIST:
         if model in completed: log(f"skip {model}"); continue
@@ -132,16 +439,21 @@ def main():
                 {"$match":{"Question":{"$ne":None},"Answer":{"$in":list(VALID_ANSWERS)}}},
                 {"$sample":{"size":QUESTIONS_PER_FIELD}}
             ]))
+            indexed_docs=list(enumerate(docs,1))
+            node_batches={node:[] for node in OLLAMA_NODES}
+            node_count=len(OLLAMA_NODES)
+            for idx, doc in indexed_docs:
+                node = OLLAMA_NODES[(idx-1) % node_count]
+                node_batches[node].append((idx, doc))
+
             total=0.0
-            for i,d in enumerate(docs,1):
-                q,gt=d["Question"],d["Answer"].lower()
-                year=d.get("publication_year")
-                prompt=build_prompt(fname,q,year); node=next(nodes)
-                raw=ask(model,prompt,node); pred_norm=norm(raw)
-                sc=score(gt,pred_norm)
-                res="✅" if sc>0 else "❌" if sc<0 else "☐"
-                log(f"{fname} | {i}/{QUESTIONS_PER_FIELD} | {year or '—'} | {model} | GT:{gt} | LLM:{raw} | {res}")
-                total+=sc
+            with ThreadPoolExecutor(max_workers=node_count) as executor:
+                futures=[
+                    executor.submit(process_batch, node, batch, model, fname)
+                    for node, batch in node_batches.items() if batch
+                ]
+                for future in as_completed(futures):
+                    total += future.result()
             field_scores[fname]=round(total,4)
 
         overall=round(sum(field_scores.values())/len(field_scores),4)
