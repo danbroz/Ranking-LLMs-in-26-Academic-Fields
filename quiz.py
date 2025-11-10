@@ -28,6 +28,7 @@ import atexit
 import ollama
 from pymongo import MongoClient
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from collections import defaultdict
 
 # ────────── config ──────────
 INSTANCES = [
@@ -181,7 +182,8 @@ logging.basicConfig(level=logging.INFO,
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("ollama").setLevel(logging.WARNING)
 logging.getLogger("ollama._client").setLevel(logging.WARNING)
-log, log_err = logging.getLogger(__name__).info, logging.getLogger(__name__).error
+logger = logging.getLogger(__name__)
+log, log_warn, log_err = logger.info, logger.warning, logger.error
 
 #if not MODEL_LIST:
 #    MODEL_LIST = ["gemma:2b","gemma:7b","llama3:8b","mistral","phi3-mini","tinyllama",
@@ -194,6 +196,9 @@ INCORRECT_SCORE = -0.1
 
 OLLAMA_PROCESSES: List[subprocess.Popen] = []
 OLLAMA_MANAGED_PIDS: set[int] = set()
+GLOBAL_SALVAGE_TOTAL: int = 0
+GLOBAL_SALVAGE_BY_MODEL: Dict[str, int] = {}
+GLOBAL_SALVAGE_BY_FIELD: Dict[str, int] = defaultdict(int)
 
 
 def _register_pid(pid: int) -> None:
@@ -429,7 +434,7 @@ def build_reprompt_prompt(base_prompt: str, reason: str, previous: str) -> str:
     return f"{base_prompt}{REPROMPT_TEMPLATE.format(answer=normalized_previous, reason=reason_text)}"
 
 
-def get_validated_answer(model: str, base_prompt: str, node: str) -> Tuple[str, str, int, bool]:
+def get_validated_answer(model: str, base_prompt: str, node: str) -> Tuple[str, str, int, bool, str]:
     attempts = 0
     prompt = base_prompt
     last_raw = ""
@@ -438,27 +443,34 @@ def get_validated_answer(model: str, base_prompt: str, node: str) -> Tuple[str, 
         raw_response = ask(model, prompt, node)
         normalized, valid, reason = normalize_and_validate(raw_response)
         if valid:
+            reason_tag = "other"
             if reason:
                 if reason.startswith("Alias"):
                     log(f"Alias normalization -> {normalized} | {reason} | raw='{raw_response}'")
+                    reason_tag = "alias"
                 elif reason == "Numeric choice":
                     log(f"Numeric choice -> {normalized} | raw='{raw_response}'")
+                    reason_tag = "numeric"
                 elif reason == "Salvaged token from verbose response":
                     log(f"Salvaged verbose -> {normalized} | raw='{raw_response}'")
+                    reason_tag = "salvaged_verbose"
                 elif reason == "Exact match":
                     log(f"Exact match -> {normalized}")
+                    reason_tag = "exact"
                 else:
                     log(f"{reason} -> {normalized} | raw='{raw_response}'")
-            return normalized, raw_response, attempts + 1, True
+            else:
+                reason_tag = "exact"
+            return normalized, raw_response, attempts + 1, True, reason_tag
 
         attempts += 1
         last_raw = raw_response
         if attempts >= MAX_REPROMPTS:
-            return normalized, last_raw, attempts, False
+            return normalized, last_raw, attempts, False, "invalid"
 
         prompt = build_reprompt_prompt(base_prompt, reason, last_raw)
 
-    return "unknown", last_raw, attempts, False
+    return "unknown", last_raw, attempts, False, "invalid"
 
 def build_prompt(field:str,q:str,year:int|None)->str:
     yr = f"The paper was published in {year}. " if year else ""
@@ -478,21 +490,30 @@ def score(gt:str,pred:str)->float:
     return INCORRECT_SCORE
 
 
-def process_batch(node: str, batch: List[Tuple[int, Dict]], model: str, field_name: str) -> float:
+def process_batch(node: str, batch: List[Tuple[int, Dict]], model: str, field_name: str) -> Tuple[float, int]:
     total = 0.0
+    salvaged_verbose_count = 0
     for idx, doc in batch:
         q, gt = doc["Question"], doc["Answer"].lower()
         year = doc.get("publication_year")
         prompt = build_prompt(field_name, q, year)
 
-        normalized, raw_answer, attempts_used, valid_answer = get_validated_answer(model, prompt, node)
+        normalized, raw_answer, attempts_used, valid_answer, reason_tag = get_validated_answer(model, prompt, node)
+        if reason_tag == "salvaged_verbose":
+            salvaged_verbose_count += 1
         if not valid_answer:
             if normalized not in VALID_ANSWERS:
                 normalized = "unknown"
-            log_err(
+            message = (
                 f"{field_name} | {idx}/{QUESTIONS_PER_FIELD} | {year or '—'} | {model} | "
                 f"invalid response after {attempts_used} attempts; raw='{raw_answer}' -> using '{normalized}'"
             )
+            if normalized == "unknown" and attempts_used > 1:
+                log_err(message)
+            elif normalized == "unknown":
+                log(message)
+            else:
+                log(message)
 
         sc = score(gt, normalized)
         res = "✅" if sc > 0 else "❌" if sc < 0 else "☐"
@@ -502,7 +523,7 @@ def process_batch(node: str, batch: List[Tuple[int, Dict]], model: str, field_na
             f"GT:{gt} | LLM:{raw_answer} -> {normalized} | {res} | {attempt_info}"
         )
         total += sc
-    return total
+    return total, salvaged_verbose_count
 
 def header()->List[str]: return ["model","overall",*FIELD_MAP.values(),"timestamp"]
 def done()->set[str]:
@@ -512,6 +533,7 @@ def done()->set[str]:
 
 # ────────── main ──────────
 def main():
+    global GLOBAL_SALVAGE_TOTAL, GLOBAL_SALVAGE_BY_MODEL, GLOBAL_SALVAGE_BY_FIELD
     ensure_ollama_running()
     completed=done(); hdr=CSV_PATH.exists()
     mongo=MongoClient(MONGO_URI)
@@ -523,6 +545,8 @@ def main():
         log(f"=== MODEL {model} ===")
 
         field_scores:Dict[str,float]={}
+        field_salvage_counts:Dict[str,int]={}
+        model_salvage_total = 0
         for db in DATABASES:
             fname=FIELD_MAP[db]; col=cols[db]
             docs=list(col.aggregate([
@@ -537,13 +561,19 @@ def main():
                 node_batches[node].append((idx, doc))
 
             total=0.0
+            field_salvaged = 0
             with ThreadPoolExecutor(max_workers=node_count) as executor:
                 futures=[
                     executor.submit(process_batch, node, batch, model, fname)
                     for node, batch in node_batches.items() if batch
                 ]
                 for future in as_completed(futures):
-                    total += future.result()
+                    batch_total, batch_salvaged = future.result()
+                    total += batch_total
+                    field_salvaged += batch_salvaged
+            model_salvage_total += field_salvaged
+            field_salvage_counts[fname] = field_salvaged
+            GLOBAL_SALVAGE_BY_FIELD[fname] += field_salvaged
             field_scores[fname]=round(total,4)
 
         overall=round(sum(field_scores.values())/len(field_scores),4)
@@ -554,9 +584,26 @@ def main():
             if not hdr: w.writerow(header()); hdr=True
             w.writerow(row)
 
+        GLOBAL_SALVAGE_TOTAL += model_salvage_total
+        GLOBAL_SALVAGE_BY_MODEL[model] = model_salvage_total
+        if model_salvage_total:
+            per_field = ", ".join(
+                f"{field}:{count}"
+                for field, count in field_salvage_counts.items()
+                if count
+            )
+            log(f"{model} salvaged verbose answers: total={model_salvage_total}"
+                f"{' | '+per_field if per_field else ''}")
         delete(model); log(f"done {model}")
 
     mongo.close(); log("🎉 all models done")
+    if GLOBAL_SALVAGE_TOTAL:
+        log(
+            "Verbose answer salvage summary — "
+            f"total:{GLOBAL_SALVAGE_TOTAL} | "
+            f"models:{ {m:c for m,c in GLOBAL_SALVAGE_BY_MODEL.items() if c} } | "
+            f"fields:{ {f:c for f,c in GLOBAL_SALVAGE_BY_FIELD.items() if c} }"
+        )
 
 if __name__ == "__main__":
     try:
