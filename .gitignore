@@ -1,0 +1,46 @@
+# Log files
+*.log
+*.log.*
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Process ID files
+*.pid
+
+# Ollama instance logs
+ollama_*.log
+
+# Build and quiz logs
+buildQA.log
+quiz.log
+quiz_llms.log
+quiz_run.log
+
+# Results CSV files (generated)
+results*.csv
+
+# Environment files
+.env
+.venv
+env/
+venv/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
