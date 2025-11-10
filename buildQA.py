@@ -282,10 +282,17 @@ A randomized controlled trial found that daily vitamin D supplementation signifi
 Question: Is it true, false, possibly true, or possibly false that daily vitamin D supplementation reduces the risk of respiratory infections in elderly people?
 Answer: true"""
 
+    unacceptable = (
+        "Unacceptable output example (do NOT do this):\n"
+        "Okay, I understand.\n"
+        "Question: Is it true ...\n"
+        "Answer: true\n"
+    )
+
     base_prompt = (
         "You are generating questions and answers into a database from research abstracts. "
         "Only the exact format shown below is accepted—no confirmations, no acknowledgements, and no explanations. "
-        "Respond directly with the question and answer lines, nothing else before or after.\n\n"
+        "Respond directly with the question line and the answer line, nothing else before, between, or after.\n\n"
         "From the following research abstract, generate exactly one question based specifically on the findings described. "
         "Start the question with the exact words 'Is it true, false, possibly true, or possibly false that'. "
         "Do not include phrases like 'does the study', 'does the abstract', 'based on these findings', "
@@ -294,13 +301,14 @@ Answer: true"""
         "The answer must explicitly be either true, false, possibly true, or possibly false. "
         "Then directly answer it with one of these four choices only (no additional explanation).\n\n"
         f"{example}\n\n"
+        f"{unacceptable}\n"
     )
 
     if error_feedback:
         base_prompt += (
             f"Your previous response was incorrect: {error_feedback}\n"
-            "Remember: do not write acknowledgements or explanations—only the question line and the answer line. "
-            "Follow the format exactly as shown in the example.\n\n"
+            "Remember: do NOT write acknowledgements, confirmations, or explanations—only the question line and the answer line. "
+            "Follow the format exactly as shown in the example and never imitate the unacceptable example.\n\n"
         )
 
     base_prompt += (
