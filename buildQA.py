@@ -353,9 +353,10 @@ def is_valid_response(response):
     ]):
         return False
     # Check for required format
-    if "\n" in response and response.strip().startswith("Question:"):
-        parts = response.split("\n", 1)
-        if len(parts) == 2 and parts[1].strip().startswith("Answer:"):
+    if "\n" in response:
+        first_line, second_line = response.split("\n", 1)
+        first_line_stripped = first_line.strip()
+        if first_line_stripped.startswith(("Question:", "Q:")) and second_line.strip().startswith("Answer:"):
             return True
     return False
 
@@ -417,8 +418,18 @@ def generate_question_answer(node, abstract):
 
             if is_valid_response(response):
                 question_line, answer_line = response.split("\n", 1)
-                question = question_line.replace("Question: ", "").strip()
-                answer = answer_line.replace("Answer: ", "").strip()
+                question_line = question_line.strip()
+                if question_line.startswith("Question:"):
+                    question = question_line[len("Question:"):].strip()
+                elif question_line.startswith("Q:"):
+                    question = question_line[len("Q:"):].strip()
+                else:
+                    question = question_line
+                answer_line = answer_line.strip()
+                if answer_line.startswith("Answer:"):
+                    answer = answer_line[len("Answer:"):].strip()
+                else:
+                    answer = answer_line
                 if answer.lower() in ['true', 'false', 'possibly true', 'possibly false']:
                     return question, answer
 
