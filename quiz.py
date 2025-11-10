@@ -90,11 +90,10 @@ def looks_like_filler_response(text: str) -> bool:
     return any(hint in lowered for hint in FILLER_HINTS)
 REPROMPT_TEMPLATE = (
     "\n\nYour previous answer \"{answer}\" was invalid because {reason}. "
-    "Reply with exactly one lowercase word from: true, false, possibly true, possibly false, unknown. "
-    "Do not repeat the question, mention titles/abstracts, or add phrases like \"here is\" or \"the paper\". "
-    "Do not write sentences (for example, \"The answer is ...\"). "
-    "Copy the word exactly as spelled above; do not invent variations or add punctuation. "
-    "If you cannot decide, reply with unknown. Never leave the reply blank."
+    "Respond with exactly one lowercase word: true, false, possibly true, possibly false, unknown. "
+    "Do not start with filler phrases such as \"here is\" or \"the answer is\", and do not write any sentences. "
+    "Copy the word exactly as spelled above with no punctuation or extras. "
+    "If you are unsure, reply with unknown. Never leave the reply blank."
 )
 
 FIELD_MAP = {  # … unchanged … (same mapping dictionary) ...
@@ -488,9 +487,20 @@ def get_validated_answer(model: str, base_prompt: str, node: str) -> Tuple[str, 
         filler_hit = looks_like_filler_response(raw_response) if raw_response else False
         reprompt_reason = reason
         if filler_hit:
-            log(f"Filler invalid -> raw='{raw_response}' | skipping reprompt")
-            normalized = normalized if normalized in VALID_ANSWERS else "unknown"
-            return normalized, raw_response, attempts + 1, False, "filler_skipped"
+            preview = (raw_response or "").strip().replace("\n", " ")[:80]
+            log(
+                f"Filler invalid (model={model}, attempt={attempts + 1}) -> '{preview}'"
+            )
+            if attempts == 0:
+                reprompt_reason = (
+                    "your reply began with filler text instead of one of the allowed words"
+                )
+            else:
+                normalized = normalized if normalized in VALID_ANSWERS else "unknown"
+                log(
+                    f"Filler repeated (model={model}, attempt={attempts + 1}) -> '{preview}' | aborting"
+                )
+                return normalized, raw_response, attempts + 1, False, "filler_skipped"
 
         attempts += 1
         last_raw = raw_response
@@ -505,11 +515,9 @@ def get_validated_answer(model: str, base_prompt: str, node: str) -> Tuple[str, 
 def build_prompt(field:str,q:str,year:int|None)->str:
     yr = f"The paper was published in {year}. " if year else ""
     instructions = (
-        "Reply with exactly one lowercase word chosen from: true, false, possibly true, possibly false, unknown.\n"
-        "Do not write sentences such as \"The answer is ...\" or \"Here is ...\"; any extra text is discarded.\n"
-        "Copy the word exactly as spelled above—no punctuation, numbers, or alternate spellings like \"possiblely\".\n"
-        "Do not mention the question, titles, abstracts, or publication years. If you cannot decide, reply with unknown. Never leave the reply blank.\n"
-        "Example response: true\n"
+        "Respond with exactly one lowercase word: true, false, possibly true, possibly false, unknown.\n"
+        "Do not add sentences, introductions, or punctuation—phrases like \"here is\" or \"the answer is\" are invalid.\n"
+        "Copy the word exactly as spelled above. If you cannot decide, reply unknown. Never leave the reply blank.\n"
     )
     context = f"You are being quizzed in {field}. {yr}"
     return f"{instructions}{context}Question:\n{q}"
