@@ -21,6 +21,8 @@ from scripts import backup_field_databases, prune_field_databases
 # Dynamic Ollama configuration will be computed at runtime
 GPU_MEMORY_RESERVE_MB = 512
 SMOLLM2_MEMORY_MB = 906
+MODEL_NAME = 'gemma3:270m'
+MODEL_MEMORY_MB = 1500
 BASE_PORT = 11434
 
 nodes = []
@@ -171,8 +173,8 @@ def ensure_ollama_instances():
     port = BASE_PORT
     for gpu_index, total_mem in enumerate(GPU_MEMORY_MB):
         available = max(0, total_mem - GPU_MEMORY_RESERVE_MB)
-        if available >= SMOLLM2_MEMORY_MB:
-            count = max(1, available // SMOLLM2_MEMORY_MB)
+        if available >= MODEL_MEMORY_MB:
+            count = max(1, available // MODEL_MEMORY_MB)
         else:
             count = 1
         for _ in range(count):
@@ -203,19 +205,19 @@ def ensure_ollama_instances():
         subprocess.Popen(['nohup', 'ollama', 'serve'], env=env, stdout=stdout, stderr=subprocess.STDOUT)
         time.sleep(5)
 
-        # Ensure smollm2 model is available for this instance
+        # Ensure model is available for this instance
         env_pull = os.environ.copy()
         env_pull['OLLAMA_HOST'] = f'localhost:{port}'
         try:
             show = subprocess.run(
-                ['ollama', 'show', 'smollm2:135m'],
+                ['ollama', 'show', MODEL_NAME],
                 env=env_pull,
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
             if show.returncode != 0:
-                log(f"⬇️ Pulling smollm2:135m on port {port}")
-                subprocess.run(['ollama', 'pull', 'smollm2:135m'], env=env_pull, check=True)
+                log(f"⬇️ Pulling {MODEL_NAME} on port {port}")
+                subprocess.run(['ollama', 'pull', MODEL_NAME], env=env_pull, check=True)
         except subprocess.CalledProcessError:
             log(f"⚠️ Model setup issue on port {port}; continuing.")
 
@@ -351,7 +353,7 @@ def generate_question_answer(node, abstract):
         try:
             client = ollama.Client(host=current_node, timeout=TASK_TIMEOUT_SECONDS)
             response = client.generate(
-                model='smollm2:135m',
+                model=MODEL_NAME,
                 prompt=prompt,
                 options={'temperature': 0.3, 'top_p': 0.9}
             )['response']
