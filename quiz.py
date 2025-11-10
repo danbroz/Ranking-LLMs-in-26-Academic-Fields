@@ -90,10 +90,11 @@ def looks_like_filler_response(text: str) -> bool:
     return any(hint in lowered for hint in FILLER_HINTS)
 REPROMPT_TEMPLATE = (
     "\n\nYour previous answer \"{answer}\" was invalid because {reason}. "
-    "Do not repeat the question, mention titles/abstracts, or say phrases like \"here is\" or \"the paper\". "
-    "Reply with the single lowercase word only (example: true):"
-    "\n1) true\n2) false\n3) possibly true\n4) possibly false\n5) unknown"
-    "\nAnything else is discarded and counted as unknown."
+    "Reply with exactly one lowercase word from: true, false, possibly true, possibly false, unknown. "
+    "Do not repeat the question, mention titles/abstracts, or add phrases like \"here is\" or \"the paper\". "
+    "Do not write sentences (for example, \"The answer is ...\"). "
+    "Copy the word exactly as spelled above; do not invent variations or add punctuation. "
+    "If you cannot decide, reply with unknown. Never leave the reply blank."
 )
 
 FIELD_MAP = {  # … unchanged … (same mapping dictionary) ...
@@ -390,7 +391,7 @@ def ask(model:str,prompt:str,node:str)->str:
             options={
                 "temperature": 0.0,
                 "top_p": 0.9,
-                "num_predict": 6,  # enough tokens for "possibly false" while preventing rambling
+                "num_predict": 10,  # enough tokens for full guidance while preventing rambling
                 "keep_alive": 0,
             },
         )
@@ -504,11 +505,11 @@ def get_validated_answer(model: str, base_prompt: str, node: str) -> Tuple[str, 
 def build_prompt(field:str,q:str,year:int|None)->str:
     yr = f"The paper was published in {year}. " if year else ""
     instructions = (
-        "Choose the correct number and reply with only that lowercase word. Do not mention the question, titles, abstracts, years, or say phrases like \"here is\" or \"the paper\". "
-        "Do not write yes/no/maybe or any explanation. Respond with exactly one of the following words:\n"
-        "1) true\n2) false\n3) possibly true\n4) possibly false\n5) unknown\n"
+        "Reply with exactly one lowercase word chosen from: true, false, possibly true, possibly false, unknown.\n"
+        "Do not write sentences such as \"The answer is ...\" or \"Here is ...\"; any extra text is discarded.\n"
+        "Copy the word exactly as spelled above—no punctuation, numbers, or alternate spellings like \"possiblely\".\n"
+        "Do not mention the question, titles, abstracts, or publication years. If you cannot decide, reply with unknown. Never leave the reply blank.\n"
         "Example response: true\n"
-        "Any extra words (for example, \"The paper is...\" or \"Here is the answer\") are discarded and treated as unknown. No human reads this—only the lowercase word is stored.\n"
     )
     context = f"You are being quizzed in {field}. {yr}"
     return f"{instructions}{context}Question:\n{q}"
