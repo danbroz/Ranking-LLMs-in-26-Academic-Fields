@@ -296,6 +296,7 @@ Answer: true"""
         "- Please provide the research abstract.\n"
         "- I will follow the instructions.\n"
         "- Any explanation of what you are doing.\n"
+        "- 'Q:' or any abbreviation of 'Question:'. Spell 'Question:' exactly.\n"
     )
 
     base_prompt = (
@@ -307,6 +308,7 @@ Answer: true"""
         "Do not include phrases like 'does the study', 'does the abstract', 'based on these findings', "
         "'do the research findings', 'is it possible', or 'is it possibly'. "
         "The question must stand alone without referencing the abstract, study, or researchers. "
+        "After that line, immediately write the answer line starting with 'Answer:' followed by exactly one of true, false, possibly true, or possibly false. "
         "The answer must explicitly be either true, false, possibly true, or possibly false. "
         "Then directly answer it with one of these four choices only (no additional explanation).\n\n"
         f"{example}\n\n"
@@ -318,6 +320,7 @@ Answer: true"""
         base_prompt += (
             f"Your previous response was incorrect: {error_feedback}\n"
             "You must begin your reply with 'Question:' as the first token, followed immediately by the required question. "
+            "The second line must start with 'Answer:' exactly and contain only one of the allowed words. "
             "Do NOT write acknowledgements, confirmations, or any of the forbidden phrases above. "
             "Output exactly two lines—see the example—and never imitate the unacceptable example.\n\n"
         )
