@@ -186,20 +186,7 @@ MODEL_LIST = [
     "command-r:35b",
     "aya:35b",
     "falcon:40b",
-    "deepseek-llm:67b",
-    "llama3:70b",
-    "llama3.1:70b",
-    "llama3.3:70b",
-    "deepseek-r1:70b",
-    "dolphin-llama3:70b",
-    "orca-mini:70b",
-    "hermes3:70b",
-    "cogito:70b",
-    "qwen:72b",
-    "qwen2:72b",
-    "qwen2.5:72b",
-    "llama4:16×17b",
-    "qwen:110b",
+
 ]
 
 MONGO_URI, LOG_PATH, CSV_PATH = "mongodb://localhost:27017/", Path("quiz_llms.log"), Path("results.csv")
@@ -781,30 +768,67 @@ def estimate_model_memory_mb(model: str) -> int:
     return DEFAULT_INSTANCE_MEMORY_MB
 
 
+def _should_spread_across_gpus(model: str) -> bool:
+    """Check if model should be spread across all GPUs (one instance per GPU).
+    
+    Models starting from deepseek-llm:67b and later in MODEL_LIST are spread
+    across all GPUs to avoid trying to fit multiple large model instances on a single GPU.
+    """
+    try:
+        model_index = MODEL_LIST.index(model)
+        deepseek_index = MODEL_LIST.index("deepseek-llm:67b")
+        return model_index >= deepseek_index
+    except ValueError:
+        # If model not found in list, don't spread (use default behavior)
+        return False
+
+
 def plan_instances_for_model(model: str) -> List[Dict[str, str]]:
     """Produce an Ollama instance plan sized for the requested model."""
     mem_needed = max(estimate_model_memory_mb(model), 1)
     plan: List[Dict[str, str]] = []
     port = _get_base_port()
-    for gpu_index, total_mem in enumerate(GPU_MEMORY_MB):
-        available = max(0, total_mem - GPU_MEMORY_RESERVE_MB)
-        if available >= mem_needed:
-            count = max(1, available // mem_needed)
-        else:
-            count = 1
-        # Dynamic cap based on GPU memory
-        max_instances = _calculate_max_instances_per_gpu(total_mem)
-        count = max(1, min(count, max_instances))
-        for _ in range(count):
-            plan.append({
-                "host": f"http://127.0.0.1:{port}",
-                "port": str(port),
-                "gpu": str(gpu_index),
-            })
-            port += 1
-    if not plan:
-        base_port = _get_base_port()
-        plan.append({"host": f"http://127.0.0.1:{base_port}", "port": str(base_port), "gpu": "0"})
+    
+    # For large models (deepseek-llm:67b and later), spread across all GPUs
+    if _should_spread_across_gpus(model):
+        # Distribute one instance per GPU across all available GPUs
+        for gpu_index, total_mem in enumerate(GPU_MEMORY_MB):
+            available = max(0, total_mem - GPU_MEMORY_RESERVE_MB)
+            # Only add instance if GPU has enough memory for the model
+            if available >= mem_needed:
+                plan.append({
+                    "host": f"http://127.0.0.1:{port}",
+                    "port": str(port),
+                    "gpu": str(gpu_index),
+                })
+                port += 1
+        
+        # Fallback: if no GPUs have enough memory, place on GPU 0 anyway
+        if not plan:
+            base_port = _get_base_port()
+            plan.append({"host": f"http://127.0.0.1:{base_port}", "port": str(base_port), "gpu": "0"})
+    else:
+        # Original logic: try to fit as many instances as possible per GPU
+        for gpu_index, total_mem in enumerate(GPU_MEMORY_MB):
+            available = max(0, total_mem - GPU_MEMORY_RESERVE_MB)
+            if available >= mem_needed:
+                count = max(1, available // mem_needed)
+            else:
+                count = 1
+            # Dynamic cap based on GPU memory
+            max_instances = _calculate_max_instances_per_gpu(total_mem)
+            count = max(1, min(count, max_instances))
+            for _ in range(count):
+                plan.append({
+                    "host": f"http://127.0.0.1:{port}",
+                    "port": str(port),
+                    "gpu": str(gpu_index),
+                })
+                port += 1
+        if not plan:
+            base_port = _get_base_port()
+            plan.append({"host": f"http://127.0.0.1:{base_port}", "port": str(base_port), "gpu": "0"})
+    
     return plan
 
 
